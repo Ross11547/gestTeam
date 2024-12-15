@@ -23,7 +23,8 @@ export const ColorsLogin = {
 export const Colors = {
     // Blancos y Grises
     white: "#FFFFFF",      
-    greyLight: "#E6E6E6",  
+    greyLight: "#b6b6b6",  
+    greyLightDos: "#b6b6b6",
     greyDark: "#4D4D4D",   
     black: "#000000"       
 };
