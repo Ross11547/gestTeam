@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   LoginContainer,
   BackgroundImage,
@@ -14,12 +14,17 @@ import {
 } from "../../style/loginStyle.jsx";
 import Logo from "../../assets/img/logoDos.png";
 import Fondo from "../../assets/img/FondoCinco.png";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigation = useNavigate();
   const [isActive, setIsActive] = useState(false);
 
   const handleFocus = () => setIsActive(true);
   const handleBlur = (e) => setIsActive(e.target.value !== "");
+  const handlesubmit = () => {
+    navigation("/inicio");
+  };
   return (
     <LoginContainer>
       <BackgroundImage src={Fondo} alt="Imagen de fondo" />
@@ -30,14 +35,24 @@ const Login = () => {
         <LoginTitle>Login</LoginTitle>
         <Form>
           <InputWrapper>
-            <StyledInput active={isActive} onFocus={handleFocus} onBlur={handleBlur} type="email"/>
+            <StyledInput
+              active={isActive}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              type="email"
+            />
             <StyledLabel active={isActive}>Correo</StyledLabel>
           </InputWrapper>
           <InputWrapper>
-            <StyledInput active={isActive} onFocus={handleFocus} onBlur={handleBlur} type="password"/>
+            <StyledInput
+              active={isActive}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              type="password"
+            />
             <StyledLabel active={isActive}>Contraseña</StyledLabel>
           </InputWrapper>
-          <LoginButton>Ingresar</LoginButton>
+          <LoginButton onClick={handlesubmit}>Ingresar</LoginButton>
         </Form>
       </LoginFormContainer>
     </LoginContainer>
