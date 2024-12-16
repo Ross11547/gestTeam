@@ -10,8 +10,9 @@ import Colaboracion from "./pages/private/colaboradores/index.jsx";
 import Pizarra from "./pages/private/pizarra/index.jsx";
 import Login from "./pages/public/login.jsx";
 import Layout from "./pages/private/layout.jsx";
-/* import ExcalidrawComponente from "./components/ui/excalidraw.jsx";
- */ /* import NavbarAdmin from "./components/ui/navAdmin/navAdmin.jsx"; */
+import ExcalidrawComponente from "./components/excalidraw.jsx";
+import Excalidraw from "./pages/private/excalidraw/index.jsx";
+/* import NavbarAdmin from "./components/ui/navAdmin/navAdmin.jsx"; */
 /* import Facultad from "./pages/admin/facultad/index.jsx";
  */ /* import Usuario from "./pages/admin/usuario/index.jsx"; */
 const AppRoutes = () => {
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         <Route path={ROUTES.MATERIA} element={<Materia />} />
         <Route path={ROUTES.COLABORACION} element={<Colaboracion />} />
         <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
+        <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
       </Route>
     </Routes>
   );

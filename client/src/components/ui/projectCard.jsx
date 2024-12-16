@@ -7,7 +7,7 @@ import {
   ProjectInfo,
   Label,
   IconWrapper,
-} from "../../style/styledInicio";
+} from "../../style/estudiante/styledInicio";
 
 const ProjectCard = ({ title, type, rating, subject, students, teachers }) => {
   return (

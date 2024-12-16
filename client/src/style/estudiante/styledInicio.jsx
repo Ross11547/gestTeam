@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  max-width: 90%;
-  margin: 0 auto;
-  padding: 2rem;
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
+  padding: 1rem;
 `;
 
 export const Header = styled.header`

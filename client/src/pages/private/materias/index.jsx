@@ -4,10 +4,9 @@ import { Search, BookOpen } from "lucide-react";
 import Logo from "../../../assets/img/headerPort.svg";
 //import { Header, IconWrapper, SearchBar } from "../../../style/styledInicio";
 const Container = styled.div`
-  max-width: 95%;
-  margin: 0 auto;
-  padding: 2rem;
-  min-height: 100vh;
+  width: 100%;
+  padding: 1rem;
+  height: 100vh;
 `;
 
 const Title = styled.h1`

@@ -9,7 +9,7 @@ import {
   Tab,
   ProjectGrid,
   IconWrapper,
-} from "../../../style/styledInicio";
+} from "../../../style/estudiante/styledInicio";
 import ProjectCard from "../../../components/ui/projectCard";
 
 const TABS = ["Todos", "Ingeniería", "Medicina", "Psicología"];
