@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import { Search, Users, LinkedinIcon, GithubIcon, Mail } from "lucide-react";
-import { Header, IconWrapper, SearchBar } from "../../../style/styledInicio";
+import { Header, IconWrapper, SearchBar } from "../../../style/estudiante/styledInicio";
 
 const Container = styled.div`
   max-width: 95%;
