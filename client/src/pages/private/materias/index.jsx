@@ -16,15 +16,11 @@ import {
   TableHeaderRow,
   TableRow,
   TableStyled,
-<<<<<<< HEAD
-} from "../../../style/estudiante/materiasStyled";
-=======
   ProfileUser,
   ImgProfile,
   Divlabel,
   LabelUser,
-} from "../../../style/materiasStyled";
->>>>>>> 9962349c3494c5453cc276bf86fc06f43cda49e7
+} from "../../../style/estudiante/materiasStyled";
 import CardHeader from "../../../components/ui/cardHeader";
 import Director from "../../../assets/img/perfilUser1.webp";
 import styled from "styled-components";

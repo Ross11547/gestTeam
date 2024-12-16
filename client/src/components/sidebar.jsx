@@ -1,52 +1,114 @@
 import React, { useState } from "react";
-import { Layout, Calendar, Mail, Bell, PlusCircle, ChevronsLeft, ChevronsRight, User, Trello } from "lucide-react";
-import { GlobalStyle, AppContainer, Badge, CreateTaskButto2, CreateTaskButton, IconWrapper, MenuItem, MinimizedIconContainer, ProfileSection, SectionTitle, ServiceItem, ServiceSection, SidebarContent, SidebarWrapper, ToggleButton, colors, Profile, TitleMenu, FotoPerfil } from "../style/navbar";
+import {
+  Layout,
+  Calendar,
+  Mail,
+  Bell,
+  PlusCircle,
+  ChevronsLeft,
+  ChevronsRight,
+  User,
+  Trello,
+  UserCircle,
+  LogOut,
+} from "lucide-react";
+import {
+  GlobalStyle,
+  AppContainer,
+  Badge,
+  CreateTaskButto2,
+  CreateTaskButton,
+  IconWrapper,
+  MenuItem,
+  MinimizedIconContainer,
+  ProfileSection,
+  SectionTitle,
+  ServiceItem,
+  ServiceSection,
+  SidebarContent,
+  SidebarWrapper,
+  ToggleButton,
+  colors,
+  Profile,
+  TitleMenu,
+  FotoPerfil,
+} from "../style/navbar";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../enums/routes/Routes";
 import Foto from "../assets/img/Foto.jpg";
+import { useUser } from "../context/useContext";
 const SidebarNavigation = ({ minimized, toggleSidebar }) => {
   const [activeItem, setActiveItem] = useState("project");
-
-  const menuItems = [
-    {
-      icon: <Layout size={20} />,
-      label: "Inicio",
-      key: "dashboard",
-      route: ROUTES.DASHBOARD,
-    },
-    {
-      icon: <Trello size={20} />,
-      label: "Materias",
-      key: "materias",
-      route: ROUTES.MATERIA,
-    },
-    {
-      icon: <Calendar size={20} />,
-      label: "Proyectos",
-      key: "proyectos",
-      route: ROUTES.PROYECTO,
-      extra: "+",
-    },
-    {
-      icon: <Mail size={20} />,
-      label: "Colaboraciones",
-      key: "colaboraciones",
-      route: ROUTES.COLABORACION,
-      badge: 3,
-    },
-    {
-      icon: <Bell size={20} />,
-      label: "Notificationes",
-      key: "notificaciones",
-      route: ROUTES.NOTIFICACION,
-    },
-    {
-      icon: <Layout size={20} />,
-      label: "Pizarra",
-      key: "pizarra",
-      route: ROUTES.PIZARRA,
-    },
-  ];
+  const { user, logout } = useUser();
+  console.log(user);
+  const menuItems =
+    user?.rol === "Estudiante"
+      ? [
+          {
+            icon: <Layout size={20} />,
+            label: "Inicio",
+            key: "dashboard",
+            route: ROUTES.DASHBOARD,
+          },
+          {
+            icon: <Trello size={20} />,
+            label: "Materias",
+            key: "materias",
+            route: ROUTES.MATERIA,
+          },
+          {
+            icon: <Calendar size={20} />,
+            label: "Proyectos",
+            key: "proyectos",
+            route: ROUTES.PROYECTO,
+            extra: "+",
+          },
+          {
+            icon: <Mail size={20} />,
+            label: "Colaboraciones",
+            key: "colaboraciones",
+            route: ROUTES.COLABORACION,
+            badge: 3,
+          },
+          {
+            icon: <Bell size={20} />,
+            label: "Notificationes",
+            key: "notificaciones",
+            route: ROUTES.NOTIFICACION,
+          },
+          {
+            icon: <Layout size={20} />,
+            label: "Pizarra",
+            key: "pizarra",
+            route: ROUTES.PIZARRA,
+          },
+        ]
+      : [
+          {
+            icon: <Layout size={20} />,
+            label: "Docentes",
+            key: "docentes",
+            route: ROUTES.DOCENTE,
+          },
+          {
+            icon: <Trello size={20} />,
+            label: "Alumnos",
+            key: "alumno",
+            route: ROUTES.USUARIO,
+          },
+          {
+            icon: <Calendar size={20} />,
+            label: "Facultades",
+            key: "facultades",
+            route: ROUTES.FACULTAD,
+          },
+          {
+            icon: <UserCircle size={20} />,
+            label: "Directores de carrera",
+            key: "directoresCarreras",
+            route: ROUTES.DIRECTOCARRERA,
+          },
+        ];
 
   const services = [];
 
@@ -101,7 +163,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                   Buenos dias 👋
                 </div>
                 <div style={{ fontWeight: "bold", color: colors.text.dark }}>
-                  Rossana Trujillo
+                  {user?.nombre} {user?.apellido}
                 </div>
               </div>
             </ProfileSection>
@@ -132,39 +194,45 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
               </Link>
             ))}
 
-            <SectionTitle>
-              <span>Herramientas</span>
-            </SectionTitle>
+            {user?.rol === "Estudiante" ? (
+              <>
+                <SectionTitle>
+                  <span>Herramientas</span>
+                </SectionTitle>
 
-            <ServiceSection>
-              {services.map((service, index) => (
-                <ServiceItem key={index}>
-                  {service.icon}
-                  <span style={{ marginLeft: "10px" }}>{service.label}</span>
-                </ServiceItem>
-              ))}
-              <ServiceItem>
-                <PlusCircle
-                  size={24}
-                  color={colors.primary}
-                  style={{ marginRight: "10px" }}
-                />
-                Añadir una herramienta
-              </ServiceItem>
-            </ServiceSection>
+                <ServiceSection>
+                  {services.map((service, index) => (
+                    <ServiceItem key={index}>
+                      {service.icon}
+                      <span style={{ marginLeft: "10px" }}>
+                        {service.label}
+                      </span>
+                    </ServiceItem>
+                  ))}
+                  <ServiceItem>
+                    <PlusCircle
+                      size={24}
+                      color={colors.primary}
+                      style={{ marginRight: "10px" }}
+                    />
+                    Añadir una herramienta
+                  </ServiceItem>
+                </ServiceSection>
 
-            <CreateTaskButton minimized={minimized}>
-              {minimized ? (
-                <>
-                  <PlusCircle size={24} style={{ marginRight: "10px" }} />
-                </>
-              ) : (
-                <>
-                  <PlusCircle size={24} style={{ marginRight: "10px" }} />
-                  Crear nuevo proyecto
-                </>
-              )}
-            </CreateTaskButton>
+                <CreateTaskButton onClick={() => logout()}>
+                  <LogOut size={24} style={{ marginRight: "10px" }} />
+                  Salir
+                </CreateTaskButton>
+              </>
+            ) : (
+              <>
+                {" "}
+                <CreateTaskButton onClick={() => logout()}>
+                  <LogOut size={24} style={{ marginRight: "10px" }} />
+                  Salir
+                </CreateTaskButton>
+              </>
+            )}
           </SidebarContent>
         </SidebarWrapper>
       </AppContainer>

@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle, css } from "styled-components";
+import { ColorsEstu, ColorsLogin } from "./colors";
 
 export const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -178,22 +179,25 @@ export const ServiceItem = styled.div`
 `;
 
 export const CreateTaskButton = styled.button`
-  width: calc(100% - 40px);
+  //width: calc(100% - 40px);
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background-color: ${colors.primary};
   color: white;
   border: none;
-  padding: 15px;
   border-radius: 10px;
+  padding: 15px;
+  background: transparent;
   ${flexCenter};
   cursor: pointer;
   font-weight: bold;
   ${smoothTransition};
-
+  color: ${ColorsLogin.secondary200};
+  font-size: 16px;
   &:hover {
-    background-color: #FFDE59;
+    color: ${ColorsLogin.secondary100};
+    padding-left: 25px;
+    transition: 0.5s;
   }
 `;
 export const CreateTaskButto2 = styled.button`
@@ -215,7 +219,7 @@ export const CreateTaskButto2 = styled.button`
   ${smoothTransition};
   font-size: 25px;
   &:hover {
-    background-color: #FFDE59;
+    background-color: #ffde59;
   }
 `;
 

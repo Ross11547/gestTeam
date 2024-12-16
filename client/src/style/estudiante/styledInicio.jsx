@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Colors, ColorsEstu } from "../colors";
 export const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -46,11 +46,9 @@ export const SearchBar = styled.input`
 export const TabList = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 3rem;
   padding-top: 10px;
-
   overflow-x: auto;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 `;
 
 export const Tab = styled.button`
@@ -137,4 +135,173 @@ export const IconWrapper = styled.span`
   display: inline-flex;
   align-items: center;
   color: #ffcc00;
+`;
+
+export const ProyectosGrid = styled.div`
+  width: 100%;
+  height: 545px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const ProyectoCard = styled.div`
+  width: 100%;
+  height: 355px;
+  background: ${Colors.white};
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+`;
+
+export const ProyectoImagen = styled.img`
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+`;
+
+export const ProyectoContent = styled.div`
+  padding: 12px;
+`;
+
+export const ProyectoTitle = styled.h2`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: ${Colors.black};
+`;
+
+export const TipoProyecto = styled.div`
+  width: 110px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 13px;
+  font-size: 11px;
+  font-weight: bold;
+
+  ${(props) => {
+    switch (props.tipo) {
+      case "Individual":
+        return "background-color: #dbeafe; color: #1d4ed8;";
+      case "Grupal":
+        return "background-color: #dcfce7; color: #15803d;";
+      default:
+        return "background-color: #f3e8ff; color: #7e22ce;";
+    }
+  }}
+`;
+
+export const InfoGrid = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
+export const InfoBox = styled.div`
+  width: calc(50% - 5px);
+  height: 90px;
+  background: ${(props) =>
+    props.type === "materia" ? ColorsEstu.primary : Colors.white};
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  h3 {
+    color: ${(props) =>
+      props.type === "materia" ? Colors.white : Colors.gray200};
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  p {
+    padding-top: 4px;
+    color: ${(props) =>
+      props.type === "materia" ? Colors.white : Colors.gray200};
+    font-size: 11px;
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-top: 4px;
+    font-size: 11px;
+    list-style: none;
+    color: ${(props) =>
+      props.type === "materia" ? Colors.white : Colors.gray200};
+  }
+`;
+
+export const DocentesSection = styled.div`
+  width: 100%;
+  margin-top: 10px;
+
+  h3 {
+    color: ${Colors.gray200};
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+`;
+
+export const DocentesGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+`;
+
+export const DocenteTag = styled.div`
+  padding: 8px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${Colors.white};
+  color: ${Colors.black};
+  border-radius: 10px;
+  font-size: 11px;
+`;
+
+export const ProyectoTitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+`;
+
+export const StarsRow = styled.div`
+  display: flex;
+  gap: 3px;
+  color: ${ColorsEstu.primary};
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: ${Colors.primary400};
+  }
 `;
