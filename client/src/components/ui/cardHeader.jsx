@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import Logo from "../../assets/img/headerPort.svg";
 import {
   BackgroundIllustration,
