@@ -7,15 +7,15 @@ import {
   HeaderTitle,
   ImgLogo,
   Title,
-} from "../../style/materiasStyled";
+} from "../../style/estudiante/materiasStyled.jsx";
 
-const CardHeader = ({ title, Children }) => {
+const CardHeader = ({ title, children }) => {
   return (
     <Header>
       <HeaderTitle>
         <Title>{title}</Title>
       </HeaderTitle>
-      <HeaderContent>{Children}</HeaderContent>
+      <HeaderContent>{children}</HeaderContent>
       <BackgroundIllustration>
         <ImgLogo src={Logo} />
       </BackgroundIllustration>

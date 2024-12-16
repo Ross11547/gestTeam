@@ -24,7 +24,7 @@ import {
   TableHeaderRow,
   TableRow,
   TableStyled,
-} from "../../../style/materiasStyled";
+} from "../../../style/estudiante/materiasStyled";
 import CardHeader from "../../../components/ui/cardHeader";
 
 const SUBJECTS = [
@@ -170,8 +170,8 @@ const Materias = () => {
   ];
   return (
     <Container>
-      <CardHeader title="Mis materias" />
-      <H1Division>Materias</H1Division>
+      <CardHeader title="Materias" />
+      <H1Division>Cursos</H1Division>
       <SubjectsGrid>
         {filteredSubjects.map((subject) => (
           <SubjectCard key={subject.id}>

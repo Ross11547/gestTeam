@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Users, User, UsersRound } from 'lucide-react';
 import ExcalidrawComponente from '../../../components/excalidraw';
-import { BoardCard, BoardsGrid, CardDate, CardHeader, CardTitle, CloseButton, Container, Header, Modal, ModalContent, ModalHeader, ModalTitle, NewBoardButton, TabButton, TabsContainer, TabsList, FormGroup, FormActions} from '../../../style/estudiante/styledPizarra';
+import { BoardCard, BoardsGrid, CardDate, CardTitle, CloseButton, Container, Header, Modal, ModalContent, ModalHeader, ModalTitle, NewBoardButton, TabButton, TabsContainer, TabsList, FormGroup, FormActions, CardHeaders } from '../../../style/estudiante/styledPizarra';
 import { ROUTES } from "../../../enums/routes/Routes";
 import { useNavigate } from 'react-router-dom';
+import CardHeader from '../../../components/ui/cardHeader';
 
 const Pizarra = () => {
   const [activeTab, setActiveTab] = useState('individual');
@@ -13,8 +14,8 @@ const Pizarra = () => {
   const [boardDate, setBoardDate] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [selectedFaculties, setSelectedFaculties] = useState([]);
-  const [students, setStudents] = useState([]); 
-  const [faculties, setFaculties] = useState([]); 
+  const [students, setStudents] = useState([]);
+  const [faculties, setFaculties] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,12 +76,14 @@ const Pizarra = () => {
 
   return (
     <Container>
-      <Header>
-        <NewBoardButton onClick={() => setShowModal(true)}>
-          <Plus size={20} />
-          Nueva Pizarra
-        </NewBoardButton>
-      </Header>
+      <CardHeader title="Pizarras">
+        <Header>
+          <NewBoardButton onClick={() => setShowModal(true)}>
+            <Plus size={20} />
+            Nueva Pizarra
+          </NewBoardButton>
+        </Header>
+      </CardHeader>
 
       <TabsContainer>
         <TabsList>
@@ -101,119 +104,17 @@ const Pizarra = () => {
         <BoardsGrid>
           {boards[activeTab].map((board) => (
             <BoardCard key={board.id}>
-              <CardHeader>
+              <CardHeaders>
                 <CardTitle>{board.title}</CardTitle>
                 {getIcon(board.type)}
-              </CardHeader>
+              </CardHeaders>
               <CardDate>Creada el: {new Date(board.date).toLocaleDateString()}</CardDate>
             </BoardCard>
           ))}
         </BoardsGrid>
       </TabsContainer>
 
-      {showModal && (
-        <Modal onClick={() => setShowModal(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              <ModalTitle>Nueva Pizarra</ModalTitle>
-              <CloseButton onClick={() => setShowModal(false)}>&times;</CloseButton>
-            </ModalHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleCreateBoard();
-              }}
-            >
-              <FormGroup>
-                <label htmlFor="boardName">Nombre de la Pizarra</label>
-                <input
-                  type="text"
-                  id="boardName"
-                  value={boardName}
-                  onChange={(e) => setBoardName(e.target.value)}
-                  required
-                />
-              </FormGroup>
 
-              <FormGroup>
-                <label htmlFor="boardType">Tipo</label>
-                <select
-                  id="boardType"
-                  value={boardType}
-                  onChange={(e) => setBoardType(e.target.value)}
-                  required
-                >
-                  <option value="individual">Individual</option>
-                  <option value="grupal">Grupal</option>
-                  <option value="colaborativo">Colaborativo</option>
-                </select>
-              </FormGroup>
-
-              {boardType === "grupal" && (
-                <FormGroup>
-                  <label htmlFor="students">Seleccionar Estudiantes</label>
-                  <select
-                    id="students"
-                    multiple
-                    value={selectedStudents}
-                    onChange={(e) =>
-                      setSelectedStudents(
-                        Array.from(e.target.selectedOptions, (option) => option.value)
-                      )
-                    }
-                  >
-                    {students.map((student) => (
-                      <option key={student.id} value={student.id}>
-                        {student.name}
-                      </option>
-                    ))}
-                  </select>
-                </FormGroup>
-              )}
-
-              {boardType === "colaborativo" && (
-                <FormGroup>
-                  <label htmlFor="faculties">Seleccionar Otras Facultades</label>
-                  <select
-                    id="faculties"
-                    multiple
-                    value={selectedFaculties}
-                    onChange={(e) =>
-                      setSelectedFaculties(
-                        Array.from(e.target.selectedOptions, (option) => option.value)
-                      )
-                    }
-                  >
-                    {faculties.map((faculty) => (
-                      <option key={faculty.id} value={faculty.id}>
-                        {faculty.name}
-                      </option>
-                    ))}
-                  </select>
-                </FormGroup>
-              )}
-
-              <FormGroup>
-                <label htmlFor="boardDate">Fecha</label>
-                <input
-                  type="date"
-                  id="boardDate"
-                  value={boardDate}
-                  onChange={(e) => setBoardDate(e.target.value)}
-                  required
-                />
-              </FormGroup>
-
-              <FormActions>
-                <button type="submit" onClick={handleCreateBoard}>Crear</button>
-                <button type="button" onClick={() => setShowModal(false)}>
-                  Cancelar
-                </button>
-              </FormActions>
-            </form>
-          </ModalContent>
-        </Modal>
-      )}
     </Container>
   );
 };

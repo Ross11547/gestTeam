@@ -43,6 +43,13 @@ export const AppContainer = styled.div`
   box-sizing: border-box;
 `;
 
+export const FotoPerfil = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  border-radius: 12px;
+`;
+
 export const SidebarWrapper = styled.div`
   width: ${(props) => (props.minimized ? "80px" : "300px")};
   height: 100%;

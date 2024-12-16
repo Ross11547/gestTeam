@@ -1,9 +1,11 @@
 export const ColorsEstu = {
     // Amarillos
-    primary: "#FFCC00",   
+    primary: "#fcbf49",   
     primary100: "#FFDE59", 
     primary200: "#FFE680", 
     primary300: "#FFD700",
+    primary800: "#F8E061ff",
+    primary900: "#ffc107",
     // Amarillos Oscuros
     primary400: "#E6B800",
     primary500: "#CC9A00", 
@@ -28,3 +30,4 @@ export const Colors = {
     greyDark: "#4D4D4D",   
     black: "#000000"       
 };
+

@@ -7,13 +7,18 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
+  width: 25%;
+  height: 90%;
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
+  justify-content: center;
+  align-items:flex-end;
 `;
 
 export const NewBoardButton = styled.button`
+  width: 200px;
+  height: 50px;
   display: flex;
+  justify-content:center;
   align-items: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #F8E061ff, #ffc107);
@@ -23,7 +28,7 @@ export const NewBoardButton = styled.button`
   border: none;
   cursor: pointer;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s;
-margin-top:20px;
+  margin-top:20px;
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -74,7 +79,7 @@ export const BoardCard = styled.div`
   }
 `;
 
-export const CardHeader = styled.div`
+export const CardHeaders = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

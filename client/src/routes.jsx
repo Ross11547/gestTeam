@@ -12,6 +12,7 @@ import Login from "./pages/public/login.jsx";
 import Layout from "./pages/private/layout.jsx";
 import ExcalidrawComponente from "./components/excalidraw.jsx";
 import Excalidraw from "./pages/private/excalidraw/index.jsx";
+import Notificacion from "./pages/private/notificaciones/index.jsx";
 /* import NavbarAdmin from "./components/ui/navAdmin/navAdmin.jsx"; */
 /* import Facultad from "./pages/admin/facultad/index.jsx";
  */ /* import Usuario from "./pages/admin/usuario/index.jsx"; */
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         <Route path={ROUTES.DASHBOARD} element={<Inicio />} />
         <Route path={ROUTES.MATERIA} element={<Materia />} />
         <Route path={ROUTES.COLABORACION} element={<Colaboracion />} />
+        <Route path={ROUTES.NOTIFICACION} element={<Notificacion />} />
         <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
         <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
       </Route>

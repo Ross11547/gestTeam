@@ -1,43 +1,10 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  Calendar,
-  Mail,
-  Bell,
-  PlusCircle,
-  ChevronsLeft,
-  ChevronsRight,
-  User,
-  Settings as SettingsIcon,
-  Slack,
-  Trello,
-  Zap,
-  NotebookIcon,
-} from "lucide-react";
-import {
-  GlobalStyle,
-  AppContainer,
-  Badge,
-  CreateTaskButto2,
-  CreateTaskButton,
-  IconWrapper,
-  MenuItem,
-  MinimizedIconContainer,
-  ProfileSection,
-  SectionTitle,
-  ServiceItem,
-  ServiceSection,
-  SidebarContent,
-  SidebarWrapper,
-  ToggleButton,
-  colors,
-  Profile,
-  TitleMenu,
-} from "../style/navbar";
+import { Layout, Calendar, Mail, Bell, PlusCircle, ChevronsLeft, ChevronsRight, User, Trello } from "lucide-react";
+import { GlobalStyle, AppContainer, Badge, CreateTaskButto2, CreateTaskButton, IconWrapper, MenuItem, MinimizedIconContainer, ProfileSection, SectionTitle, ServiceItem, ServiceSection, SidebarContent, SidebarWrapper, ToggleButton, colors, Profile, TitleMenu, FotoPerfil } from "../style/navbar";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../enums/routes/Routes";
+import Foto from "../assets/img/Foto.jpg";
 const SidebarNavigation = ({ minimized, toggleSidebar }) => {
-  //const [minimized, setMinimized] = useState(false);
   const [activeItem, setActiveItem] = useState("project");
 
   const menuItems = [
@@ -94,11 +61,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
               <ChevronsRight size={20} color={colors.primary} />
             </ToggleButton>
             <Profile>
-              <User
-                size={50}
-                color={colors.text.light}
-                style={{ marginRight: "15px" }}
-              />
+              <FotoPerfil src={Foto} alt="" />
             </Profile>
 
             <TitleMenu>
@@ -132,17 +95,13 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
           </ToggleButton>
           <SidebarContent minimized={false}>
             <ProfileSection>
-              <User
-                size={50}
-                color={colors.text.light}
-                style={{ marginRight: "15px" }}
-              />
+              <FotoPerfil src={Foto} alt="" />
               <div>
                 <div style={{ color: colors.text.light, fontSize: "0.9em" }}>
                   Buenos dias 👋
                 </div>
                 <div style={{ fontWeight: "bold", color: colors.text.dark }}>
-                  Rossana angela
+                  Rossana Trujillo
                 </div>
               </div>
             </ProfileSection>
