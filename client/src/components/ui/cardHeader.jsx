@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import Logo from "../../assets/img/headerPort.svg";
 import {
   BackgroundIllustration,
@@ -9,13 +9,13 @@ import {
   Title,
 } from "../../style/materiasStyled";
 
-const CardHeader = ({ title, Children }) => {
+const CardHeader = ({ title, children }) => {
   return (
     <Header>
       <HeaderTitle>
         <Title>{title}</Title>
       </HeaderTitle>
-      <HeaderContent>{Children}</HeaderContent>
+      <HeaderContent>{children}</HeaderContent>
       <BackgroundIllustration>
         <ImgLogo src={Logo} />
       </BackgroundIllustration>

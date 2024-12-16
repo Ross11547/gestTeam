@@ -236,3 +236,33 @@ export const H1Division = styled.h1`
   font-weight: bold;
   font-size: 25px;
 `;
+
+export const ProfileUser = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  padding: 20px;
+`;
+export const ImgProfile = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  margin: 0px 10px;
+  object-fit: cover;
+`;
+export const Divlabel = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+`;
+export const LabelUser = styled.label`
+  display: flex;
+  flex-direction: column;
+  color: #6b7280;
+  font-size: 700;
+  font-size: 17px;
+  margin: 5px;
+`;

@@ -65,7 +65,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
       label: "Colaboraciones",
       key: "colaboraciones",
       route: ROUTES.COLABORACION,
-      badge: 4,
+      badge: 3,
     },
     {
       icon: <Bell size={20} />,

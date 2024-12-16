@@ -1,21 +1,13 @@
 import React, { useState, useMemo } from "react";
-import styled from "styled-components";
-import Logo from "../../../assets/img/headerPort.svg";
 import {
   SubjectsGrid,
-  BackgroundIllustration,
   Container,
-  Header,
-  HeaderContent,
-  HeaderTitle,
   ImageContainer,
-  ImgLogo,
   SubjectCard,
   SubjectContent,
   SubjectDetail,
   SubjectImage,
   SubjectTitle,
-  Title,
   TableContainer,
   H1Division,
   TableCell,
@@ -24,9 +16,14 @@ import {
   TableHeaderRow,
   TableRow,
   TableStyled,
+  ProfileUser,
+  ImgProfile,
+  Divlabel,
+  LabelUser,
 } from "../../../style/materiasStyled";
 import CardHeader from "../../../components/ui/cardHeader";
-
+import Director from "../../../assets/img/perfilUser1.webp";
+import styled from "styled-components";
 const SUBJECTS = [
   {
     id: 1,
@@ -170,7 +167,25 @@ const Materias = () => {
   ];
   return (
     <Container>
-      <CardHeader title="Mis materias" />
+      <CardHeader title="Mis materias">
+        <ProfileUser>
+          <ImgProfile src={Director} alt="Directora de carrera" />
+          <Divlabel>
+            <LabelUser>
+              <strong>Nombre</strong>
+              Ingeniera fabiola cadima
+            </LabelUser>
+            <LabelUser>
+              <strong>Telefono</strong>
+              +591 68984585
+            </LabelUser>
+            <LabelUser>
+              <strong>Correo</strong>
+              cbbe.fabiola.cadima@unifranz.doc.bo
+            </LabelUser>
+          </Divlabel>
+        </ProfileUser>
+      </CardHeader>
       <H1Division>Materias</H1Division>
       <SubjectsGrid>
         {filteredSubjects.map((subject) => (
