@@ -11,6 +11,8 @@ import {
   Trello,
   UserCircle,
   LogOut,
+  CalendarDays,
+  ChartBarBig,
 } from "lucide-react";
 import {
   GlobalStyle,
@@ -32,11 +34,13 @@ import {
   Profile,
   TitleMenu,
   FotoPerfil,
+  Calen,
 } from "../style/navbar";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../enums/routes/Routes";
 import Foto from "../assets/img/Foto.jpg";
 import { useUser } from "../context/useContext";
+import { ColorsEstu, ColorsLogin } from "../style/colors";
 const SidebarNavigation = ({ minimized, toggleSidebar }) => {
   const [activeItem, setActiveItem] = useState("project");
   const { user, logout } = useUser();
@@ -84,6 +88,12 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
           },
         ]
       : [
+          {
+            icon: <ChartBarBig size={20} />,
+            label: "Dashboard",
+            key: "dashboard",
+            route: ROUTES.DASHBOARDADMIN,
+          },
           {
             icon: <Layout size={20} />,
             label: "Docentes",
@@ -149,7 +159,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
 
   const handleCalendario = () => {
     navigate(ROUTES.CALENDARIOU);
-  }
+  };
 
   return (
     <>
@@ -174,9 +184,10 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
             <div>
               <SectionTitle>
                 <span>Menu</span>
-                <Calen onClick={handleCalendario}><CalendarDays size={22}/></Calen>
+                <Calen onClick={handleCalendario}>
+                  <CalendarDays size={22} />
+                </Calen>
               </SectionTitle>
-
             </div>
 
             {menuItems.map((item) => (
@@ -188,6 +199,11 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                 <MenuItem
                   active={activeItem === item.key}
                   onClick={() => setActiveItem(item.key)}
+                  dynamicColor={
+                    user?.rol === "Admin"
+                      ? ColorsLogin.secondary100
+                      : ColorsEstu.primary100
+                  }
                 >
                   <IconWrapper active={activeItem === item.key}>
                     {item.icon}
@@ -233,7 +249,6 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
               </>
             ) : (
               <>
-                {" "}
                 <CreateTaskButton onClick={() => logout()}>
                   <LogOut size={24} style={{ marginRight: "10px" }} />
                   Salir

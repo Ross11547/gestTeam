@@ -11,7 +11,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Toaster position="top-right" expand={false} richColors />
         <HashRouter>
-          <AppRoutes />
+          <UserProvider>
+            <AppRoutes />
+          </UserProvider>
         </HashRouter>
       </QueryClientProvider>
     </>

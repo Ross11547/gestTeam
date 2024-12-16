@@ -13,6 +13,7 @@ export const ROUTES = {
   CALENDARIOU: "/estudiante/calendario",
   //admin
   ADMIN: "/admin",
+  DASHBOARDADMIN: "/admin/dashboard",
   DIRECTOCARRERA: "/admin/directo-carrera",
   DOCENTE: "/admin/docente",
   FACULTAD: "/admin/facultad",

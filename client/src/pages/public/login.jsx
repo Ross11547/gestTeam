@@ -51,7 +51,11 @@ const Login = () => {
         if (data.mensaje == "Inicio de sesión correcto") {
           login(data.data);
           toast.success(data.mensaje);
-          navigation(ROUTES.DASHBOARD);
+          if (data.data.rol == "Admin") {
+            navigation(ROUTES.DASHBOARDADMIN);
+          } else {
+            navigation(ROUTES.DASHBOARD);
+          }
         }
         if (data.mensaje == "Usuario no autorizado") {
           toast.error(data.mensaje);

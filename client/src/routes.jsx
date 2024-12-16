@@ -13,14 +13,20 @@ import Layout from "./pages/private/layout.jsx";
 import ExcalidrawComponente from "./components/excalidraw.jsx";
 import Excalidraw from "./pages/private/excalidraw/index.jsx";
 import Notificacion from "./pages/private/notificaciones/index.jsx";
-import { UserProvider } from "./context/useContext.jsx";
 import CalendarioUni from "./components/calendarioUni.jsx";
 /* import NavbarAdmin from "./components/ui/navAdmin/navAdmin.jsx"; */
 /* import Facultad from "./pages/admin/facultad/index.jsx";
  */ /* import Usuario from "./pages/admin/usuario/index.jsx"; */
+import { useUser } from "./context/useContext.jsx";
+import Docente from "./pages/admin/docente/index.jsx";
+import Directores from "./pages/admin/directores/index.jsx";
+import Facultades from "./pages/admin/facultades/index.jsx";
+import Alumno from "./pages/admin/alumno/index.jsx";
+import Dashboard from "./pages/admin/dashboard/index.jsx";
 const AppRoutes = () => {
+  const { user } = useUser();
   return (
-    <UserProvider>
+    <>
       <Routes>
         <Route path={ROUTES.LOGIN} element={<Login />} />
 
@@ -28,18 +34,27 @@ const AppRoutes = () => {
         <Route path={ROUTES.FACULTAD} element={<Facultad />} />
         <Route path={ROUTES.USUARIO} element={<Usuario />} />
       </Route> */}
-
-        <Route path={ROUTES.ESTUDIANTE} element={<Layout />}>
-          <Route path={ROUTES.DASHBOARD} element={<Inicio />} />
-          <Route path={ROUTES.MATERIA} element={<Materia />} />
-          <Route path={ROUTES.COLABORACION} element={<Colaboracion />} />
-          <Route path={ROUTES.NOTIFICACION} element={<Notificacion />} />
-          <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
-          <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
-          <Route path={ROUTES.CALENDARIOU} element={<CalendarioUni />} />
-        </Route>
+        {user?.rol === "Admin" ? (
+          <Route path={ROUTES.ADMIN} element={<Layout />}>
+            <Route path={ROUTES.DASHBOARDADMIN} element={<Dashboard />} />
+            <Route path={ROUTES.DOCENTE} element={<Docente />} />
+            <Route path={ROUTES.DIRECTOCARRERA} element={<Directores />} />
+            <Route path={ROUTES.FACULTAD} element={<Facultades />} />
+            <Route path={ROUTES.USUARIO} element={<Alumno />} />
+          </Route>
+        ) : (
+          <Route path={ROUTES.ESTUDIANTE} element={<Layout />}>
+            <Route path={ROUTES.DASHBOARD} element={<Inicio />} />
+            <Route path={ROUTES.MATERIA} element={<Materia />} />
+            <Route path={ROUTES.COLABORACION} element={<Colaboracion />} />
+            <Route path={ROUTES.NOTIFICACION} element={<Notificacion />} />
+            <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
+            <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
+            <Route path={ROUTES.CALENDARIOU} element={<CalendarioUni />} />
+          </Route>
+        )}
       </Routes>
-    </UserProvider>
+    </>
   );
 };
 

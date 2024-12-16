@@ -118,12 +118,12 @@ export const MenuItem = styled.div`
   ${smoothTransition};
 
   background-color: ${(props) =>
-    props.active ? colors.primary : "transparent"};
+    props.active ? props.dynamicColor : "transparent"};
   color: ${(props) => (props.active ? "white" : colors.text.dark)};
 
   &:hover {
     background-color: ${(props) =>
-      props.active ? colors.primary : colors.background.dark};
+      props.active ? props.dynamicColor : colors.background.dark};
   }
 `;
 
