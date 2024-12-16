@@ -35,6 +35,7 @@ import {
   TitleMenu,
 } from "../style/navbar";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../enums/routes/Routes";
 const SidebarNavigation = ({ minimized, toggleSidebar }) => {
   //const [minimized, setMinimized] = useState(false);
   const [activeItem, setActiveItem] = useState("project");
@@ -43,17 +44,17 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
     {
       icon: <Layout size={20} />,
       label: "Inicio",
-      key: "inicio",
+      key: ROUTES.DASHBOARD,
     },
     {
       icon: <Trello size={20} />,
       label: "Materias",
-      key: "materias",
+      key: ROUTES.MATERIA,
     },
     {
       icon: <Calendar size={20} />,
       label: "Proyectos",
-      key: "proyectos",
+      key: ROUTES.PROYECTO,
       extra: "+",
     },
     {
@@ -147,7 +148,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
             {menuItems.map((item) => (
               <Link
                 key={item.key}
-                to={`/${item.key}`}
+                to={item.key}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <MenuItem
@@ -178,11 +179,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                 </ServiceItem>
               ))}
               <ServiceItem>
-                <PlusCircle
-                  size={24}
-                  color={colors.primary}
-                  style={{ marginRight: "10px" }}
-                />
+                <PlusCircle size={24} color={colors.primary} style={{ marginRight: "10px" }}/>
                 Añadir una herramienta
               </ServiceItem>
             </ServiceSection>

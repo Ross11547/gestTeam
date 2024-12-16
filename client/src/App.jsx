@@ -1,21 +1,18 @@
-import SidebarNav from "./components/sidebar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Inicio from "./pages/private/inicio";
-import Materias from "./pages/private/materias";
-import Colaboradores from "./pages/private/colaboradores";
-import Layout from "./pages/private/layout";
-import Login from "./pages/public/login";
+import { HashRouter } from "react-router-dom";
+import AppRoutes from "./routes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
+const queryClient = new QueryClient();
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/" element={<Layout />}>
-          <Route path="/inicio" element={<Inicio />} />
-          <Route path="/materias" element={<Materias />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+   
+      <QueryClientProvider client={queryClient}>
+        <Toaster position="top-right" reverseOrder={false} />
+        <HashRouter>
+          <AppRoutes />
+        </HashRouter>
+      </QueryClientProvider>
+  
   );
 }
 

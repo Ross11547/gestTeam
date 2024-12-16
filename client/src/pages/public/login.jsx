@@ -12,9 +12,9 @@ import {
   StyledLabel,
   StyledInput,
 } from "../../style/loginStyle.jsx";
-import Logo from "../../assets/img/logoDos.png";
 import Fondo from "../../assets/img/FondoCinco.png";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../enums/routes/Routes.js";
 
 const Login = () => {
   const navigation = useNavigate();
@@ -23,7 +23,7 @@ const Login = () => {
   const handleFocus = () => setIsActive(true);
   const handleBlur = (e) => setIsActive(e.target.value !== "");
   const handlesubmit = () => {
-    navigation("/inicio");
+    navigation(ROUTES.DASHBOARD);
   };
   return (
     <LoginContainer>
