@@ -20,10 +20,10 @@ import {
   ImgProfile,
   Divlabel,
   LabelUser,
+  TableCont,
 } from "../../../style/estudiante/materiasStyled";
 import CardHeader from "../../../components/ui/cardHeader";
 import Director from "../../../assets/img/perfilUser1.webp";
-import styled from "styled-components";
 const SUBJECTS = [
   {
     id: 1,
@@ -206,34 +206,36 @@ const Materias = () => {
         ))}
       </SubjectsGrid>
       <H1Division>Evaluaciones</H1Division>
-      <TableContainer>
-        <TableStyled>
-          <TableHeader>
-            <TableHeaderRow>
-              <TableHeaderCell>ASIGNATURA</TableHeaderCell>
-              <TableHeaderCell>DÍA</TableHeaderCell>
-              <TableHeaderCell>HITO 1</TableHeaderCell>
-              <TableHeaderCell>HITO 2</TableHeaderCell>
-              <TableHeaderCell>HITO 3</TableHeaderCell>
-              <TableHeaderCell>HITO 4</TableHeaderCell>
-              <TableHeaderCell>HITO 5</TableHeaderCell>
-            </TableHeaderRow>
-          </TableHeader>
-          <tbody>
-            {data.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell>{item.asignatura}</TableCell>
-                <TableCell>{item.dia}</TableCell>
-                <TableCell>{item.hito1}</TableCell>
-                <TableCell>{item.hito2}</TableCell>
-                <TableCell>{item.hito3}</TableCell>
-                <TableCell>{item.hito4}</TableCell>
-                <TableCell>{item.hito5}</TableCell>
-              </TableRow>
-            ))}
-          </tbody>
-        </TableStyled>
-      </TableContainer>
+      <TableCont>
+        <TableContainer>
+          <TableStyled>
+            <TableHeader>
+              <TableHeaderRow>
+                <TableHeaderCell>ASIGNATURA</TableHeaderCell>
+                <TableHeaderCell>DÍA</TableHeaderCell>
+                <TableHeaderCell>HITO 1</TableHeaderCell>
+                <TableHeaderCell>HITO 2</TableHeaderCell>
+                <TableHeaderCell>HITO 3</TableHeaderCell>
+                <TableHeaderCell>HITO 4</TableHeaderCell>
+                <TableHeaderCell>HITO 5</TableHeaderCell>
+              </TableHeaderRow>
+            </TableHeader>
+            <tbody>
+              {data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{item.asignatura}</TableCell>
+                  <TableCell>{item.dia}</TableCell>
+                  <TableCell>{item.hito1}</TableCell>
+                  <TableCell>{item.hito2}</TableCell>
+                  <TableCell>{item.hito3}</TableCell>
+                  <TableCell>{item.hito4}</TableCell>
+                  <TableCell>{item.hito5}</TableCell>
+                </TableRow>
+              ))}
+            </tbody>
+          </TableStyled>
+        </TableContainer>
+      </TableCont>
     </Container>
   );
 };

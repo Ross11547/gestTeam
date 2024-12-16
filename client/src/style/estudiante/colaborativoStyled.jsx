@@ -7,9 +7,8 @@ export const fadeIn = keyframes`
 `;
 
 export const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  padding: 1rem;
 `;
 
 export const CollaboratorsGrid = styled.div`

@@ -147,6 +147,10 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
     );
   }
 
+  const handleCalendario = () => {
+    navigate(ROUTES.CALENDARIOU);
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -167,10 +171,13 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                 </div>
               </div>
             </ProfileSection>
+            <div>
+              <SectionTitle>
+                <span>Menu</span>
+                <Calen onClick={handleCalendario}><CalendarDays size={22}/></Calen>
+              </SectionTitle>
 
-            <SectionTitle>
-              <span>Menu</span>
-            </SectionTitle>
+            </div>
 
             {menuItems.map((item) => (
               <Link

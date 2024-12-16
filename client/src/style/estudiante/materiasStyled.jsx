@@ -129,7 +129,7 @@ export const SearchBar = styled.input`
   border-radius: 30px;
   width: 300px;
   font-size: 1rem;
-  background-color: white;
+  background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 
@@ -170,43 +170,49 @@ export const HeaderTitle = styled.div`
   width: 100%;
 `;
 
+export const TableCont = styled.div`
+  width: 100%;
+  height: 455px;
+`;
+
 export const TableContainer = styled.div`
-  background-color: white;
+  width: 100%;
+  background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 20px 0;
-  overflow: hidden;
 `;
 
 export const TableStyled = styled.table`
   width: 100%;
+  height: 50px;
   border-collapse: separate;
   border-spacing: 0;
 `;
 
 export const TableHeader = styled.thead`
-  background-color: ${ColorsEstu.primary};
+  background: ${ColorsEstu.primary};
 `;
 
 export const TableHeaderRow = styled.tr`
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 `;
 
 export const TableHeaderCell = styled.th`
   padding: 15px;
   text-align: left;
   color: white;
-  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.9rem;
+  text-align: center;
 `;
 
 export const TableRow = styled.tr`
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
   cursor: pointer;
   &:hover {
-    background-color: rgba(224, 224, 224, 0.25);
+    background: rgba(224, 224, 224, 0.25);
   }
 `;
 
@@ -215,8 +221,7 @@ export const TableCell = styled.td`
   border-bottom: 1px solid #e0e0e0;
   color: #000;
   font-size: 0.9rem;
-  font-weight: 500;
-  color: #6b7280;
+  font-weight: bold;
 `;
 
 export const H1Division = styled.h1`
@@ -224,13 +229,13 @@ export const H1Division = styled.h1`
   text-align: center;
   bottom: 20px;
   left: 20px;
-  background-color: ${ColorsEstu.primary};
+  background: ${ColorsEstu.primary};
   color: white;
   border: none;
   padding: 15px;
   border-radius: 10px;
   font-weight: bold;
-  font-size: 25px;
+  font-size: 20px;
 `;
 
 export const ProfileUser = styled.div`

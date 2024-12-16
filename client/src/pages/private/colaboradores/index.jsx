@@ -66,7 +66,7 @@ const Colaboradores = () => {
 
   return (
     <Container>
-      <CardHeader title="Nuestros Colaboradores" />
+      <CardHeader title="Colaboraciones" />
       <CollaboratorsGrid>
         {filteredCollaborators.map((collaborator) => (
           <CollaboratorCard key={collaborator.id}>

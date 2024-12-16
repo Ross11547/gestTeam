@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Colors, ColorsEstu } from "../colors";
 
 export const Container = styled.div`
   width: 100%;
@@ -86,11 +87,13 @@ export const CardHeaders = styled.div`
 `;
 
 export const CardTitle = styled.h3`
-  color: #1f2937;
+  color: ${Colors.black};
+  font-size: 18px;
 `;
 
 export const CardDate = styled.p`
-  color: #9ca3af;
+  color: ${Colors.greyLight};
+  font-size: 15px;
 `;
 
 export const Modal = styled.div`
@@ -103,7 +106,7 @@ export const Modal = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background: white;
+  background:${Colors.white};
   padding: 2rem;
   border-radius: 1rem;
   width: 80%;
@@ -121,7 +124,7 @@ export const ModalHeader = styled.div`
 
 export const ModalTitle = styled.h2`
   font-size: 1.5rem;
-  color: #1f2937;
+  color: ${Colors.black};
 `;
 
 export const CloseButton = styled.button`
@@ -129,13 +132,12 @@ export const CloseButton = styled.button`
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6b7280;
+  color: ${Colors.greyLight};
 
   &:hover {
-    color: #1f2937;
+    color: ${Colors.black};
   }
 `;
-// Grupo de formularios
 export const FormGroup = styled.div`
   margin-bottom: 15px;
 
@@ -143,7 +145,7 @@ export const FormGroup = styled.div`
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151;
+    color: ${Colors.black};
     margin-bottom: 5px;
   }
 
@@ -152,20 +154,19 @@ export const FormGroup = styled.div`
     width: 100%;
     padding: 10px;
     font-size: 1rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid ${Colors.greyLight};
     border-radius: 5px;
-    background-color: #f9fafb;
-    color: #374151;
+    background: ${Colors.white};
+    color: ${Colors.black};
 
     &:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+      border-color: ${Colors.greyLight};
+      
     }
   }
 `;
 
-// Contenedor de acciones del formulario
 export const FormActions = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -180,17 +181,17 @@ export const FormActions = styled.div`
     transition: background-color 0.3s;
 
     &:first-child {
-      background-color: #2563eb;
+      background-color: ${ColorsEstu.primary400};
       color: white;
 
       &:hover {
-        background-color: #1d4ed8;
+        background-color: ${ColorsEstu.primary900};
       }
     }
 
     &:last-child {
       background-color: #f3f4f6;
-      color: #374151;
+      color: ${Colors.black};
 
       &:hover {
         background-color: #e5e7eb;

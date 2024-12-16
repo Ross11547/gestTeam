@@ -14,6 +14,7 @@ import ExcalidrawComponente from "./components/excalidraw.jsx";
 import Excalidraw from "./pages/private/excalidraw/index.jsx";
 import Notificacion from "./pages/private/notificaciones/index.jsx";
 import { UserProvider } from "./context/useContext.jsx";
+import CalendarioUni from "./components/calendarioUni.jsx";
 /* import NavbarAdmin from "./components/ui/navAdmin/navAdmin.jsx"; */
 /* import Facultad from "./pages/admin/facultad/index.jsx";
  */ /* import Usuario from "./pages/admin/usuario/index.jsx"; */
@@ -35,6 +36,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.NOTIFICACION} element={<Notificacion />} />
           <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
           <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
+          <Route path={ROUTES.CALENDARIOU} element={<CalendarioUni />} />
         </Route>
       </Routes>
     </UserProvider>
