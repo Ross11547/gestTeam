@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Layout, Calendar, Mail, Bell, PlusCircle, ChevronsLeft, ChevronsRight, User, Trello } from "lucide-react";
-import { GlobalStyle, AppContainer, Badge, CreateTaskButto2, CreateTaskButton, IconWrapper, MenuItem, MinimizedIconContainer, ProfileSection, SectionTitle, ServiceItem, ServiceSection, SidebarContent, SidebarWrapper, ToggleButton, colors, Profile, TitleMenu, FotoPerfil } from "../style/navbar";
-import { Link } from "react-router-dom";
+import { Layout, Calendar, Mail, Bell, PlusCircle, ChevronsLeft, ChevronsRight, Trello, CalendarDays } from "lucide-react";
+import { GlobalStyle, AppContainer, Badge, CreateTaskButto2, CreateTaskButton, IconWrapper, MenuItem, MinimizedIconContainer, ProfileSection, SectionTitle, ServiceItem, ServiceSection, SidebarContent, SidebarWrapper, ToggleButton, colors, Profile, TitleMenu, FotoPerfil, Calen } from "../style/navbar";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../enums/routes/Routes";
 import Foto from "../assets/img/Foto.jpg";
+import { Colors, ColorsLogin } from "../style/colors";
 const SidebarNavigation = ({ minimized, toggleSidebar }) => {
   const [activeItem, setActiveItem] = useState("project");
+  const navigate = useNavigate();
 
   const menuItems = [
     {
@@ -85,6 +87,10 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
     );
   }
 
+  const handleCalendario = () => {
+    navigate(ROUTES.CALENDARIOU);
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -105,10 +111,13 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                 </div>
               </div>
             </ProfileSection>
+            <div>
+              <SectionTitle>
+                <span>Menu</span>
+                <Calen onClick={handleCalendario}><CalendarDays size={22}/></Calen>
+              </SectionTitle>
 
-            <SectionTitle>
-              <span>Menu</span>
-            </SectionTitle>
+            </div>
 
             {menuItems.map((item) => (
               <Link

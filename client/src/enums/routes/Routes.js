@@ -10,6 +10,7 @@ export const ROUTES = {
     TAREAPENDIENTE: "/estudiante/tareapendiente",
     PIZARRA: "/estudiante/pizarra",
     EXCALIDRAW: "/estudiante/excalidraw",
+    CALENDARIOU: "/estudiante/calendario",
     //admin
     ADMIN: "/admin",
     FACULTAD: "/admin/facultad",

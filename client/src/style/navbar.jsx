@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle, css } from "styled-components";
+import { Colors, ColorsEstu } from "./colors";
 
 export const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -122,7 +123,7 @@ export const MenuItem = styled.div`
 
   &:hover {
     background-color: ${(props) =>
-      props.active ? colors.primary : colors.background.dark};
+    props.active ? colors.primary : colors.background.dark};
   }
 `;
 
@@ -141,14 +142,27 @@ export const Badge = styled.span`
 `;
 
 export const SectionTitle = styled.div`
+  width: 100%;
+  height: 30px;
   display: flex;
   justify-content: space-between;
-  color: ${colors.text.light};
+  align-items:center;
+  color: ${Colors.greyDark};
   font-size: 0.8em;
   margin: 20px 0 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight:bold;
 `;
+
+export const Calen = styled.div`
+  color:${Colors.greyDark};
+  cursor: pointer;
+  &:hover{
+    color:${ColorsEstu.primary400};
+  }
+`;
+
 export const TitleMenu = styled.div`
   display: flex;
   justify-content: space-between;
