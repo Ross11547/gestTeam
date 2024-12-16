@@ -200,9 +200,9 @@ const Materias = () => {
         </div>
       </Header> */}
       <Header>
-        <HeaderContent>
+        <HeaderTitle>
           <Title>Mis Materias</Title>
-          <div style={{ position: "relative" }}>
+          <CardHeader style={{ position: "relative" }}>
             <SearchBar
               type="text"
               placeholder="Buscar materias..."
@@ -219,10 +219,11 @@ const Materias = () => {
             >
               <Search size={20} />
             </IconWrapper>
-          </div>
-        </HeaderContent>
+          </CardHeader>
+        </HeaderTitle>
+        <HeaderContent></HeaderContent>
         <BackgroundIllustration>
-          <img src={Logo} />
+          <ImgLogo src={Logo} />
         </BackgroundIllustration>
       </Header>
       <SubjectsGrid>
@@ -248,25 +249,28 @@ const Materias = () => {
 };
 
 export default Materias;
-
+export const CardHeader = styled.div``;
 export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3rem;
-  height: 180px;
+  height: 280px;
   color: #333;
   background: linear-gradient(135deg, #ffcc00 0%, #ffd54f 100%);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 20px;
   position: relative;
-  //overflow: hidden;
+  flex-direction: column;
 `;
 
 export const HeaderContent = styled.div`
-  z-index: 2;
   position: relative;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 20px;
 `;
 
 /* export const Title = styled.h1`
@@ -310,4 +314,16 @@ export const BackgroundIllustration = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+export const ImgLogo = styled.img`
+  width: 350px;
+  height: 350px;
+`;
+export const HeaderTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  width: 100%;
+  
 `;

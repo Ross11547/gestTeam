@@ -39,6 +39,7 @@ const Container = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
   //background-color: ${({ theme }) => theme.colors.background || "#FFFFFF"};
 `;
 
@@ -51,7 +52,8 @@ const SidebarWrapper = styled.div`
 const ContentWrapper = styled.div`
   flex: 1;
   padding: 16px;
- // margin-left: ${({ isExpanded }) => (isExpanded ? "80px" : "100px")};
+  // margin-left: ${({ isExpanded }) => (isExpanded ? "80px" : "100px")};
   transition: margin-left 0.3s ease;
   background-color: ${({ theme }) => theme.colors.content};
+  overflow-y: scroll;
 `;

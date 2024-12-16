@@ -44,34 +44,40 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
     {
       icon: <Layout size={20} />,
       label: "Inicio",
-      key: ROUTES.DASHBOARD,
+      key: "dashboard",
+      route: ROUTES.DASHBOARD,
     },
     {
       icon: <Trello size={20} />,
       label: "Materias",
-      key: ROUTES.MATERIA,
+      key: "materias",
+      route: ROUTES.MATERIA,
     },
     {
       icon: <Calendar size={20} />,
       label: "Proyectos",
-      key: ROUTES.PROYECTO,
+      key: "proyectos",
+      route: ROUTES.PROYECTO,
       extra: "+",
     },
     {
       icon: <Mail size={20} />,
       label: "Colaboraciones",
       key: "colaboraciones",
+      route: ROUTES.COLABORACION,
       badge: 4,
     },
     {
       icon: <Bell size={20} />,
-      label: "Notifications",
-      key: "notifications",
+      label: "Notificationes",
+      key: "notificaciones",
+      route: ROUTES.NOTIFICACION,
     },
     {
       icon: <Layout size={20} />,
       label: "Pizarra",
       key: "pizarra",
+      route: ROUTES.PIZARRA,
     },
   ];
 
@@ -148,7 +154,7 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
             {menuItems.map((item) => (
               <Link
                 key={item.key}
-                to={item.key}
+                to={item.route}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <MenuItem
@@ -179,7 +185,11 @@ const SidebarNavigation = ({ minimized, toggleSidebar }) => {
                 </ServiceItem>
               ))}
               <ServiceItem>
-                <PlusCircle size={24} color={colors.primary} style={{ marginRight: "10px" }}/>
+                <PlusCircle
+                  size={24}
+                  color={colors.primary}
+                  style={{ marginRight: "10px" }}
+                />
                 Añadir una herramienta
               </ServiceItem>
             </ServiceSection>
