@@ -1,112 +1,31 @@
 import React, { useState, useMemo } from "react";
 import styled from "styled-components";
-import { Search, BookOpen } from "lucide-react";
 import Logo from "../../../assets/img/headerPort.svg";
-//import { Header, IconWrapper, SearchBar } from "../../../style/styledInicio";
-const Container = styled.div`
-  max-width: 95%;
-  margin: 0 auto;
-  padding: 2rem;
-  min-height: 100vh;
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  color: #fff;
-  margin-bottom: 1rem;
-  font-weight: bold;
-`;
-
-const SubjectsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-`;
-
-const SubjectCard = styled.div`
-  cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s ease;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border: 1px solid #e0e0e0;
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg, #f89c5e 0%, #ffcc00 100%);
-  }
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  }
-`;
-
-const ImageContainer = styled.div`
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  position: relative;
-`;
-
-const SubjectImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-
-  ${SubjectCard}:hover & {
-    transform: scale(1.1);
-  }
-`;
-
-const SubjectIconOverlay = styled(BookOpen)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-
-  ${SubjectCard}:hover & {
-    opacity: 1;
-  }
-`;
-
-const SubjectContent = styled.div`
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-`;
-
-const SubjectTitle = styled.h2`
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 0.75rem;
-  text-align: center;
-`;
-
-const SubjectDetail = styled.p`
-  color: #6b7280;
-  font-size: 1rem;
-  margin: 0.25rem 0;
-  text-align: center;
-  font-weight: 500;
-`;
+import {
+  SubjectsGrid,
+  BackgroundIllustration,
+  Container,
+  Header,
+  HeaderContent,
+  HeaderTitle,
+  ImageContainer,
+  ImgLogo,
+  SubjectCard,
+  SubjectContent,
+  SubjectDetail,
+  SubjectImage,
+  SubjectTitle,
+  Title,
+  TableContainer,
+  H1Division,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableHeaderRow,
+  TableRow,
+  TableStyled,
+} from "../../../style/materiasStyled";
+import CardHeader from "../../../components/ui/cardHeader";
 
 const SUBJECTS = [
   {
@@ -175,57 +94,84 @@ const Materias = () => {
         subject.teacher.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [searchQuery]);
-
+  const data = [
+    {
+      asignatura: "INGENIERÍA DE SISTEMAS",
+      dia: "VIE",
+      hito1: "09/08/2024",
+      hito2: "06/09/2024",
+      hito3: "25/10/2024",
+      hito4: "22/11/2024",
+      hito5: "20/12/2024",
+    },
+    {
+      asignatura: "INGENIERÍA DE SOFTWARE I",
+      dia: "MIE",
+      hito1: "07/08/2024",
+      hito2: "04/09/2024",
+      hito3: "16/10/2024",
+      hito4: "20/11/2024",
+      hito5: "18/12/2024",
+    },
+    {
+      asignatura: "PROGRAMACION AVANZADA",
+      dia: "JUE",
+      hito1: "08/08/2024",
+      hito2: "12/09/2024",
+      hito3: "17/10/2024",
+      hito4: "21/11/2024",
+      hito5: "19/12/2024",
+    },
+    {
+      asignatura: "PREPARACION Y EVALUACION DE PROYECTOS",
+      dia: "MAR",
+      hito1: "13/08/2024",
+      hito2: "03/09/2024",
+      hito3: "22/10/2024",
+      hito4: "26/11/2024",
+      hito5: "17/12/2024",
+    },
+    {
+      asignatura: "PROYECTO INTEGRADOR INTERMEDIO I",
+      dia: "LUN",
+      hito1: "12/08/2024",
+      hito2: "02/09/2024",
+      hito3: "21/10/2024",
+      hito4: "25/11/2024",
+      hito5: "21/12/2024",
+    },
+    {
+      asignatura: "SISTEMAS DE COMUNICACIONES",
+      dia: "VIE",
+      hito1: "09/08/2024",
+      hito2: "13/09/2024",
+      hito3: "18/10/2024",
+      hito4: "22/11/2024",
+      hito5: "13/12/2024",
+    },
+    {
+      asignatura: "SISTEMAS DIGITALES",
+      dia: "JUE",
+      hito1: "08/08/2024",
+      hito2: "05/09/2024",
+      hito3: "24/10/2024",
+      hito4: "21/11/2024",
+      hito5: "19/12/2024",
+    },
+    {
+      asignatura: "SISTEMAS OPERATIVOS MOVILES Y EMBEBIDOS",
+      dia: "MAR",
+      hito1: "13/08/2024",
+      hito2: "10/09/2024",
+      hito3: "15/10/2024",
+      hito4: "19/11/2024",
+      hito5: "17/12/2024",
+    },
+  ];
   return (
     <Container>
-      {/*  <Header>
-        <Title>Mis Materias</Title>
-        <div style={{ position: "relative" }}>
-          <SearchBar
-            type="text"
-            placeholder="Buscar materias..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <IconWrapper
-            style={{
-              position: "absolute",
-              right: "15px",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-          >
-            <Search size={20} />
-          </IconWrapper>
-        </div>
-      </Header> */}
-      <Header>
-        <HeaderTitle>
-          <Title>Mis Materias</Title>
-          <CardHeader style={{ position: "relative" }}>
-            <SearchBar
-              type="text"
-              placeholder="Buscar materias..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <IconWrapper
-              style={{
-                position: "absolute",
-                right: "15px",
-                top: "50%",
-                transform: "translateY(-50%)",
-              }}
-            >
-              <Search size={20} />
-            </IconWrapper>
-          </CardHeader>
-        </HeaderTitle>
-        <HeaderContent></HeaderContent>
-        <BackgroundIllustration>
-          <ImgLogo src={Logo} />
-        </BackgroundIllustration>
-      </Header>
+      <CardHeader title="Mis materias" />
+      <H1Division>Materias</H1Division>
       <SubjectsGrid>
         {filteredSubjects.map((subject) => (
           <SubjectCard key={subject.id}>
@@ -244,86 +190,37 @@ const Materias = () => {
           </SubjectCard>
         ))}
       </SubjectsGrid>
+      <H1Division>Evaluaciones</H1Division>
+      <TableContainer>
+        <TableStyled>
+          <TableHeader>
+            <TableHeaderRow>
+              <TableHeaderCell>ASIGNATURA</TableHeaderCell>
+              <TableHeaderCell>DÍA</TableHeaderCell>
+              <TableHeaderCell>HITO 1</TableHeaderCell>
+              <TableHeaderCell>HITO 2</TableHeaderCell>
+              <TableHeaderCell>HITO 3</TableHeaderCell>
+              <TableHeaderCell>HITO 4</TableHeaderCell>
+              <TableHeaderCell>HITO 5</TableHeaderCell>
+            </TableHeaderRow>
+          </TableHeader>
+          <tbody>
+            {data.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>{item.asignatura}</TableCell>
+                <TableCell>{item.dia}</TableCell>
+                <TableCell>{item.hito1}</TableCell>
+                <TableCell>{item.hito2}</TableCell>
+                <TableCell>{item.hito3}</TableCell>
+                <TableCell>{item.hito4}</TableCell>
+                <TableCell>{item.hito5}</TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </TableStyled>
+      </TableContainer>
     </Container>
   );
 };
 
 export default Materias;
-export const CardHeader = styled.div``;
-export const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-  height: 280px;
-  color: #333;
-  background: linear-gradient(135deg, #ffcc00 0%, #ffd54f 100%);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 30px;
-  padding: 20px;
-  position: relative;
-  flex-direction: column;
-`;
-
-export const HeaderContent = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border-radius: 20px;
-`;
-
-/* export const Title = styled.h1`
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #333;
-  font-weight: bold;
-`; */
-
-export const SearchBar = styled.input`
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 30px;
-  width: 300px;
-  font-size: 1rem;
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-    width: 320px;
-  }
-`;
-
-export const IconWrapper = styled.span`
-  margin-right: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  color: #333;
-`;
-
-export const BackgroundIllustration = styled.div`
-  position: absolute;
-  top: -25px;
-  right: 0;
-  bottom: 0;
-  width: 40%;
-  //opacity: 0.1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-export const ImgLogo = styled.img`
-  width: 350px;
-  height: 350px;
-`;
-export const HeaderTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-
-  width: 100%;
-  
-`;
