@@ -48,7 +48,6 @@ export async function inscribirEquipoFeriaCasoUso(feriaIdRaw, payload) {
     let nombreProyecto = data.nombreProyecto;
     let miembros = [];
 
-    // Inscripción desde un equipo real del sistema: se traen su proyecto y sus integrantes.
     if (data.equipoId) {
         const equipo = await prisma.equipo.findUnique({
             where: { id: data.equipoId },

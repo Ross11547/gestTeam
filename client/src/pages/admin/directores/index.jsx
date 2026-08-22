@@ -39,7 +39,6 @@ import { authFetch } from "../../../services/api";
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const FETCH_OPTS = { credentials: "include", headers: { "Content-Type": "application/json" } };
 
-// Helpers
 const strip = (s = "") =>
   s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 
@@ -63,19 +62,16 @@ const Directores = () => {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Catálogos
   const [facultades, setFacultades] = useState([]);
   const [carreras, setCarreras] = useState([]);
   const [materias, setMaterias] = useState([]);
 
-  // Formulario
   const [form, setForm] = useState({
     nombre: "", apellido: "", email: "", telefono: "", ci: "",
     idFacultad: "", idCarrera: "", materiaIds: [],
   });
   const setF = (p) => setForm((s) => ({ ...s, ...p }));
 
-  // Derivados (preview)
   const carreraSeleccionada = useMemo(
     () => carreras.find((c) => String(c.id) === String(form.idCarrera)) || null,
     [carreras, form.idCarrera]
@@ -104,7 +100,6 @@ const Directores = () => {
     return `${local}@unifranz.edu.bo`;
   }, [form.nombre, form.apellido]);
 
-  // API calls
   const readText = async (r) => { try { return await r.text(); } catch { return ""; } };
 
   const loadDirectores = async (q = "") => {
@@ -130,7 +125,6 @@ const Directores = () => {
     return r.json();
   };
 
-  // CRUD operations
   const handleCreate = async (payload) => {
     try {
       const r = await authFetch(`${BASE}/api/director`, {
@@ -189,7 +183,6 @@ const Directores = () => {
     }
   };
 
-  // Catálogos
   const loadFacultades = async () => {
     const r = await authFetch(`${BASE}/api/facultad`, FETCH_OPTS);
     const { data } = await r.json();
@@ -212,7 +205,6 @@ const Directores = () => {
     setMaterias(data || []);
   };
 
-  // Effects
   useEffect(() => { loadDirectores().catch(e => setErr(String(e.message || e))); }, []);
   useEffect(() => {
     const t = setTimeout(() => { loadDirectores(searchTerm).catch(e => setErr(String(e.message || e))); }, 300);
@@ -230,7 +222,6 @@ const Directores = () => {
     setF({ materiaIds: [] });
   }, [form.idCarrera]);
 
-  // Detect scroll need
   useEffect(() => {
     const checkScrollNeed = () => {
       const tableWrapper = document.querySelector('[data-table-wrapper]');
@@ -244,7 +235,6 @@ const Directores = () => {
     return () => window.removeEventListener('resize', checkScrollNeed);
   }, [rows]);
 
-  // Actions
   const openNew = () => {
     setEditingId(null);
     setForm({ nombre:"", apellido:"", email:"", telefono:"", ci:"", idFacultad:"", idCarrera:"", materiaIds:[] });
@@ -291,7 +281,6 @@ const Directores = () => {
     else await handleCreate(payload);
   };
 
-  // Modal
   const renderModal = () => {
     if (!isModalOpen) return null;
     return (

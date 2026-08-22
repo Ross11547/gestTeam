@@ -2,7 +2,6 @@ import { prisma } from "../../../infrastructure/db/prisma.client.js";
 import { crearError } from "../../../dominio/reporte/helpersReporte.js";
 import { generarReporte as validarGenerar } from "../../../dominio/reporte/validacionReporte.js";
 
-// Cada tipo produce un snapshot JSON con las estadísticas del momento.
 async function calcularDashboard() {
     const [usuariosPorRol, proyectosPorEstado, equipos, pizarras, documentos, evaluaciones] = await Promise.all([
         prisma.usuario.groupBy({ by: ["idRol"], _count: { _all: true } }),
@@ -24,7 +23,6 @@ async function calcularDashboard() {
 }
 
 async function calcularAvanceSemestre(periodoId) {
-    // Proyectos del periodo vía ProyectoMateria.
     const vinculos = await prisma.proyectoMateria.findMany({
         where: periodoId ? { periodoId } : undefined,
         select: { proyectoId: true },
@@ -140,7 +138,6 @@ async function calcularDocentesDesempeno(periodoId) {
     });
     const nombreDe = Object.fromEntries(docentes.map((d) => [d.id, `${d.nombre} ${d.apellido}`.trim()]));
 
-    // Consultas agrupadas (evita N+1 por docente)
     const todasLasClases = clases.map((c) => c.id);
     const [vinculos, evaluaciones] = await Promise.all([
         prisma.proyectoMateria.findMany({

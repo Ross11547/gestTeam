@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const estadosEntrega = ["BORRADOR", "ENTREGADO", "REVISADO", "DEVUELTO", "ATRASADO"];
 
-// evidenciaUrl acepta URL válida, cadena vacía (se normaliza a null) o null.
 const evidenciaUrl = z
     .union([z.string().trim().url("La evidencia debe ser una URL válida").max(500), z.literal(""), z.null()])
     .optional();

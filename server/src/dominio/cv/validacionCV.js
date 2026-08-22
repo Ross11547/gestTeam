@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const idPositivo = z.coerce.number().int().positive();
 
-// Las fechas llegan como string ISO o null; el caso de uso convierte a Date.
 const fechaOpcional = z
     .string()
     .refine((v) => !Number.isNaN(Date.parse(v)), "La fecha no es válida")

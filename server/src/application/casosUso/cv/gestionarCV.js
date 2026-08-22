@@ -24,7 +24,6 @@ export async function obtenerCVDelUsuario(usuarioId) {
     });
 }
 
-// El estudiante ve su CV; docentes y staff pueden consultar el de cualquiera.
 export async function obtenerCVDeUsuarioCasoUso(usuarioIdRaw, solicitante) {
     const usuarioId = ensureIdPositivo(usuarioIdRaw);
     if (!usuarioId) throw crearError("ID inválido", 400);
@@ -45,7 +44,6 @@ export async function obtenerCVDeUsuarioCasoUso(usuarioIdRaw, solicitante) {
 export async function obtenerMiCVCasoUso(solicitante) {
     const cv = await obtenerCVDelUsuario(solicitante.id);
     if (!cv) {
-        // Un CV vacío no es un error para el dueño: devuelve estructura lista.
         return {
             usuarioId: solicitante.id,
             resumen: "",
@@ -57,7 +55,6 @@ export async function obtenerMiCVCasoUso(solicitante) {
     return cv;
 }
 
-// Upsert de la cabecera del CV (crea si no existe).
 export async function guardarMiCVCasoUso(payload, solicitante) {
     const data = guardarCV.parse(payload);
 

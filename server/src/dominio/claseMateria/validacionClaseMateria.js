@@ -6,7 +6,7 @@ export const crearClaseMateria = z.object({
     periodoId: idPositivo("periodoId es requerido"),
     materiaId: idPositivo("materiaId es requerido"),
 
-    docenteId: z.coerce.number().int().positive().optional().nullable(), // puede ser null
+    docenteId: z.coerce.number().int().positive().optional().nullable(), 
 
     paralelo: z.string().trim().max(20).optional().nullable(),
     aula: z.string().trim().max(50).optional().nullable(),

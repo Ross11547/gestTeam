@@ -14,7 +14,6 @@ export function crearError(message, statusCode = 400) {
     return err;
 }
 
-// Staff = Admin o Director: pueden ver/gestionar todo el sistema.
 export function esRolStaff(usuario) {
     const nombre = String(usuario?.rol?.nombre || "").trim().toLowerCase();
     return nombre === "admin" || nombre === "director";

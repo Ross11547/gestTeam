@@ -23,9 +23,7 @@ function redirectToGithubPage(params = {}) {
   const qs = new URLSearchParams(params).toString();
   return `${FRONTEND_BASE}/#${FRONTEND_GITHUB_ROUTE}${qs ? `?${qs}` : ""}`;
 }
-// ============================
 // Helpers
-// ============================
 async function ensureAuth(req, res, next) {
   try {
     const secret = process.env.SESSION_SECRET || "dev_secret";
@@ -67,10 +65,7 @@ function slugifyRepoName(s = "") {
     .slice(0, 90);
 }
 
-// ============================
 // OAuth GitHub (link cuentas)
-// ============================
-
 // Iniciar OAuth (INSTITUCIONAL | PERSONAL)
 router.get("/oauth/start", ensureAuth, (req, res, next) => {
   const { type, t } = req.query;
@@ -118,13 +113,10 @@ router.get("/oauth/callback", (req, res, next) => {
   )(req, res, next);
 });
 
-// ============================
 // GitHub App (instalación)
-// ============================
-
 // Redirigir a instalación de la App (incluye state=t y guarda fallback en sesión)
 router.get("/app/install", (req, res) => {
-  const base = process.env.GITHUB_APP_INSTALL_REDIRECT; // ej: https://github.com/apps/<slug>/installations/new
+  const base = process.env.GITHUB_APP_INSTALL_REDIRECT; 
   if (!base) return res.status(500).send("Falta GITHUB_APP_INSTALL_REDIRECT");
 
   const t = String(req.query.t || "");
@@ -137,8 +129,8 @@ router.get("/app/install", (req, res) => {
   return res.redirect(url);
 });
 
-// Callback post-instalación (guarda installation_id)
-// Soporta fallback si GitHub NO devuelve state (toma de req.session.install_t)
+// Callback post-instalación 
+// Soporta fallback si GitHub NO devuelve state 
 router.get("/app/installed", async (req, res) => {
   try {
     let { installation_id, state } = req.query;
@@ -238,7 +230,7 @@ router.get("/app/installed", async (req, res) => {
   }
 });
 
-// Completar datos de instalaciones (si faltan accountLogin/accountId)
+// Completar datos de instalaciones 
 router.post("/app/backfill", ensureAuth, async (req, res) => {
   const installs = await prisma.instGithubApp.findMany({
     where: { usuarioId: req.user.id },
@@ -261,11 +253,9 @@ router.post("/app/backfill", ensureAuth, async (req, res) => {
   res.json({ ok: true, updated });
 });
 
-// ============================
 // Datos / Listados
-// ============================
 
-// Overview (usuario, enlaces, instalaciones, proyectos con repoUrl)
+// usuario, enlaces, instalaciones, proyectos con repoUrl
 router.get("/me/overview", ensureAuth, async (req, res) => {
   const [cuentas, installs, membresias] = await Promise.all([
     prisma.githubAuth.findMany({ where: { usuarioId: req.user.id } }),
@@ -302,7 +292,7 @@ router.get("/me/overview", ensureAuth, async (req, res) => {
   });
 });
 
-// Listar repos (OAuth de la cuenta INSTITUCIONAL)
+// Listar repos OAuth de la cuenta INSTITUCIONAL
 router.get("/me/repos", ensureAuth, async (req, res) => {
   const inst = await prisma.githubAuth.findUnique({
     where: {
@@ -330,7 +320,6 @@ router.get("/me/repos", ensureAuth, async (req, res) => {
   });
 });
 
-// POST /github/import/repos
 // Trae repos de la cuenta INSTITUCIONAL (propios) y los crea en tu BD como Proyectos
 router.post("/import/repos", ensureAuth, async (req, res) => {
   try {
@@ -349,7 +338,7 @@ router.post("/import/repos", ensureAuth, async (req, res) => {
 
     const octokit = new Octokit({ auth: inst.accessToken });
 
-    // Repos donde eres owner (hasta 100; si tienes más, se pagina)
+    // Repos donde eres owner 
     const { data } = await octokit.repos.listForAuthenticatedUser({
       per_page: 100,
       affiliation: "owner",
@@ -359,7 +348,7 @@ router.post("/import/repos", ensureAuth, async (req, res) => {
     const skipped = [];
 
     for (const r of data) {
-      // sólo repos propiedad de tu cuenta institucional (no colaborador)
+      // sólo repos propiedad de tu cuenta institucional 
       if (
         (r.owner?.login || "").toLowerCase() !==
         (inst.login || "").toLowerCase()
@@ -379,7 +368,6 @@ router.post("/import/repos", ensureAuth, async (req, res) => {
         data: {
           titulo: r.name,
           codigoMateria: null,
-          // Heurística simple: trata todo como GRUPAL (puedes ajustar luego)
           tipoGrupo: "GRUPAL",
           repoUrl,
         },
@@ -407,9 +395,7 @@ router.post("/import/repos", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
 // Crear repo + invitar (proyectos)
-// ============================
 router.post("/project/:id/repo", ensureAuth, async (req, res) => {
   try {
     const proyectoId = Number(req.params.id);
@@ -428,7 +414,7 @@ router.post("/project/:id/repo", ensureAuth, async (req, res) => {
     if (!esOwner)
       return res.status(403).json({ error: "Solo OWNER puede crear el repo" });
 
-    // 1) Instalación de la GitHub App (para invitar colaboradores, etc.)
+    // 1) Instalación de la GitHub App 
     const install = await prisma.instGithubApp.findFirst({
       where: { usuarioId: req.user.id },
     });
@@ -448,7 +434,7 @@ router.post("/project/:id/repo", ensureAuth, async (req, res) => {
     let created;
 
     if (ownerType === "Organization") {
-      // ORG -> la App puede crear repos con el installation token
+      // ORG la App puede crear repos con el installation token
       const { data } = await octo.request("POST /orgs/{org}/repos", {
         org: ownerLogin,
         name: repoName,
@@ -460,7 +446,7 @@ router.post("/project/:id/repo", ensureAuth, async (req, res) => {
       });
       created = data;
     } else {
-      // USER -> usar token OAuth de la cuenta INSTITUCIONAL (no el de la App)
+      // USER usar token OAuth de la cuenta INSTITUCIONAL 
       const instOauth = await prisma.githubAuth.findUnique({
         where: {
           usuarioId_tipoCuenta: {
@@ -545,9 +531,7 @@ router.post("/project/:id/repo", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
 // Sincronizar repos existentes del owner institucional a BD
-// ============================
 router.post("/me/sync-repos", ensureAuth, async (req, res) => {
   try {
     // OAuth institucional
@@ -567,7 +551,6 @@ router.post("/me/sync-repos", ensureAuth, async (req, res) => {
     const octo = new Octokit({ auth: inst.accessToken });
     const instLogin = inst.login;
 
-    // Repos donde eres OWNER
     const repos = await octo.paginate(octo.repos.listForAuthenticatedUser, {
       per_page: 100,
       affiliation: "owner",
@@ -581,7 +564,6 @@ router.post("/me/sync-repos", ensureAuth, async (req, res) => {
       const repoUrl = r.html_url;
       const titulo = r.name;
 
-      // upsert proyecto por repoUrl
       let proyecto = await prisma.proyecto.findFirst({ where: { repoUrl } });
       if (!proyecto) {
         proyecto = await prisma.proyecto.create({
@@ -599,7 +581,6 @@ router.post("/me/sync-repos", ensureAuth, async (req, res) => {
         });
       }
 
-      // upsert membresía OWNER
       try {
         await prisma.miembroProyecto.upsert({
           where: {
@@ -634,12 +615,9 @@ router.post("/me/sync-repos", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
-// Invitar PERSONAL a todos los repos del owner institucional
-// ============================
 router.post("/me/invite-personal-on-all", ensureAuth, async (req, res) => {
   try {
-    // Reusa tu función que invita usando App token / OAuth en base a proyectos de BD
+    
     const r = await invitePersonalToProjectRepos(req.user.id);
     return res.json({ ok: true, ...r });
   } catch (e) {
@@ -650,9 +628,6 @@ router.post("/me/invite-personal-on-all", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
-// Listado enriquecido directo desde GitHub (para UI)
-// ============================
 router.get("/me/repos/full", ensureAuth, async (req, res) => {
   try {
     const inst = await prisma.githubAuth.findUnique({
@@ -692,7 +667,7 @@ router.get("/me/repos/full", ensureAuth, async (req, res) => {
           site_admin: c.site_admin,
         }));
       } catch {
-        /* sin permisos admin, ignorar */
+        
       }
 
       out.push({
@@ -717,9 +692,6 @@ router.get("/me/repos/full", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
-// Reintentar invitaciones (para proyectos con repoUrl)
-// ============================
 router.post("/me/retry-invites", ensureAuth, async (req, res) => {
   try {
     const result = await invitePersonalToProjectRepos(req.user.id);
@@ -736,9 +708,7 @@ router.post("/me/retry-invites", ensureAuth, async (req, res) => {
   }
 });
 
-// ============================
-// Debug / Health
-// ============================
+
 router.get("/healthz", (_req, res) => res.json({ ok: true }));
 
 router.get("/debug/app", ensureAuth, async (req, res) => {

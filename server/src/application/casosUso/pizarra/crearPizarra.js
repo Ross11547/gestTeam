@@ -24,16 +24,12 @@ export async function crearPizarraCasoUso(payload, usuario) {
     const equipoId = dto.equipoId ? Number(dto.equipoId) : null;
     const periodoId = dto.periodoId ? Number(dto.periodoId) : null;
 
-    // Si ligan un equipo sin proyecto, el proyecto se infiere del equipo.
     if (equipoId && !proyectoId) {
         const equipo = await prisma.equipo.findUnique({ where: { id: equipoId }, select: { proyectoId: true } });
         if (!equipo) throw new ErrorNoEncontrado("Equipo no existe");
         proyectoId = equipo.proyectoId;
     }
 
-    // Pizarra ligada a un proyecto: solo staff, docente/director con autoridad
-    // o integrantes del proyecto pueden crearla. Sin proyecto (pizarra libre de ideas)
-    // cualquier usuario autenticado puede crearla e invitar colaboradores.
     if (proyectoId) {
         const proyecto = await prisma.proyecto.findUnique({ where: { id: proyectoId }, select: { id: true } });
         if (!proyecto) throw new ErrorNoEncontrado("Proyecto no existe");
@@ -60,14 +56,12 @@ export async function crearPizarraCasoUso(payload, usuario) {
         if (!periodo) throw new ErrorNoEncontrado("Periodo académico no existe");
     }
 
-    // Validar usuarios colaboradores (si vienen)
     if (colaboradores.length > 0) {
         const ids = [...new Set(colaboradores.map(c => Number(c.usuarioId)))];
         const existentes = await prisma.usuario.findMany({ where: { id: { in: ids } }, select: { id: true } });
         if (existentes.length !== ids.length) throw new ErrorValidacion("Uno o más colaboradores no existen");
     }
 
-    // Crear con transacción
     const creada = await prisma.$transaction(async (tx) => {
         const p = await pizarraRepositorio.crear({
             proyectoId,

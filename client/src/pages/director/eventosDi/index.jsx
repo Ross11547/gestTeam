@@ -1,5 +1,3 @@
-// Roxy: Calendario de eventos conectado a "BD" simulada
-
 import React, { useState, useEffect } from "react";
 import {
     EventosContainer,
@@ -101,7 +99,6 @@ const EventosDi = ({ ColorsDoc }) => {
 
         const days = [];
 
-        // días del mes anterior
         for (let i = startingDay - 1; i >= 0; i--) {
             const prevMonthDay = new Date(year, month, -i);
             days.push({
@@ -111,7 +108,6 @@ const EventosDi = ({ ColorsDoc }) => {
             });
         }
 
-        // días del mes actual (usando eventos filtrados)
         for (let i = 1; i <= daysInMonth; i++) {
             const currentDay = new Date(year, month, i);
             const dayEvents = filteredEventos.filter((e) => {
@@ -125,7 +121,6 @@ const EventosDi = ({ ColorsDoc }) => {
             });
         }
 
-        // completar hasta 6 filas (42 celdas)
         const remainingDays = 42 - days.length;
         for (let i = 1; i <= remainingDays; i++) {
             const nextMonthDay = new Date(year, month + 1, i);
@@ -533,7 +528,6 @@ const EventosDi = ({ ColorsDoc }) => {
 
 export default EventosDi;
 
-// ===== estilos locales para modal y lista de día =====
 
 const SelectedDayWrapper = styled.div`
   margin-top: 1rem;

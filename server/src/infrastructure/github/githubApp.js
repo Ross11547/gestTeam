@@ -40,5 +40,5 @@ export async function getInstallationInfo(installationId) {
     'GET /app/installations/{installation_id}',
     { installation_id: installationId }
   );
-  return data; // .account.login, .account.type ('User'|'Organization')
+  return data; 
 }

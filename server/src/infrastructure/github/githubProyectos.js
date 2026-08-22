@@ -5,7 +5,6 @@ import { prisma } from '../db/prisma.client.js';
 const router = express.Router();
 const JWT_SECRET = process.env.SESSION_SECRET || 'dev_secret';
 
-// ---- helpers auth -----------------------------------------------------------
 function getUid(req) {
     const h = req.headers.authorization || '';
     const m = h.match(/^Bearer\s+(.+)$/i);
@@ -32,7 +31,6 @@ async function ensureAuth(req, res, next) {
     }
 }
 
-// ---- POST /projects  => { titulo, tipoGrupo: 'GRUPAL'|'INDIVIDUAL', materiaId } ----
 router.post('/', ensureAuth, async (req, res) => {
     try {
         const uid = req.user.id;
@@ -49,7 +47,6 @@ router.post('/', ensureAuth, async (req, res) => {
             return res.status(400).json({ error: 'materiaId es requerido' });
         }
 
-        // Materia + validación por facultad (opcional)
         const materia = await prisma.materia.findUnique({
             where: { id: mid },
             select: {
@@ -67,16 +64,14 @@ router.post('/', ensureAuth, async (req, res) => {
             return res.status(403).json({ error: 'La materia no pertenece a tu facultad' });
         }
 
-        // Crear proyecto
         const proyecto = await prisma.proyecto.create({
             data: {
                 titulo: titulo.trim(),
                 tipoGrupo,
-                codigoMateria: materia.codigo || null, // solo guardas el código en tu modelo actual
+                codigoMateria: materia.codigo || null, 
             },
         });
 
-        // Agregar creador como OWNER (si existiese por algún motivo, no duplicar)
         await prisma.miembroProyecto.upsert({
             where: { proyectoId_usuarioId: { proyectoId: proyecto.id, usuarioId: uid } },
             update: { rol: 'OWNER' },
@@ -90,7 +85,6 @@ router.post('/', ensureAuth, async (req, res) => {
     }
 });
 
-// ---- POST /projects/:id/members  => agrega miembro (solo OWNER) ---------------
 router.post('/:id/members', ensureAuth, async (req, res) => {
     try {
         const proyectoId = Number(req.params.id);
@@ -107,13 +101,11 @@ router.post('/:id/members', ensureAuth, async (req, res) => {
             return res.status(403).json({ error: 'Solo OWNER puede agregar miembros' });
         }
 
-        // Resolver usuario a agregar
         let userToAdd = null;
         if (usuarioId) userToAdd = await prisma.usuario.findUnique({ where: { id: Number(usuarioId) } });
         if (!userToAdd && correo) userToAdd = await prisma.usuario.findUnique({ where: { correo: String(correo) } });
         if (!userToAdd) return res.status(404).json({ error: 'Usuario a agregar no existe' });
 
-        // Evitar duplicado
         const yaEsMiembro = await prisma.miembroProyecto.findUnique({
             where: { proyectoId_usuarioId: { proyectoId, usuarioId: userToAdd.id } },
         });
@@ -133,7 +125,6 @@ router.post('/:id/members', ensureAuth, async (req, res) => {
     }
 });
 
-// ---- GET /projects/my  => proyectos donde participo ---------------------------
 router.get('/my', ensureAuth, async (req, res) => {
     try {
         const uid = req.user.id;

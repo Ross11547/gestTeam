@@ -46,7 +46,6 @@ export async function actualizarDirectorCasoUso({ id, rolId, body }) {
         }
     }
 
-    // Código
     let codigoUpdate = {};
     if (ci !== undefined || idCarrera !== undefined || idFacultad !== undefined) {
         const u = await prisma.usuario.findUnique({
@@ -66,7 +65,6 @@ export async function actualizarDirectorCasoUso({ id, rolId, body }) {
         };
     }
 
-    // Correo
     let correoUpdate = {};
     if (correo !== undefined) {
         correoUpdate = {

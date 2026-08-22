@@ -119,7 +119,6 @@ export const MenuItem = styled.div`
   ${smoothTransition};
   background-color: ${(props) =>
     props.active ? props.Colors.secundary : "transparent"};
-    //////
   color: ${(props) => (props.active ? props.Colors.primary : colors.text.dark)};
   font-weight: ${props => props.active ? '600' : '400'};
   &:hover {

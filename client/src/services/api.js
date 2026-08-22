@@ -1,8 +1,5 @@
 export const API_BASE = "http://localhost:3000";
 
-// ===============================
-// Helpers de sesión
-// ===============================
 function getSessionToken() {
   return (
     localStorage.getItem("gt_token") ||
@@ -15,7 +12,6 @@ function getSessionToken() {
 function saveSessionToken(token) {
   if (!token) return;
 
-  // Guardamos en ambos por compatibilidad con partes antiguas del sistema
   localStorage.setItem("gt_token", token);
   localStorage.setItem("token", token);
 }
@@ -26,11 +22,6 @@ function clearSessionToken() {
   localStorage.removeItem("authToken");
 }
 
-// ===============================
-// Fetch con autenticación
-// ===============================
-// Wrapper de fetch que adjunta el token JWT guardado en localStorage.
-// No fuerza Content-Type para no romper uploads con FormData.
 export async function authFetch(input, init = {}) {
   const token = getSessionToken();
   const headers = new Headers(init.headers || {});
@@ -43,9 +34,6 @@ export async function authFetch(input, init = {}) {
   return fetch(input, { ...init, headers });
 }
 
-// ===============================
-// Request general
-// ===============================
 async function request(path, { method = "GET", body, headers } = {}) {
   const token = getSessionToken();
 
@@ -92,12 +80,10 @@ async function request(path, { method = "GET", body, headers } = {}) {
     data = {};
   }
 
-  // Si el backend devuelve token, lo guardamos
   if (data?.token) {
     saveSessionToken(data.token);
   }
 
-  // Por si algún endpoint devuelve { data: { token: "..." } }
   if (data?.data?.token) {
     saveSessionToken(data.data.token);
   }
@@ -105,12 +91,7 @@ async function request(path, { method = "GET", body, headers } = {}) {
   return data;
 }
 
-// ===============================
-// API
-// ===============================
 export const api = {
-  // Ajusta esta ruta solo si tu backend usa otra.
-  // En tu código actual estás usando /api/login.
   login: (payload) => request("/api/login", { method: "POST", body: payload }),
 
   logout: () => {
@@ -118,9 +99,6 @@ export const api = {
     return request("/auth/logout", { method: "POST" });
   },
 
-  // ===============================
-  // Proyectos
-  // ===============================
   myProjects: () => request("/projects/my"),
 
   addMember: (projectId, data) =>
@@ -135,9 +113,6 @@ export const api = {
       body: payload,
     }),
 
-  // ===============================
-  // GitHub
-  // ===============================
   overview: () => request("/github/me/overview"),
 
   repos: () => request("/github/me/repos"),
@@ -192,8 +167,5 @@ export const api = {
       `${API_BASE}/github/app/install?t=${encodeURIComponent(t)}`;
   },
 
-  // ===============================
-  // Materias
-  // ===============================
   myMaterias: () => request("/api/materias/mias"),
 };

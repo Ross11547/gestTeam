@@ -1,5 +1,3 @@
-// Roxy: Pizarras simulando conexión a BD
-
 import React, { useState, useEffect } from "react";
 import { Plus, Users, User, UsersRound } from "lucide-react";
 import ExcalidrawComponente from "../../../components/excalidraw";
@@ -58,7 +56,6 @@ const Pizarra = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Cargar datos simulados de "BD"
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -99,7 +96,6 @@ const Pizarra = () => {
         [created.type]: [...(prev[created.type] || []), created],
       }));
 
-      // limpiar...
       setBoardName("");
       setBoardType("individual");
       setBoardDate("");

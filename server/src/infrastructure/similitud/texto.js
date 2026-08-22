@@ -65,8 +65,7 @@ export function dividirEnFragmentos(texto, tamano = 250) {
             fin: finChar >= 0 ? finChar : textoFragmento.length,
         });
 
-        inicioPalabra += Math.floor(tamano * 0.7); // solapamiento
-    }
+        inicioPalabra += Math.floor(tamano * 0.7); 
 
     return fragmentos;
 }

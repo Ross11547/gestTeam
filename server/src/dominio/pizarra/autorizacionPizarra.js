@@ -6,8 +6,6 @@ export function esRolStaffPizarra(usuario) {
     return nombre === "admin" || nombre === "director";
 }
 
-// Carga la pizarra verificando que el usuario pueda escribir en ella:
-// creador, colaborador, o staff académico. Con soloDuenio, solo creador o staff.
 export async function obtenerPizarraParaEscritura(pizarraId, usuario, { soloDuenio = false } = {}) {
     const pizarra = await prisma.pizarra.findUnique({
         where: { id: pizarraId },

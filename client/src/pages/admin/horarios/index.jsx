@@ -71,7 +71,6 @@ const HorariosCRUD = () => {
         catch { try { return (await res.text())?.slice(0, 160) || res.statusText; } catch { return res.statusText; } }
     };
 
-    // Carga inicial
     useEffect(() => {
         loadData();
     }, []);
@@ -94,7 +93,6 @@ const HorariosCRUD = () => {
         }
     };
 
-    // Detect scroll need
     useEffect(() => {
         const checkScrollNeed = () => {
             const tableWrapper = document.querySelector('[data-table-wrapper]');
@@ -108,7 +106,6 @@ const HorariosCRUD = () => {
         return () => window.removeEventListener('resize', checkScrollNeed);
     }, [horarios]);
 
-    // CRUD
     const handleCreate = async (payload) => {
         try {
             const r = await authFetch(API, {
@@ -118,7 +115,7 @@ const HorariosCRUD = () => {
             });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Horario creado correctamente");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData(); 
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo crear el horario");
@@ -136,7 +133,7 @@ const HorariosCRUD = () => {
             });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Horario actualizado");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData(); 
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo actualizar el horario");
@@ -153,7 +150,7 @@ const HorariosCRUD = () => {
             const r = await authFetch(`${API}/${id}`, { method: "DELETE" });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Horario eliminado");
-            await loadData(); // Recargar lista
+            await loadData(); 
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo eliminar el horario");
@@ -323,11 +320,11 @@ const HorariosCRUD = () => {
         );
     };
 
-    const columnCount = 8; // 8 columnas: Materia, Código, Carrera, Facultad, Día, Hora, Aula, Acciones
+    const columnCount = 8;  
 
     return (
         <PageWrapper>
-            <Container wide> {/* Container wide para CRUDs complejos */}
+            <Container wide> 
                 <PageHeader>
                     <Title>Gestión de Horarios</Title>
                 </PageHeader>
@@ -358,7 +355,6 @@ const HorariosCRUD = () => {
                             </thead>
                             <tbody>
                                 {loading ? (
-                                    // Estado de carga
                                     Array.from({ length: 5 }, (_, i) => (
                                         <LoadingRow key={`loading-${i}`}>
                                             <LoadingCell><div className="skeleton" /></LoadingCell>

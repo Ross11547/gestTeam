@@ -4,7 +4,6 @@ import { generar, listar, obtenerPorId, eliminar } from "../controllers/reporte.
 
 const router = Router();
 
-// Los reportes son para la gestión académica: staff y docentes.
 router.post("/reporte", autorizarRoles("Admin", "Director", "Docente"), generar);
 router.get("/reporte", autorizarRoles("Admin", "Director", "Docente"), listar);
 router.get("/reporte/:id(\\d+)", autorizarRoles("Admin", "Director", "Docente"), obtenerPorId);

@@ -25,7 +25,7 @@ function normalizarTipoCuenta(type) {
     .trim()
     .toUpperCase();
 
-  // Compatibilidad por si algún frontend viejo manda INSTITUTIONAL
+  
   if (value === "INSTITUTIONAL") return "INSTITUCIONAL";
   if (value === "INSTITUCIONAL") return "INSTITUCIONAL";
   if (value === "PERSONAL") return "PERSONAL";
@@ -62,9 +62,7 @@ passport.use(
 
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        // =========================================================
         // 1. Resolver tipo de cuenta y usuario autenticado
-        // =========================================================
         let linkType = req.session?.githubLinkType || null;
 
         if (!linkType || !req.user) {
@@ -114,9 +112,7 @@ passport.use(
           });
         }
 
-        // =========================================================
         // 2. Obtener correos desde GitHub
-        // =========================================================
         const domain = String(ALLOWED_INSTITUTION_DOMAIN || "unifranz.edu.bo")
           .trim()
           .toLowerCase();
@@ -172,9 +168,7 @@ passport.use(
           firstEmail ||
           null;
 
-        // =========================================================
         // 3. Validar cuenta institucional
-        // =========================================================
         if (linkType === "INSTITUCIONAL") {
           const ok = requireVerified
             ? Boolean(institutionalVerified)
@@ -189,9 +183,7 @@ passport.use(
           }
         }
 
-        // =========================================================
         // 4. Preparar datos para Prisma
-        // =========================================================
         const githubId = String(profile.id || profile._json?.id || "");
 
         if (!githubId) {
@@ -225,9 +217,7 @@ passport.use(
           scopes: "",
         };
 
-        // =========================================================
         // 5. Guardar o actualizar GithubAuth
-        // =========================================================
         await prisma.githubAuth.upsert({
           where: {
             usuarioId_tipoCuenta: {
@@ -247,18 +237,14 @@ passport.use(
           create: data,
         });
 
-        // =========================================================
         // 6. Actualizar par INSTITUCIONAL / PERSONAL
-        // =========================================================
         try {
           await upsertGithubLinkPair(usuarioId);
         } catch (e) {
           console.warn("[GitHub OAuth] upsertGithubLinkPair:", e?.message || e);
         }
 
-        // =========================================================
         // 7. Invitar cuenta personal a repositorios si corresponde
-        // =========================================================
         try {
           await invitePersonalToProjectRepos(usuarioId);
         } catch (e) {

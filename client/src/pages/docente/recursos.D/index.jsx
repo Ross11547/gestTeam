@@ -121,7 +121,6 @@ const RecursosD = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    // Lógica para manejar archivos
   };
 
   const stats = [

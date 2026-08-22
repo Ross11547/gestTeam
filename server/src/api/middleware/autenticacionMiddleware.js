@@ -1,11 +1,8 @@
 import jwt from "jsonwebtoken";
 import { prisma } from "../../infrastructure/db/prisma.client.js";
 
-// Mismo secreto que usa login.js para firmar el token.
 const JWT_SECRET = process.env.SESSION_SECRET || "dev_secret";
 
-// Endpoints públicos dentro de /api (no requieren token).
-// Todo lo demás bajo /api exige autenticación válida.
 const RUTAS_PUBLICAS = [{ metodo: "POST", ruta: "/login" }];
 
 function esRutaPublica(req) {
@@ -15,7 +12,6 @@ function esRutaPublica(req) {
 }
 
 export async function autenticarToken(req, res, next) {
-    // Preflight CORS nunca requiere token
     if (req.method === "OPTIONS") return next();
 
     if (esRutaPublica(req)) return next();
@@ -61,8 +57,6 @@ export async function autenticarToken(req, res, next) {
     }
 }
 
-// Factory: restringe el endpoint a los roles indicados.
-// Debe usarse SIEMPRE después de autenticarToken.
 export function autorizarRoles(...nombresPermitidos) {
     const permitidos = nombresPermitidos.map((n) =>
         String(n).trim().toLowerCase()

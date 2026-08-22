@@ -26,7 +26,6 @@ export async function listarMateriasMiasCasoUso(usuario) {
     });
     if (!usuarioDb) throw crearError("Usuario no encontrado", 404);
 
-    // Docentes: materias que les fueron asignadas.
     const rolNombre = String(usuarioDb.rol?.nombre || "").trim().toLowerCase();
     if (rolNombre === "docente") {
         const asignaciones = await prisma.docenteMateria.findMany({
@@ -37,7 +36,6 @@ export async function listarMateriasMiasCasoUso(usuario) {
         return asignaciones.map((a) => a.materia).filter(Boolean);
     }
 
-    // Estudiantes y demás roles con carrera/semestre: malla de su semestre.
     if (!usuarioDb.idCarrera) throw crearError("El usuario no tiene carrera asignada", 400);
     if (!usuarioDb.semestreId) throw crearError("El usuario no tiene semestre asignado", 400);
 

@@ -1,5 +1,3 @@
-// Roxy: Dashboard Director con métricas que cambian según el correo del director
-
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
@@ -62,10 +60,8 @@ const DashboardDi = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // ================= CONFIG POR DIRECTOR (según correo) =================
     const email = (user?.correo || user?.email || "").toLowerCase();
 
-    // Director Ingeniería de Sistemas (Integrador III)
     const sistemasConfig = {
         headerTitle: "Director Ingeniería de Sistemas",
         stats: {
@@ -141,7 +137,6 @@ const DashboardDi = () => {
         },
     };
 
-    // Director Medicina (Anatomía)
     const medicinaConfig = {
         headerTitle: "Director Medicina",
         stats: {
@@ -197,7 +192,7 @@ const DashboardDi = () => {
             { semester: "3er Semestre", count: 85 },
         ],
         projectStats: {
-            active: 6, // por ejemplo casos clínicos / proyectos integradores
+            active: 6, 
             featured: 2,
         },
         fairs: [
@@ -224,7 +219,6 @@ const DashboardDi = () => {
         },
     };
 
-    // Config general por defecto (por si el correo no matchea)
     const defaultConfig = {
         headerTitle: "Director de Carrera",
         stats: {
@@ -323,7 +317,6 @@ const DashboardDi = () => {
         },
     };
 
-    // Elegir config según correo
     let config = defaultConfig;
     if (email.includes("cbbe.fabiolaevelyn.cadima.sa@unifranz.edu.bo") || email.includes("sis")) {
         config = sistemasConfig;
@@ -331,7 +324,6 @@ const DashboardDi = () => {
         config = medicinaConfig;
     }
 
-    // ================= DERIVADOS PARA EL DASHBOARD =================
     const stats = [
         {
             id: 1,
@@ -370,7 +362,6 @@ const DashboardDi = () => {
     const fairs = config.fairs;
     const iaAlerts = config.iaAlerts;
 
-    // Accesos rápidos (mismo layout, independiente del director)
     const quickAccess = [
         {
             id: 1,
@@ -409,7 +400,6 @@ const DashboardDi = () => {
                 title="Bienvenido al Dashboard Director"
             />
 
-            {/* Tarjetas principales */}
             <StatsGrid>
                 {stats.map((stat) => (
                     <StatCard key={stat.id}>
@@ -424,7 +414,6 @@ const DashboardDi = () => {
                 ))}
             </StatsGrid>
 
-            {/* Clases del día + actividad reciente */}
             <div
                 style={{
                     display: "grid",
@@ -470,7 +459,6 @@ const DashboardDi = () => {
                 </ActivitySection>
             </div>
 
-            {/* Acceso rápido */}
             <h2 style={{ marginTop: "2rem", marginBottom: "1rem", color: "#2c3e50" }}>
                 Acceso Rápido
             </h2>
@@ -489,9 +477,7 @@ const DashboardDi = () => {
                 ))}
             </QuickAccessGrid>
 
-            {/* ================= BLOQUE DE INFORMES ================= */}
             <ExtraSection>
-                {/* Estudiantes por semestre + Proyectos */}
                 <TwoColumnGrid>
                     <SectionCard>
                         <SectionHeader>
@@ -541,7 +527,6 @@ const DashboardDi = () => {
                     </SectionCard>
                 </TwoColumnGrid>
 
-                {/* Ferias + Alertas IA */}
                 <TwoColumnGrid style={{ marginTop: "1.5rem" }}>
                     <SectionCard>
                         <SectionHeader>
@@ -590,7 +575,6 @@ const DashboardDi = () => {
 
 export default DashboardDi;
 
-/* ========= ESTILOS LOCALES PARA LA PARTE NUEVA ========= */
 
 const ExtraSection = styled.div`
   margin-top: 2rem;

@@ -23,7 +23,6 @@ const storage = multer.diskStorage({
     filename(_req, file, cb) {
         const uniqueSuffix =
             Date.now() + "-" + Math.round(Math.random() * 1e9);
-        // Nunca confiar en originalname: solo extensión saneada.
         const ext = path.extname(file.originalname).toLowerCase().replace(/[^a-z0-9.]/g, "");
         cb(null, uniqueSuffix + ext);
     },

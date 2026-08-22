@@ -3,8 +3,6 @@ import { avanzarHito } from "../../../dominio/hito/validacionHito.js";
 import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadProyecto.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// Máquina de estados del hito. FINALIZADO es terminal;
-// CANCELADO permite reabrir (volver a PENDIENTE).
 const TRANSICIONES = {
     PENDIENTE: ["ACTIVO", "CANCELADO"],
     ACTIVO: ["FINALIZADO", "CANCELADO"],
@@ -36,7 +34,6 @@ export async function avanzarEstadoHitoCasoUso(idRaw, payload, usuario) {
         );
     }
 
-    // Al activar se marca el inicio; al finalizar, el cierre.
     const data = { estado: destino };
     if (destino === "ACTIVO" && !hito.fechaInicio) data.fechaInicio = new Date();
     if (destino === "FINALIZADO" && !hito.fechaFin) data.fechaFin = new Date();

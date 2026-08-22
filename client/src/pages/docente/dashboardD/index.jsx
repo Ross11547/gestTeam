@@ -1,5 +1,3 @@
-// Roxy: Dashboard Docente simulando 3 perfiles distintos según el usuario
-
 import React, { useState, useEffect } from "react";
 import {
     Container,
@@ -45,12 +43,10 @@ import {
 } from "lucide-react";
 import { useColors } from "../../../style/colors";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../../context/useContext"; // <- importante
+import { useUser } from "../../../context/useContext";
 import CardHeader from "../../../components/ui/cardHeader";
 
-// Helper: devuelve data simulada según el docente logueado
 const getDashboardDataForTeacher = (user, ColorsDoc) => {
-    // CONFIG 1: Docente de Redes I, Redes II, Seguridad Informática
     const redesConfig = {
         subtitle: "Redes y Seguridad Informática",
         stats: [
@@ -93,7 +89,6 @@ const getDashboardDataForTeacher = (user, ColorsDoc) => {
         ]
     };
 
-    // CONFIG 3: Docente de Testing
     const testingConfig = {
         subtitle: "Calidad y Testing de Software",
         stats: [
@@ -146,7 +141,7 @@ const getDashboardDataForTeacher = (user, ColorsDoc) => {
 const DashboardD = () => {
     const ColorsDoc = useColors();
     const navigate = useNavigate();
-    const { user } = useUser(); // <- usuario logueado
+    const { user } = useUser(); 
 
     const [currentTime, setCurrentTime] = useState(new Date());
 

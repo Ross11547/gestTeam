@@ -2,8 +2,6 @@ import { crearEvaluacion } from "../../../dominio/evaluacionProyecto/validacionE
 import { crearError, esRolStaff } from "../../../dominio/evaluacionProyecto/helpersEvaluacionProyecto.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// El tipo de evaluador se deduce del rol: Admin->ADMIN, Director->DIRECTOR,
-// Docente->DOCENTE. JURADO es el único valor que se acepta explícito.
 function derivarTipoEvaluador(usuario, tipoExplicito) {
     if (tipoExplicito === "JURADO") return "JURADO";
     const nombre = String(usuario?.rol?.nombre || "").trim().toLowerCase();
@@ -27,7 +25,6 @@ export async function crearEvaluacionCasoUso(payload, usuario) {
     });
     if (!proyecto) throw crearError("El proyecto indicado no existe", 404);
 
-    // Nadie evalúa un proyecto del que forma parte.
     const esMiembro = await prisma.miembroProyecto.findUnique({
         where: { proyectoId_usuarioId: { proyectoId: data.proyectoId, usuarioId: usuario.id } },
         select: { id: true },
@@ -42,7 +39,6 @@ export async function crearEvaluacionCasoUso(payload, usuario) {
         if (!periodo) throw crearError("El periodo académico indicado no existe", 404);
     }
 
-    // Docentes solo evalúan proyectos de sus clases; staff evalúa cualquiera.
     if (!esRolStaff(usuario)) {
         const asignado = await prisma.proyectoMateria.findFirst({
             where: { proyectoId: data.proyectoId, clase: { docenteId: usuario.id } },

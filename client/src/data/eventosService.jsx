@@ -1,5 +1,3 @@
-// Roxy: servicio simulado de eventos (base de datos falsa)
-
 const EVENTOS_DATA = [
     {
         id: 1,
@@ -60,11 +58,10 @@ const EVENTOS_DATA = [
     },
 ];
 
-// Simula una llamada a BD / API
 export const getEventos = async () => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve(EVENTOS_DATA);
-        }, 300); // delay para que parezca petición real
+        }, 300); 
     });
 };

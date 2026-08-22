@@ -10,14 +10,12 @@ export async function actualizarEntregaCasoUso(idRaw, payload, usuario) {
     const entrega = await entregaRepositorio.obtenerPorId(id);
     if (!entrega) throw crearError("La entrega no existe", 404);
 
-    // Solo el autor de la entrega o el staff pueden modificarla.
     if (!esStaff(usuario) && entrega.autorId !== usuario.id) {
         throw crearError("No tienes permisos para modificar esta entrega", 403);
     }
 
     const data = actualizarEntrega.parse(payload);
 
-    // Marcar REVISADO es tarea del docente/staff al revisar.
     if (data.estado === "REVISADO" && !esStaff(usuario)) {
         throw crearError("Solo el personal puede marcar una entrega como revisada", 403);
     }

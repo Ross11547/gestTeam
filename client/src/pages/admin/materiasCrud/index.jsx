@@ -41,7 +41,6 @@ const SEM_LABELS = [
 ];
 const labelFromNumero = (n, etiqueta) => etiqueta || SEM_LABELS[n] || (n ? `Semestre ${n}` : "");
 
-// Misma lógica que el backend para vista previa
 const STOPWORDS = new Set([
     "a", "al", "con", "de", "del", "el", "la", "las", "los", "en", "para", "por", "sin",
     "y", "e", "o", "u", "un", "una", "uno", "unos", "unas", "the", "and", "of",
@@ -83,7 +82,6 @@ const MateriasCRUD = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
 
-    // estado para vista previa de código
     const [formNombre, setFormNombre] = useState("");
     const [formCodigo, setFormCodigo] = useState("");
 
@@ -92,7 +90,6 @@ const MateriasCRUD = () => {
         catch { try { return (await res.text())?.slice(0, 160) || res.statusText; } catch { return res.statusText; } }
     };
 
-    // Carga inicial
     useEffect(() => {
         loadData();
     }, []);
@@ -130,13 +127,12 @@ const MateriasCRUD = () => {
         }
     };
 
-    // CRUD
     const handleCreate = async (payload) => {
         try {
             const r = await authFetch(API, { ...FETCH_OPTS, method: "POST", body: JSON.stringify(payload) });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Materia creada correctamente");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData();
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo crear la materia");
@@ -154,7 +150,7 @@ const MateriasCRUD = () => {
             });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Materia actualizada");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData();
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo actualizar la materia");
@@ -171,7 +167,7 @@ const MateriasCRUD = () => {
             const r = await authFetch(`${API}/${id}`, { ...FETCH_OPTS, method: "DELETE" });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Materia eliminada");
-            await loadData(); // Recargar lista
+            await loadData();  
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo eliminar la materia");
@@ -234,7 +230,6 @@ const MateriasCRUD = () => {
                                 nombre: fd.get("nombre"),
                                 idCarrera: Number(fd.get("idCarrera")),
                                 semestreId: Number(fd.get("semestreId")),
-                                // "codigo" lo genera el backend
                             };
 
                             if (!payload.nombre || String(payload.nombre).trim() === "") {
@@ -337,7 +332,7 @@ const MateriasCRUD = () => {
         );
     };
 
-    const columnCount = 5; // 5 columnas: Código, Materia, Carrera, Semestre, Acciones
+    const columnCount = 5; 
 
     return (
         <PageWrapper>
@@ -369,7 +364,6 @@ const MateriasCRUD = () => {
                             </thead>
                             <tbody>
                                 {loading ? (
-                                    // Estado de carga
                                     Array.from({ length: 5 }, (_, i) => (
                                         <LoadingRow key={`loading-${i}`}>
                                             <LoadingCell><div className="skeleton" /></LoadingCell>

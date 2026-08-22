@@ -39,7 +39,6 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-// ==== ANIMACIONES ====
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -77,14 +76,12 @@ const shimmer = keyframes`
   100% { transform: translateX(100%); }
 `;
 
-// ==== ESTILOS PARA ROTACIÓN ====
 const GlobalStyle = styled.div`
   .rotating {
     animation: ${rotate} 1s linear infinite;
   }
 `;
 
-// ==== CONTENEDORES PRINCIPALES ====
 const MainContainer = styled.div`
   animation: ${fadeIn} 0.4s ease;
 `;
@@ -103,7 +100,6 @@ const Card = styled.div`
   }
 `;
 
-// ==== HEADER Y TOOLBAR ====
 const HeaderSection = styled.div`
   margin-bottom: 24px;
 `;
@@ -214,7 +210,6 @@ const Btn = styled.button`
   }
 `;
 
-// ==== TAGS DE ESTADO ====
 const StatusGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -274,7 +269,6 @@ const StatusValue = styled.div`
   color: ${({ $ok }) => ($ok ? "#166534" : "#7f1d1d")};
 `;
 
-// ==== FORMULARIO DE CREACIÓN ====
 const CreateSection = styled.div`
   background: linear-gradient(135deg, #fef3c7, #fef9c3);
   border: 2px solid #fde047;
@@ -372,7 +366,6 @@ const Select = styled.select`
   }
 `;
 
-// ==== TABLA PREMIUM ====
 const TableContainer = styled.div`
   background: white;
   border-radius: 20px;
@@ -586,7 +579,6 @@ const ActionBtn = styled.button`
   }
 `;
 
-// ==== EMPTY STATE ====
 const EmptyState = styled.div`
   display: flex;
   flex-direction: column;
@@ -623,7 +615,6 @@ const EmptyText = styled.p`
   max-width: 400px;
 `;
 
-// ==== LOADING STATE ====
 const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
@@ -636,7 +627,6 @@ const LoadingSpinner = styled(Loader2)`
   color: ${({ Colors }) => Colors.primary};
 `;
 
-// ==== HELP TEXT ====
 const HelpSection = styled.div`
   padding: 20px;
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
@@ -1032,7 +1022,6 @@ function ProjectsPanel() {
                       <Td>
                         <ActionButtons>
                           {p.repoUrl ? (
-                            // SOLO COPIAR CUANDO YA TIENE REPO
                             <ActionBtn
                               Colors={Colors}
                               onClick={() => onCopy(p.repoUrl)}
@@ -1041,7 +1030,6 @@ function ProjectsPanel() {
                               Copiar
                             </ActionBtn>
                           ) : (
-                            // SIN REPO → CREAR REPO
                             <ActionBtn
                               Colors={Colors}
                               $primary
@@ -1093,7 +1081,6 @@ function ProjectsPanel() {
   );
 }
 
-// ==== PANEL DE INTEGRACIÓN ====
 const ProyectoUno = () => {
   const Colors = useColors();
   const [state, setState] = useState({
@@ -1194,12 +1181,10 @@ const ProyectoUno = () => {
     }
   };
 
-  // Si ya está todo OK, muestra los proyectos
   if (state.inst && state.personal && state.app) {
     return <ProjectsPanel />;
   }
 
-  // Panel de integración
   return (
     <GlobalStyle>
       <MainContainer>

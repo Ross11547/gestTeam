@@ -1,7 +1,6 @@
 export function erroresMiddleware(err, req, res, next) {
   console.error("[ERROR]", err);
 
-  // Errores de validación de esquema (zod).
   if (err.name === "ZodError") {
     return res.status(400).json({
       error: "Datos inválidos",
@@ -10,7 +9,6 @@ export function erroresMiddleware(err, req, res, next) {
     });
   }
 
-  // Errores conocidos de Prisma: traducir a códigos HTTP correctos.
   if (err.code === "P2002") {
     return res.status(409).json({
       error: "El registro ya existe",
@@ -29,7 +27,6 @@ export function erroresMiddleware(err, req, res, next) {
     return res.status(404).json({ error: "No encontrado", mensaje: "El registro indicado no existe" });
   }
 
-  // Los errores de dominio pueden exponer estadoHttp (módulo pizarra).
   const status = err.statusCode || err.status || err.estadoHttp || 500;
 
   return res.status(status).json({

@@ -579,13 +579,13 @@ export const HighlightSpan = styled.span`
   background: ${(props) => {
     switch (props.tipo) {
       case "web":
-        return "rgba(239, 68, 68, 0.16)"; // rojo suave
+        return "rgba(239, 68, 68, 0.16)"; 
       case "universidad":
-        return "rgba(249, 115, 22, 0.16)"; // naranja suave
+        return "rgba(249, 115, 22, 0.16)"; 
       case "ia":
-        return "rgba(139, 92, 246, 0.16)"; // violeta suave
+        return "rgba(139, 92, 246, 0.16)"; 
       case "original":
-        return "rgba(34, 197, 94, 0.12)"; // verde suave
+        return "rgba(34, 197, 94, 0.12)"; 
       default:
         return "transparent";
     }

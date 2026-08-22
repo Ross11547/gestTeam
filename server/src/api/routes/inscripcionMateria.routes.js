@@ -10,7 +10,6 @@ import {
 
 const router = Router();
 
-// La gestión de inscripciones es responsabilidad del staff académico.
 router.get("/inscripcionMateria", listarInscripcionMateria);
 router.get("/inscripcionMateria/:id(\\d+)", obtenerInscripcionMateria);
 

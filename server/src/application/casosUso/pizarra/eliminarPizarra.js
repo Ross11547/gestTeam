@@ -2,7 +2,6 @@ import { ErrorValidacion } from "../../../dominio/pizarra/erroresPizarra.js";
 import { obtenerPizarraParaEscritura } from "../../../dominio/pizarra/autorizacionPizarra.js";
 import { pizarraRepositorio } from "../../../infrastructure/repositories/repositoriosPizarras.js";
 
-// Solo el creador o el staff académico pueden eliminar una pizarra.
 export async function eliminarPizarraCasoUso(id, usuario) {
     const num = Number(id);
     if (!Number.isInteger(num) || num <= 0) throw new ErrorValidacion("id inválido");

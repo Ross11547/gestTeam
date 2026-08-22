@@ -27,7 +27,6 @@ export async function actualizarFacultadCasoUso(id, payload) {
 
     const nombreFinal = data.nombre !== undefined ? data.nombre : actual.nombre;
 
-    // validar duplicado por institución
     if (data.nombre !== undefined || data.institucionId !== undefined) {
         const yaExiste = await facultadRepositorio.existePorNombreEnInstitucion(
             institucionIdFinal,

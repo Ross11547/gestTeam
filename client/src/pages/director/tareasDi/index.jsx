@@ -1,5 +1,3 @@
-// Roxy: Tareas del Director (entregas/avances + calendario + mover cards)
-
 import React, { useState, useMemo } from "react";
 import {
     TareasContainer,
@@ -232,7 +230,6 @@ const TareasDi = ({ ColorsDoc }) => {
         { id: "completadas", title: "Completadas", tasks: tareas.completadas },
     ];
 
-    // ==== mover cards entre columnas (simula drag & drop) ====
     const moveTask = (taskId, fromColumnId, direction) => {
         const currentIndex = COLUMN_ORDER.indexOf(fromColumnId);
         const newIndex = currentIndex + direction;
@@ -248,7 +245,6 @@ const TareasDi = ({ ColorsDoc }) => {
 
             const [task] = fromList.splice(taskIndex, 1);
 
-            // si llega a "completadas", fuerzo progreso 100 para que se vea en calendario como completado
             const updatedTask =
                 toColumnId === "completadas" && task.progreso < 100
                     ? { ...task, progreso: 100 }
@@ -264,7 +260,6 @@ const TareasDi = ({ ColorsDoc }) => {
         });
     };
 
-    // ==== búsqueda ====
     const filteredColumns = useMemo(() => {
         const query = searchQuery.toLowerCase();
         if (!query) return columns;
@@ -278,7 +273,6 @@ const TareasDi = ({ ColorsDoc }) => {
         }));
     }, [columns, searchQuery]);
 
-    // ==== eventos de calendario a partir de tareas ====
     const eventosCalendario = useMemo(() => {
         const allTasks = [
             ...tareas.pendientes,
@@ -304,7 +298,6 @@ const TareasDi = ({ ColorsDoc }) => {
             .sort((a, b) => a.fecha.localeCompare(b.fecha));
     }, [tareas]);
 
-    // ==== crear nueva tarea ====
     const handleCreateTask = (e) => {
         e.preventDefault();
         const nuevaTarea = {
@@ -730,7 +723,6 @@ const TareasDi = ({ ColorsDoc }) => {
 
 export default TareasDi;
 
-// ================== Estilos locales extra ==================
 
 const ListaWrapper = styled.div`
   margin-top: 1.5rem;

@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// IMPORTANTE: sube a /uploads (raíz del server) no dentro de src
 const uploadDir = path.join(process.cwd(), "uploads");
 
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
@@ -14,7 +13,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 const storage = multer.diskStorage({
     destination: (_req, _file, cb) => cb(null, uploadDir),
     filename: (_req, file, cb) => {
-        // Solo el nombre generado + extensión saneada: nunca confiar en originalname.
+        
         const ext = path.extname(file.originalname).toLowerCase().replace(/[^a-z0-9.]/g, "");
         cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
     },
@@ -34,5 +33,5 @@ const fileFilter = (_req, file, cb) => {
 export const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 15 * 1024 * 1024 }, // 15 MB
+    limits: { fileSize: 15 * 1024 * 1024 }, 
 });

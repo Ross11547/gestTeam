@@ -10,7 +10,6 @@ export async function actualizarRevisionCasoUso(idRaw, payload, usuario) {
     const revision = await revisionRepositorio.obtenerPorId(id);
     if (!revision) throw crearError("La revisión no existe", 404);
 
-    // Solo el revisor original o Admin/Director pueden editarla.
     if (revision.revisorId !== usuario.id && !esAdminODirector(usuario)) {
         throw crearError("No tienes permisos para modificar esta revisión", 403);
     }

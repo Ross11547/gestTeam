@@ -50,8 +50,6 @@ export async function crearEstudiante(req, res, next) {
         const created = await crearEstudianteCasoUso({ rolId, body: req.body || {} });
         return res.json({ data: created, message: "estudiante creado correctamente" });
     } catch (e) {
-        // tu versión vieja respondía 500 con error.message en varios casos.
-        // aquí respetamos status si viene seteado, si no pasa a middleware.
         if (e?.status) {
             return res.status(e.status).json({ message: e.message });
         }

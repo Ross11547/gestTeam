@@ -42,7 +42,6 @@ export async function resolverSolicitudAccesoCasoUso(id, payload, usuario) {
         },
     });
 
-    // Aprobar otorga membresía MEMBER (acceso a documentos y pizarras del proyecto).
     let miembroAgregado = false;
     if (data.estado === "APROBADA" && data.agregarMiembro) {
         const yaMiembro = await prisma.miembroProyecto.findUnique({

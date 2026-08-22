@@ -3,7 +3,7 @@ import { z } from "zod";
 export const crearFacultad = z.object({
     institucionId: z.number().int().positive("institucionId inválido").optional().nullable(),
     nombre: z.string().min(2, "El nombre es obligatorio").transform(s => s.trim()),
-    theme: z.any().optional().nullable(), // JSON o string JSON
+    theme: z.any().optional().nullable(),  
 });
 
 export const actualizarFacultad = z.object({

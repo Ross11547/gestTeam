@@ -1,5 +1,3 @@
-// Roxy: "BD falsa" para materias, proyectos, entregas y pizarras
-
 const materiasDB = [
     {
         id: 1,

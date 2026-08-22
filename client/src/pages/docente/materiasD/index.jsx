@@ -1,5 +1,3 @@
-// Roxy: Materias Docente simulando 3 perfiles distintos según el usuario
-
 import { useState } from "react";
 import {
     Container,
@@ -92,7 +90,7 @@ const getMateriasForTeacher = (user) => {
             semestre: "7mo Semestre",
             tareasPendientes: 4,
             imagen:
-                "https://emacstores.com/wp-content/uploads/2021/09/seguridad-industrial.jpg" // pon tu imagen
+                "https://emacstores.com/wp-content/uploads/2021/09/seguridad-industrial.jpg" 
         },
         {
             id: 5,

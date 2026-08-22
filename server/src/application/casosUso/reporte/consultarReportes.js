@@ -5,7 +5,6 @@ import { listarReportes } from "../../../dominio/reporte/validacionReporte.js";
 export async function listarReportesCasoUso(query) {
     const filtros = listarReportes.parse(query ?? {});
 
-    // Paginación simple: limit (1..200, por defecto 50) y offset.
     const limit = Math.min(Math.max(Number(filtros.limit) || 50, 1), 200);
     const offset = Math.max(Number(filtros.offset) || 0, 0);
 
@@ -53,7 +52,6 @@ export async function eliminarReporteCasoUso(idRaw, solicitante) {
     const reporte = await prisma.reporteGenerado.findUnique({ where: { id }, select: { id: true, generadoPorId: true } });
     if (!reporte) throw crearError("El reporte indicado no existe", 404);
 
-    // Admin/Director borran cualquiera; el docente solo los suyos.
     const esPropio = reporte.generadoPorId === solicitante.id;
     if (!esPropio && !esRolStaff(solicitante)) throw crearError("No puedes eliminar este reporte", 403);
 

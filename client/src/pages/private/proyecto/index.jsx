@@ -19,7 +19,7 @@ import styled from "styled-components";
 import { useColors } from "../../../style/colors";
 
 const Proyecto = () => {
-  const Colors = useColors(); // única paleta
+  const Colors = useColors(); 
 
   const [folders, setFolders] = useState([
     { id: "1", name: "Documentos", files: [] },
@@ -133,7 +133,6 @@ const Proyecto = () => {
         folder.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    // puedes aplicar lógica para "starred" o "recent" si luego la usas
     return filtered;
   };
 
@@ -366,8 +365,6 @@ const Proyecto = () => {
 };
 
 export default Proyecto;
-
-// ================== ESTILOS ==================
 
 const Container = styled.div`
   max-width: 100%;
@@ -773,7 +770,6 @@ const FileName = styled.span`
   word-break: break-word;
 `;
 
-// Empty state
 const EmptyState = styled.div`
   display: flex;
   flex-direction: column;
@@ -789,7 +785,6 @@ const EmptyState = styled.div`
   }
 `;
 
-// Modal
 const FloatingModal = styled.div`
   position: fixed;
   top: 0;

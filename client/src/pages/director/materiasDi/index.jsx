@@ -1,5 +1,3 @@
-// Roxy: Materias del Director (cambia por correo: Sistemas vs Medicina)
-
 import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 import {
@@ -39,9 +37,7 @@ import RubricasDocente from "../rubricasDi/index.jsx";
 import CardHeader from "../../../components/ui/cardHeader.jsx";
 import { useUser } from "../../../context/useContext";
 
-// ================== CONFIGS POR DIRECTOR (por correo) ==================
 
-// Director Ingeniería de Sistemas (Integrador III)
 const SISTEMAS_CONFIG = {
   carreraNombre: "Ingeniería de Sistemas",
   headerText:
@@ -150,7 +146,6 @@ const SISTEMAS_CONFIG = {
   ],
 };
 
-// Director Medicina (Anatomía)
 const MEDICINA_CONFIG = {
   carreraNombre: "Medicina",
   headerText:
@@ -277,7 +272,6 @@ const MEDICINA_CONFIG = {
   ],
 };
 
-// Config por defecto (por si el correo no matchea)
 const DEFAULT_CONFIG = {
   carreraNombre: "Carrera",
   headerText:
@@ -351,7 +345,6 @@ const MateriasDi = () => {
   const [selectedMateria, setSelectedMateria] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Elegimos config según el correo del director
   const email = (user?.correo || user?.email || "").toLowerCase();
 
   let config = DEFAULT_CONFIG;
@@ -377,8 +370,6 @@ const MateriasDi = () => {
 
   const handleMateriaClick = (materia) => {
     setSelectedMateria(materia);
-    // Si quieres que al click se vaya directo a Entregas:
-    // setActiveTab("entregas");
   };
 
   const renderMateriasTab = () => (
@@ -666,7 +657,6 @@ const MateriasDi = () => {
 
 export default MateriasDi;
 
-// ================== Estilos locales (solo para lo nuevo) ==================
 
 const DetailSection = styled.div`
   margin-top: 1.5rem;
@@ -744,8 +734,6 @@ const DetailProgressLabel = styled.span`
   font-size: 11px;
   color: #374151;
 `;
-
-// Bloque “malla + docentes”
 
 const ExtraSection = styled.div`
   margin-top: 2rem;

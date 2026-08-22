@@ -82,7 +82,6 @@ export const bounce = keyframes`
   }
 `;
 
-// Solo animaciones sutiles adicionales
 export const slideDown = keyframes`
   0% {
     transform: translateY(-20px);

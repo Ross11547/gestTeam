@@ -13,5 +13,5 @@ export function toHoraDate(hhmm) {
 
 export function dateToHHMM(date) {
     if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null;
-    return date.toISOString().slice(11, 16); // "HH:MM"
+    return date.toISOString().slice(11, 16); 
 }

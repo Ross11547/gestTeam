@@ -161,7 +161,6 @@ const HitosCRUD = () => {
             toast.error("Primero selecciona un proyecto");
             return;
         }
-        // Sugerir el siguiente orden disponible
         const siguienteOrden = hitos.reduce((max, h) => Math.max(max, h.orden), 0) + 1;
         setCurrent(null);
         setSiguienteOrden(siguienteOrden);

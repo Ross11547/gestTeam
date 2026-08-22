@@ -16,7 +16,6 @@ import { Search } from "lucide-react";
 import { toast } from "sonner";
 import { authFetch } from "../../../services/api";
 
-// Etiquetas literales de semestre (fallback si no viene etiqueta desde la BD)
 const SEM_LABELS = [
     null,
     "Primer semestre",
@@ -34,7 +33,6 @@ const SEM_LABELS = [
 ];
 const labelFromNumero = (n, etiqueta) => etiqueta || SEM_LABELS[n] || (n ? `Semestre ${n}` : "—");
 
-// Lee mensaje de error del backend
 const readErrorMsg = async (res) => {
     try { const j = await res.json(); return j?.message || res.statusText; }
     catch { try { return (await res.text())?.slice(0, 160) || res.statusText; } catch { return res.statusText; } }
@@ -66,14 +64,12 @@ const GeneralInformacion = () => {
         })();
     }, []);
 
-    // Índice de carreras por id para acceder a su facultad
     const carrerasById = useMemo(() => {
         const map = new Map();
         for (const c of carreras) map.set(c.id, c); // c.facultad?.nombre disponible según tu backend
         return map;
     }, [carreras]);
 
-    // Composición final para la tabla: Facultad · Carrera · Semestre · Materia · Código
     const rows = useMemo(() => {
         return materias.map((m) => {
             const carrera = m.carrera ?? carrerasById.get(m.idCarrera) ?? {};
@@ -91,7 +87,6 @@ const GeneralInformacion = () => {
         });
     }, [materias, carrerasById]);
 
-    // Filtro por cualquier columna
     const filtered = useMemo(() => {
         const q = search.trim().toLowerCase();
         if (!q) return rows;

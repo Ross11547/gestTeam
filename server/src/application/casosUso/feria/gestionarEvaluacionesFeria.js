@@ -52,7 +52,6 @@ export async function listarEvaluacionesFeriaEquipoCasoUso(feriaEquipoIdRaw) {
         orderBy: { createdAt: "asc" },
     });
 
-    // Resumen útil para el mapa de la feria y las actas.
     const promedio = evaluaciones.length
         ? Math.round((evaluaciones.reduce((a, e) => a + e.puntaje, 0) / evaluaciones.length) * 100) / 100
         : null;

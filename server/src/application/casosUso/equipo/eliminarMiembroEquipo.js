@@ -12,8 +12,6 @@ export async function eliminarMiembroEquipoCasoUso(idRaw, usuarioIdRaw, usuario)
     const equipo = await equipoRepositorio.obtenerPorId(id);
     if (!equipo) throw crearError("El equipo no existe", 404);
 
-    // Staff, creador o líder pueden remover a cualquiera;
-    // un miembro común solo puede removerse a sí mismo.
     const esGestor = await puedeGestionarEquipo(usuario, equipo);
 
     if (!esGestor && usuario.id !== usuarioId) {

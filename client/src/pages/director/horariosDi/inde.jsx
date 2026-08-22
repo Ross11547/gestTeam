@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { useColors } from "../../../style/colors";
 
-// Días y horas base
 const HORAS = [
     "07:00", "07:30", "08:00", "08:30", "09:00", "09:30",
     "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
@@ -275,13 +274,13 @@ const HorarioDi = () => {
         const [inicioHora, inicioMin] = inicio.split(":").map(Number);
         const [finHora, finMin] = fin.split(":").map(Number);
         const duracionMinutos = finHora * 60 + finMin - (inicioHora * 60 + inicioMin);
-        return (duracionMinutos / 30) * 50; // 50px por bloque de 30 min
+        return (duracionMinutos / 30) * 50; 
     };
 
     const calculateBlockPosition = (inicio) => {
         const [hora, minutos] = inicio.split(":").map(Number);
         const minutosDesde7 = (hora - 7) * 60 + minutos;
-        return (minutosDesde7 / 30) * 50 + 60; // 60px offset for header
+        return (minutosDesde7 / 30) * 50 + 60; 
     };
 
     const formatDateRange = () => {

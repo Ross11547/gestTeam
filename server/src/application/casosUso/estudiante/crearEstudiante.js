@@ -70,7 +70,7 @@ export async function crearEstudianteCasoUso({ rolId, body }) {
                 telefono,
                 ci: Number(ci),
                 correo,
-                password, // TODO: hash
+                password,
                 idRol: rolId,
                 activo: Boolean(activo),
                 idFacultad: idFacultad ? Number(idFacultad) : null,

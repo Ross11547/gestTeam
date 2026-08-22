@@ -10,7 +10,6 @@ import {
 
 const router = Router();
 
-// Asignar docentes a materias es decisión del staff académico.
 router.get("/docenteMateria", listarDocenteMateria);
 router.get("/docenteMateria/:id(\\d+)", obtenerDocenteMateria);
 

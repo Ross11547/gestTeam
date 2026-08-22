@@ -33,7 +33,6 @@ import {
 import { ColorsLogin, Colors } from "../../../style/colors";
 import { authFetch } from "../../../services/api";
 
-// Etiquetas literales de semestre
 const SEM_LABELS = [
     null,
     "Primer semestre",
@@ -53,7 +52,7 @@ const labelFromNumero = (n) => SEM_LABELS[n] || `Semestre ${n}`;
 
 const SemestreCRUD = () => {
     const [semestres, setSemestres] = useState([]);
-    const [carreras, setCarreras] = useState([]); // para select
+    const [carreras, setCarreras] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [current, setCurrent] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -67,7 +66,6 @@ const SemestreCRUD = () => {
         catch { try { return (await res.text())?.slice(0, 160) || res.statusText; } catch { return res.statusText; } }
     };
 
-    // Cargar semestres + carreras
     useEffect(() => {
         loadData();
     }, []);
@@ -90,7 +88,6 @@ const SemestreCRUD = () => {
         }
     };
 
-    // Crear
     const handleCreate = async (payload) => {
         try {
             const r = await authFetch(API, {
@@ -100,7 +97,7 @@ const SemestreCRUD = () => {
             });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Semestre creado correctamente");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData();  
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo crear el semestre");
@@ -109,7 +106,6 @@ const SemestreCRUD = () => {
         }
     };
 
-    // Actualizar
     const handleUpdate = async (payload) => {
         try {
             const r = await authFetch(`${API}/${payload.id}`, {
@@ -119,7 +115,7 @@ const SemestreCRUD = () => {
             });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Semestre actualizado");
-            await loadData(); // Recargar para asegurar datos consistentes
+            await loadData(); 
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo actualizar el semestre");
@@ -129,7 +125,6 @@ const SemestreCRUD = () => {
         }
     };
 
-    // Eliminar
     const handleDelete = async (id) => {
         if (!confirm("¿Estás seguro de eliminar este semestre?")) return;
 
@@ -137,14 +132,13 @@ const SemestreCRUD = () => {
             const r = await authFetch(`${API}/${id}`, { method: "DELETE" });
             if (!r.ok) throw new Error(await readErrorMsg(r));
             toast.success("Semestre eliminado");
-            await loadData(); // Recargar lista
+            await loadData(); 
         } catch (e) {
             console.error(e);
             toast.error(e.message || "No se pudo eliminar el semestre");
         }
     };
 
-    // Filtro por carrera y por etiqueta literal del semestre
     const filtered = semestres.filter((s) => {
         const q = searchTerm.toLowerCase();
         return (
@@ -153,7 +147,6 @@ const SemestreCRUD = () => {
         );
     });
 
-    // Modal
     const renderModal = () => {
         if (!isModalOpen) return null;
         const initial = current || {
@@ -180,7 +173,6 @@ const SemestreCRUD = () => {
                             carreraId: Number(fd.get("carreraId")),
                         };
 
-                        // Validaciones rápidas
                         if (!payload.carreraId || !Number.isInteger(payload.carreraId)) {
                             toast.error("Selecciona una carrera válida");
                             return;
@@ -231,9 +223,8 @@ const SemestreCRUD = () => {
         );
     };
 
-    const columnCount = 3; // Solo 3 columnas: Semestre, Carrera, Acciones
+    const columnCount = 3; 
 
-    // Render
     return (
         <PageWrapper>
             <Container> {/* Container normal para CRUDs simples */}
@@ -262,7 +253,6 @@ const SemestreCRUD = () => {
                             </thead>
                             <tbody>
                                 {loading ? (
-                                    // Estado de carga
                                     Array.from({ length: 3 }, (_, i) => (
                                         <LoadingRow key={`loading-${i}`}>
                                             <LoadingCell><div className="skeleton" /></LoadingCell>

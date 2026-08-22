@@ -3,9 +3,6 @@ import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadPro
 import { proyectoRepositorio } from "../../../infrastructure/repositories/repositorioProyecto.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// Elimina un proyecto y TODA su descendencia en una sola transacción:
-// revisiones → entregas → hitos, equipos (ferias, miembros), evaluaciones,
-// solicitudes, pizarras (colaboradores), vínculos con materias y destacados.
 export async function eliminarProyectoCasoUso(id, usuario) {
     const proyecto = await proyectoRepositorio.obtenerPorId(id);
     if (!proyecto) throw crearError("Proyecto no encontrado", 404);

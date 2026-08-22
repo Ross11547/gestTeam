@@ -44,7 +44,6 @@ export const actualizarUsuario = z.object({
     ci: z.coerce.number().int().positive().optional(),
     correo: correo.optional(),
 
-    // si viene password, la hasheamos
     password: z.string().min(6).max(200).optional(),
 
     idRol: z.coerce.number().int().positive().optional(),

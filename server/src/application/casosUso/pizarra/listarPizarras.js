@@ -15,7 +15,6 @@ export async function listarPizarrasCasoUso(query, usuario) {
         ...(periodoId ? { periodoId } : {}),
     };
 
-    // Privacidad: staff ve todo; el resto solo públicas, propias o donde colabora.
     if (!esRolStaffPizarra(usuario)) {
         const uid = Number(usuario?.id);
         filtros.OR = [

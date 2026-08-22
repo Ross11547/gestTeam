@@ -2,7 +2,6 @@ import { habilidadCV, logroCV, proyectoCV } from "../../../dominio/cv/validacion
 import { ensureIdPositivo, crearError } from "../../../dominio/cv/helpersCV.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// El CV es personal: solo su dueño edita sus secciones.
 async function obtenerCVDelDueño(solicitante) {
     const cv = await prisma.cV.findUnique({
         where: { usuarioId: solicitante.id },

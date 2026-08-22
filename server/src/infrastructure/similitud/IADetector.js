@@ -16,7 +16,7 @@ function analizarTextoBasico(texto) {
     const promedioPalabrasPorOracion = totalPalabras / totalOraciones;
 
     const vocabulario = new Set(palabras);
-    const riquezaLexica = vocabulario.size / totalPalabras; // 0-1
+    const riquezaLexica = vocabulario.size / totalPalabras; 
 
     return {
         totalPalabras,
@@ -29,10 +29,10 @@ function analizarTextoBasico(texto) {
 export function estimarContenidoIA(texto) {
     const analisis = analizarTextoBasico(texto);
 
-    const normOracion = Math.min(analisis.promedioPalabrasPorOracion / 30, 1); // >30 palabras/oración
-    const normRiqueza = 1 - Math.min(analisis.riquezaLexica / 0.6, 1); // si riqueza < 0.6 sube score
+    const normOracion = Math.min(analisis.promedioPalabrasPorOracion / 30, 1); 
+    const normRiqueza = 1 - Math.min(analisis.riquezaLexica / 0.6, 1); 
 
-    const score = normOracion * 0.5 + normRiqueza * 0.5; // 0-1
+    const score = normOracion * 0.5 + normRiqueza * 0.5; 
     const porcentajeIA = Math.round(score * 100);
 
     return {

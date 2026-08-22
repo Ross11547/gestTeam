@@ -21,7 +21,6 @@ export async function listarProyectosDestacadosCasoUso() {
     });
 }
 
-// Verifica que las FKs opcionales existan cuando vengan con valor.
 async function validarReferenciasOpcionales({ periodoId, idFacultad, idCarrera }) {
     if (periodoId != null) {
         const periodo = await prisma.periodoAcademico.findUnique({ where: { id: periodoId }, select: { id: true } });

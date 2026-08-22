@@ -1,8 +1,6 @@
 import { prisma } from "../../infrastructure/db/prisma.client.js";
 import { esRolStaff } from "./helpersComunes.js";
 
-// Autoridad sobre un proyecto: staff, director de carrera,
-// docente de una clase vinculada o miembro OWNER.
 export async function tieneAutoridadSobreProyecto(proyectoId, usuario) {
     if (!usuario?.id) return false;
     if (esRolStaff(usuario)) return true;

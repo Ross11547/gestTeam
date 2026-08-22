@@ -53,7 +53,6 @@ const getCalendarStatsForTeacher = (user, ColorsDoc) => {
     if (email === "cbbe.fernando.hinojosa.sa@unifranz.edu.bo") return controlStats;
     if (email === "cbbe.gabriela.becerra.vi@unifranz.edu.bo") return testingStats;
 
-    // Default
     return [
         { icon: Clock, label: "Clases Hoy", value: "3", color: ColorsDoc.primary },
         { icon: Bell, label: "Eventos Próximos", value: "5", color: ColorsDoc.secondary },

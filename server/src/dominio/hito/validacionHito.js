@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Fechas llegan como string ISO o null; el caso de uso las convierte a Date.
 const fechaString = z
     .string({ invalid_type_error: "La fecha debe ser una fecha válida" })
     .refine((v) => !Number.isNaN(Date.parse(v)), "La fecha no es válida");
@@ -38,5 +37,4 @@ export const avanzarHito = z.object({
     estado: z.enum(["ACTIVO", "FINALIZADO", "CANCELADO", "PENDIENTE"]),
 });
 
-// El estado del hito SOLO cambia por la máquina de estados de /avanzar.
 export const actualizarHito = crearHito.omit({ proyectoId: true, estado: true }).partial();

@@ -56,7 +56,6 @@ export async function eliminarFeriaCasoUso(idRaw) {
     const feria = await prisma.feria.findUnique({ where: { id }, select: { id: true } });
     if (!feria) throw crearError("La feria indicada no existe", 404);
 
-    // Hijos primero (los FK son restrict): evaluaciones -> miembros -> equipos -> categorias
     await prisma.$transaction([
         prisma.feriaEvaluacion.deleteMany({ where: { feriaEquipo: { feriaId: id } } }),
         prisma.feriaEquipoMiembro.deleteMany({ where: { feriaEquipo: { feriaId: id } } }),

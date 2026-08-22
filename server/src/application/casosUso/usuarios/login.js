@@ -20,7 +20,6 @@ export async function loginCasoUso(payload) {
         where: { correo: String(body.correo).trim().toLowerCase() },
         include: {
             rol: { select: { id: true, nombre: true } },
-            // SEGURIDAD: nunca seleccionar accessToken hacia el frontend.
             githubAuth: {
                 select: { tipoCuenta: true, login: true, avatarUrl: true },
             },

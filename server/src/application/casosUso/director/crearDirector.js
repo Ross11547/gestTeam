@@ -72,7 +72,7 @@ export async function crearDirectorCasoUso({ rolId, body }) {
                 telefono,
                 ci: Number(ci),
                 correo: correoFinal,
-                password, // TODO: hash
+                password, 
                 idRol: rolId,
                 esDirector: true,
                 activo: Boolean(activo),

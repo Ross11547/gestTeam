@@ -57,19 +57,16 @@ const Docentes = () => {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // catálogos
   const [facultades, setFacultades] = useState([]);
   const [carreras, setCarreras] = useState([]);   
   const [materias, setMaterias] = useState([]);  
 
-  // formulario
   const [form, setForm] = useState({
     nombre: "", apellido: "", telefono: "", ci: "",
     idFacultad: "", idCarrera: "", materiaIds: []
   });
   const setF = (p) => setForm((s) => ({ ...s, ...p }));
 
-  // carrera seleccionada y previsualizaciones
   const carreraSel = useMemo(
     () => carreras.find(c => String(c.id) === String(form.idCarrera)) || null,
     [carreras, form.idCarrera]
@@ -95,7 +92,6 @@ const Docentes = () => {
     return `${local}@unifranz.edu.bo`;
   }, [form.nombre, form.apellido]);
 
-  // -------------- API --------------
   const readText = async (r) => { try { return await r.text(); } catch { return ""; } };
 
   async function loadDocentes(q = "") {
@@ -118,10 +114,9 @@ const Docentes = () => {
   async function fetchDocenteById(id) {
     const r = await authFetch(`${BASE}/api/docente${id}`, FETCH_OPTS);
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    return r.json(); // { data }
+    return r.json(); 
   }
 
-  // ----- CRUD con toasts -----
   const handleCreate = async (payload) => {
     try {
       const r = await authFetch(`${BASE}/api/docente`, {
@@ -133,7 +128,7 @@ const Docentes = () => {
       }
       const j = await r.json();
       toast.success("Docente creado correctamente");
-      await loadDocentes(searchTerm); // Recargar lista
+      await loadDocentes(searchTerm);
     } catch (e) {
       console.error(e);
       toast.error("No se pudo crear el docente");
@@ -173,14 +168,13 @@ const Docentes = () => {
         throw new Error(`DELETE /api/docente/${id} -> ${r.status} ${r.statusText} ${txt.slice(0,120)}`);
       }
       toast.success("Docente eliminado");
-      await loadDocentes(searchTerm); // Recargar lista
+      await loadDocentes(searchTerm);
     } catch (e) {
       console.error("Error al eliminar:", e);
       toast.error("No se pudo eliminar el docente");
     }
   };
 
-  // catálogos
   async function loadFacultades() {
     const r = await authFetch(`${BASE}/api/facultad`, FETCH_OPTS);
     const { data } = await r.json();
@@ -203,7 +197,6 @@ const Docentes = () => {
     setMaterias(data || []);
   }
 
-  // -------------- effects --------------
   useEffect(() => { loadDocentes().catch(e => setErr(String(e.message || e))); }, []);
   useEffect(() => {
     const t = setTimeout(() => { loadDocentes(searchTerm).catch(e => setErr(String(e.message || e))); }, 300);
@@ -223,7 +216,6 @@ const Docentes = () => {
     setF({ materiaIds: [] });
   }, [form.idCarrera]);
 
-  // Detect scroll need
   useEffect(() => {
     const checkScrollNeed = () => {
       const tableWrapper = document.querySelector('[data-table-wrapper]');
@@ -237,7 +229,6 @@ const Docentes = () => {
     return () => window.removeEventListener('resize', checkScrollNeed);
   }, [rows]);
 
-  // -------------- actions --------------
   function openNew() {
     setEditingId(null);
     setForm({ nombre:"", apellido:"", telefono:"", ci:"", idFacultad:"", idCarrera:"", materiaIds:[] });
@@ -274,7 +265,7 @@ const Docentes = () => {
       apellido: form.apellido,
       telefono: form.telefono,
       ci: Number(String(form.ci).replace(/\D/g, "")),
-      correo: previewCorreo, // generado automáticamente
+      correo: previewCorreo,
       idFacultad: form.idFacultad ? Number(form.idFacultad) : null,
       idCarrera:  form.idCarrera  ? Number(form.idCarrera)  : null,
       materiaIds: form.materiaIds.map(Number),
@@ -283,7 +274,6 @@ const Docentes = () => {
     else await handleCreate(payload);
   }
 
-  // -------------- modal --------------
   const renderModal = () => {
     if (!isModalOpen) return null;
     return (
@@ -373,7 +363,6 @@ const Docentes = () => {
     );
   };
 
-  // -------------- render --------------
   const filtered = rows.filter((d) => {
     const q = searchTerm.toLowerCase();
     return (

@@ -1,5 +1,3 @@
-// Roxy: lista de colaboraciones simulando BD
-
 import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components";
 import { Users, ArrowRightIcon, UsersRound, User } from "lucide-react";

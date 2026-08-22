@@ -9,7 +9,6 @@ export async function eliminarRevisionCasoUso(idRaw, usuario) {
     const revision = await revisionRepositorio.obtenerPorId(id);
     if (!revision) throw crearError("La revisión no existe", 404);
 
-    // Solo el revisor original o Admin/Director pueden eliminarla.
     if (revision.revisorId !== usuario.id && !esAdminODirector(usuario)) {
         throw crearError("No tienes permisos para eliminar esta revisión", 403);
     }

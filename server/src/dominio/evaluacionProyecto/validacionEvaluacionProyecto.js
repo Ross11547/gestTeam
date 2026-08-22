@@ -2,8 +2,6 @@ import { z } from "zod";
 
 const idPositivo = z.coerce.number().int().positive();
 
-// El tipo de evaluador se deriva del rol del usuario autenticado;
-// solo se acepta explícito para JURADO.
 const tipoEvaluador = z.enum(["DOCENTE", "DIRECTOR", "ADMIN", "JURADO"]);
 
 export const listarEvaluaciones = z.object({

@@ -16,6 +16,5 @@ export async function eliminarUsuarioCasoUso({ id }) {
         throw e;
     }
 
-    // Si luego necesito hacer un borrado lógico, aquí debo cambiar a update {activo:false}
     return usuarioRepositorio.eliminar(uid);
 }

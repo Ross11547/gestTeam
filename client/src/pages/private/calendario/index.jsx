@@ -29,13 +29,12 @@ import CardHeader from "../../../components/ui/cardHeader";
 dayjs.locale("es");
 
 const CalendarioUni = () => {
-  const theme = useColors(); // paleta desde BD
+  const theme = useColors(); 
   const localizer = dayjsLocalizer(dayjs);
 
-  const [viewFilter, setViewFilter] = useState("todos"); // todos, personales, colaborativos, entregas
+  const [viewFilter, setViewFilter] = useState("todos");
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // Eventos de ejemplo SOLO de proyectos (simulan venir de la BD)
   const [eventos, setEventos] = useState([
     {
       id: 1,
@@ -46,7 +45,7 @@ const CalendarioUni = () => {
       proyecto: "GestTeam - Gestión académica",
       lugar: "Sala proyectos / Meet",
       descripcion: "Definir tareas del sprint 3",
-      publico: true, // colaborativo
+      publico: true,
     },
     {
       id: 2,
@@ -77,7 +76,7 @@ const CalendarioUni = () => {
       type: "nota",
       proyecto: "Apuntes defensa",
       descripcion: "Recordar enfatizar IA como apoyo, no reemplazo",
-      publico: false, // solo yo
+      publico: false, 
     },
     {
       id: 5,
@@ -101,7 +100,7 @@ const CalendarioUni = () => {
     proyecto: "",
     lugar: "",
     descripcion: "",
-    publico: false, // por defecto personal
+    publico: false,
   });
 
   const eventosPrivados = eventos.filter((e) => !e.publico);

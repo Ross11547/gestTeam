@@ -44,7 +44,6 @@ export async function actualizarMateriaCasoUso(id, payload) {
         ...(data.semestreId !== undefined ? { semestreId: data.semestreId } : {}),
     };
 
-    // regenerar código si cambió el nombre (sin romper códigos existentes)
     if (data.nombre !== undefined) {
         const newBase = makeCodigoMateria(data.nombre) || "MAT";
         const prevBase = extraerBaseCodigo(current.codigo || "");

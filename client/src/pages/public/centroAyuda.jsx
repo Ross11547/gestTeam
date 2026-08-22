@@ -130,7 +130,6 @@ const SearchIcon = styled.div`
   color: ${Colors.greyLight};
 `;
 
-// Manual Styles
 const ManualGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -214,7 +213,6 @@ const ManualItemText = styled.span`
   flex: 1;
 `;
 
-// FAQ Styles
 const FAQContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
@@ -258,7 +256,6 @@ const FAQAnswer = styled.p`
   margin: 0 0 0 36px;
 `;
 
-// Soporte Styles
 const SoporteContainer = styled.div`
   max-width: 900px;
   margin: 0 auto;

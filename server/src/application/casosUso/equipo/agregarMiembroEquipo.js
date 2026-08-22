@@ -34,7 +34,6 @@ export async function agregarMiembroEquipoCasoUso(idRaw, payload, usuario) {
 
     try {
         if (existente && !existente.activo) {
-            // Reactivar membresía previa.
             return await equipoRepositorio.actualizarMiembro(id, data.usuarioId, {
                 activo: true,
                 rolEquipo: data.rolEquipo ?? existente.rolEquipo,

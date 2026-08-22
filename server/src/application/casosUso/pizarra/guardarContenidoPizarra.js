@@ -21,7 +21,6 @@ export async function guardarContenidoPizarraCasoUso(id, payload, usuario) {
 
     await obtenerPizarraParaEscritura(num, usuario);
 
-    // Lock optimista atómico: solo actualiza si la versión coincide.
     const resultado = await prisma.pizarra.updateMany({
         where: { id: num, version },
         data: {

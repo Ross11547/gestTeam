@@ -1,4 +1,3 @@
-// server/services/plagio.js
 import path from "path";
 import { prisma } from "../db/prisma.client.js";
 import { fileURLToPath } from "url";

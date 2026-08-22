@@ -1,8 +1,6 @@
 import { ensureIdPositivo, crearError, esRolStaff } from "../../../dominio/solicitudAcceso/helpersSolicitudAcceso.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// El solicitante cancela su propia solicitud pendiente; el staff puede
-// eliminar cualquiera.
 export async function cancelarSolicitudAccesoCasoUso(id, usuario) {
     const idValido = ensureIdPositivo(id);
     if (!idValido) throw crearError("ID inválido", 400);

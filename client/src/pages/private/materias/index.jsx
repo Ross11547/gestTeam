@@ -1,5 +1,3 @@
-// Roxy: vista "Mis materias" simulando conexión a BD
-
 import React, { useState, useMemo, useEffect } from "react";
 import {
   SubjectsGrid,
@@ -62,7 +60,6 @@ const Materias = () => {
     );
   }, [searchQuery, subjects]);
 
-  // Tabla de evaluaciones (puede quedarse hardcodeada o moverla también al servicio)
   const data = [
     {
       asignatura: "INGENIERÍA DE SISTEMAS",

@@ -24,7 +24,6 @@ export async function crearEquipoCasoUso(payload, usuario) {
     }
 
     try {
-        // El creador queda registrado como LIDER del equipo.
         return await equipoRepositorio.crearConLider(
             {
                 proyectoId: data.proyectoId,

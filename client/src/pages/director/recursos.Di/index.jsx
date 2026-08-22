@@ -37,9 +37,6 @@ import { useColors } from "../../../style/colors";
 import CardHeader from "../../../components/ui/cardHeader";
 import { useUser } from "../../../context/useContext";
 
-// ================== CONFIGS POR DIRECTOR (correo) ==================
-
-// Director Ingeniería de Sistemas (Integrador III)
 const SISTEMAS_RECURSOS = [
   {
     id: 1,
@@ -98,7 +95,6 @@ const SISTEMAS_RECURSOS = [
   }
 ];
 
-// Director Medicina (Anatomía)
 const MEDICINA_RECURSOS = [
   {
     id: 1,
@@ -157,7 +153,6 @@ const MEDICINA_RECURSOS = [
   }
 ];
 
-// Config por defecto (si el correo no matchea)
 const DEFAULT_RECURSOS = [
   {
     id: 1,
@@ -216,7 +211,6 @@ const DEFAULT_RECURSOS = [
   }
 ];
 
-// =======================================================
 
 const RecursosDi = () => {
   const ColorsDoc = useColors();
@@ -226,7 +220,6 @@ const RecursosDi = () => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Elegimos set de recursos según el correo del director
   const email = (user?.correo || user?.email || "").toLowerCase();
 
   let recursosIniciales = DEFAULT_RECURSOS;
@@ -288,14 +281,12 @@ const RecursosDi = () => {
     return recurso.tipo === filtroCategoria && matchesSearch;
   });
 
-  // ========= Upload 100% simulado =========
 
   const inferTipoFromFile = (file) => {
     const name = file.name.toLowerCase();
     if (name.match(/\.(mp4|mov|avi|mkv)$/)) return "video";
     if (name.match(/\.(png|jpg|jpeg|gif|webp)$/)) return "imagen";
     if (name.match(/\.(zip|rar|7z)$/)) return "archivo";
-    // pdf, doc, docx, ppt...
     return "documento";
   };
 
@@ -333,7 +324,7 @@ const RecursosDi = () => {
         materia: materiaPorDefecto,
         fecha: now.toISOString().slice(0, 10),
         tamaño: formatSize(file.size),
-        descargas: Math.floor(Math.random() * 20), // simulado
+        descargas: Math.floor(Math.random() * 20), 
         icono: icon,
         color
       };
@@ -371,7 +362,6 @@ const RecursosDi = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  // ========= Acciones simuladas de cada recurso =========
 
   const handleVer = (recurso) => {
     alert(`Simulación: abrir vista previa de\n${recurso.nombre}`);
@@ -391,7 +381,6 @@ const RecursosDi = () => {
     }
   };
 
-  // ========= Stats dinámicas según recursos =========
 
   const totalRecursos = recursos.length;
   const totalDescargas = recursos.reduce(

@@ -54,7 +54,6 @@ export async function analizar(req, res) {
             return res.status(400).json({ mensaje: "Falta documentoId." });
         }
 
-        // Solo el dueño del documento (o staff) puede analizarlo.
         const documento = await prisma.documento.findUnique({
             where: { id: Number(documentoId) },
             select: { id: true, usuarioId: true },

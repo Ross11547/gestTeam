@@ -38,7 +38,6 @@ export async function crearClaseMateriaCasoUso(payload) {
     const paralelo = normalizarParalelo(body.paralelo);
     const aula = limpiarTexto(body.aula);
 
-    // Anti-duplicado recomendado
     const dup = await claseMateriaRepositorio.existeClaseSimilar({
         periodoId: Number(body.periodoId),
         materiaId: Number(body.materiaId),

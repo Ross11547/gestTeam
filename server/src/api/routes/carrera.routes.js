@@ -12,7 +12,7 @@ const router = Router();
 
 const soloAdmin = autorizarRoles("Admin");
 
-router.get("/carrera", listarCarrera);            // ?idFacultad=1&q=sistemas
+router.get("/carrera", listarCarrera);          
 router.get("/carrera/:id", obtenerCarrera);
 router.post("/carrera", soloAdmin, crearCarrera);
 router.put("/carrera/:id", soloAdmin, actualizarCarrera);

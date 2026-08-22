@@ -5,9 +5,6 @@ import { autorizarRoles } from "../middleware/autenticacionMiddleware.js";
 
 const router = Router();
 
-// La creación de oferta académica y la gestión de asignaciones
-// son operaciones administrativas. Un docente solo puede
-// sincronizar su propia carga académica.
 const soloAdmin = autorizarRoles("Admin");
 const staffAcademico = autorizarRoles("Admin", "Director");
 
@@ -408,7 +405,6 @@ router.put("/clase-materia/:id(\\d+)/liberar", staffAcademico, async (req, res, 
   }
 });
 
-// Un docente solo puede sincronizar su propia carga; el staff, la de cualquiera.
 router.put("/clase-materia/docente/:docenteId(\\d+)/sincronizar", async (req, res, next) => {
   try {
     if (String(req.user?.rol?.nombre || "").trim().toLowerCase() === "docente" && req.user.id !== Number(req.params.docenteId)) {

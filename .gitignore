@@ -1,21 +1,14 @@
-﻿node_modules/
+node_modules/
 dist/
 build/
 .env
 .env.*
-!.env.example
 .cache/
-.codebase-memory/
 .vscode/
-.zed/
-.claude/
-.cursor/
+.codebase-memory/
 *.log
 
-# Claves privadas y secretos locales (GitHub App, etc.)
 *.pem
 server/secrets/
 
-# Archivos subidos en tiempo de ejecución (se regeneran; los directorios
-# los crea el backend automáticamente al arrancar)
 server/uploads/

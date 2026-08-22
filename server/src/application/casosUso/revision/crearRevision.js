@@ -17,7 +17,6 @@ export async function crearRevisionCasoUso(payload, usuario) {
         throw crearError("Esta entrega ya fue revisada", 409);
     }
 
-    // Revisión + cambio de estado de la entrega deben ser atómicos.
     const revision = await prisma.$transaction(async (tx) => {
         const r = await tx.revisionEntrega.create({
             data: {

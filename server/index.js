@@ -45,8 +45,6 @@ import plagio from './src/infrastructure/similitud/plagioRoutes.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS: solo se reflejan orígenes permitidos (FRONTEND_URL u ORIGENES_CORS separados por coma).
-// Peticiones sin cabecera Origin (curl, pruebas, mismo origen) siempre pasan.
 const ORIGENES_PERMITIDOS = (process.env.ORIGENES_CORS || process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
   .map((s) => s.trim())

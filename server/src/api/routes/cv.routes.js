@@ -17,8 +17,6 @@ import {
 
 const router = Router();
 
-// El CV es personal: cada usuario gestiona el suyo.
-// Docentes y staff pueden consultar el de cualquier estudiante.
 router.get("/cv/me", obtenerMiCV);
 router.put("/cv/me", guardarMiCV);
 router.delete("/cv/me", eliminarMiCV);

@@ -1,4 +1,3 @@
-// Notificacion.jsx - Diseño Premium Mejorado
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import {
@@ -129,7 +128,6 @@ const NotificationBadge = styled.span`
     animation: ${props => props.hasNew ? pulse : 'none'} 2s infinite;
 `;
 
-// ==== CONTROLES Y FILTROS ====
 const ControlsSection = styled.div`
     display: flex;
     gap: 12px;
@@ -346,7 +344,6 @@ const NotificationsList = styled.div`
     animation: ${slideIn} 0.3s ease;
 `;
 
-// ==== ITEM DE NOTIFICACIÓN ====
 const NotificationItem = styled.div`
     display: flex;
     gap: 16px;
@@ -465,7 +462,6 @@ const MarkAsReadButton = styled.button`
     }
 `;
 
-// ==== EMPTY STATE ====
 const EmptyState = styled.div`
     display: flex;
     flex-direction: column;

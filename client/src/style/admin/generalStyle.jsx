@@ -68,7 +68,6 @@ export const SearchInput = styled.input`
   }
 `;
 
-// Contenedor con scroll horizontal controlado
 export const TableWrapper = styled.div`
   background: ${Colors.white};
   border-radius: 12px;
@@ -214,7 +213,6 @@ export const FloatingButton = styled.button`
   }
 `;
 
-// Modal
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -262,7 +260,6 @@ export const ModalTitle = styled.h2`
   font-weight: 700;
 `;
 
-// Formulario
 export const Form = styled.form`
   display: grid;
   grid-template-columns: ${props => {
@@ -368,7 +365,6 @@ export const Button = styled.button`
   }
 `;
 
-// Estados especiales
 export const EmptyState = styled.div`
   text-align: center;
   padding: 60px 20px;
@@ -390,7 +386,6 @@ export const EmptyState = styled.div`
   }
 `;
 
-// Chips para colores
 export const Chip = styled.span`
   display: inline-block;
   width: 20px;
@@ -419,7 +414,6 @@ export const Chip = styled.span`
 `;
 
 
-// Loading states
 export const LoadingRow = styled(TableRow)`
   td {
     padding: 20px 14px;

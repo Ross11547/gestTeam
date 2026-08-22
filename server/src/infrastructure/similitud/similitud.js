@@ -16,7 +16,7 @@ function calcularJaccard(wordsA, wordsB) {
     const inter = new Set([...setA].filter((x) => setB.has(x)));
     const menor = Math.min(setA.size, setB.size) || 1;
 
-    return (inter.size / menor) * 100; // 0-100
+    return (inter.size / menor) * 100; 
 }
 
 function segmentarOraciones(texto) {

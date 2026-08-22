@@ -44,7 +44,6 @@ const CarrerasCRUD = () => {
     const API = "http://localhost:3000/api/carrera";
     const API_FAC = "http://localhost:3000/api/facultad";
 
-    // Cargar carreras + facultades
     useEffect(() => {
         loadData();
     }, []);

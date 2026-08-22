@@ -9,7 +9,6 @@ export async function eliminarEquipoCasoUso(idRaw, usuario) {
     const equipo = await equipoRepositorio.obtenerPorId(id);
     if (!equipo) throw crearError("El equipo no existe", 404);
 
-    // Solo staff o el creador puede eliminar un equipo.
     if (!esStaff(usuario) && equipo.creadoPorId !== usuario.id) {
         throw crearError("No tienes permisos para eliminar este equipo", 403);
     }

@@ -1,4 +1,3 @@
-// Styled Components
 export const UserRoleBadge = styled.div`
   background: ${props => props.role === 'docente' ? ColorsLogin.secondary100 : '#16a34a'};
   color: ${Colors.white};

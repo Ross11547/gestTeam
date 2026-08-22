@@ -285,8 +285,6 @@ export const ActionBtn = styled.button`
   }
 `;
 
-// Agrega estos estilos a los existentes
-
 export const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;

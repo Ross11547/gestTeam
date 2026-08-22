@@ -119,7 +119,6 @@ const EventosD = ({ ColorsDoc }) => {
 
         const days = [];
 
-        // Días del mes anterior
         for (let i = startingDay - 1; i >= 0; i--) {
             const prevMonthDay = new Date(year, month, -i);
             days.push({
@@ -129,7 +128,6 @@ const EventosD = ({ ColorsDoc }) => {
             });
         }
 
-        // Días del mes actual
         for (let i = 1; i <= daysInMonth; i++) {
             const currentDay = new Date(year, month, i);
             const dayEvents = eventos.filter(e => {
@@ -143,7 +141,6 @@ const EventosD = ({ ColorsDoc }) => {
             });
         }
 
-        // Días del mes siguiente
         const remainingDays = 42 - days.length;
         for (let i = 1; i <= remainingDays; i++) {
             const nextMonthDay = new Date(year, month + 1, i);

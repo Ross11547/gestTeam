@@ -21,12 +21,10 @@ export async function crearEntregaCasoUso(payload, usuario) {
 
     if (!equipo) throw crearError("El equipo indicado no existe", 404);
 
-    // El hito y el equipo deben pertenecer al mismo proyecto.
     if (hito.proyectoId !== equipo.proyectoId) {
         throw crearError("El equipo no pertenece al proyecto del hito", 400);
     }
 
-    // Solo miembros activos del equipo (o staff) pueden entregar.
     if (!esStaff(usuario)) {
         const miembro = await prisma.equipoMiembro.findUnique({
             where: {

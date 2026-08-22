@@ -51,13 +51,13 @@ export default function Estudiantes() {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // catálogos
+  //catálogos
   const [facultades, setFacultades] = useState([]);
   const [carreras, setCarreras] = useState([]);
   const [semestres, setSemestres] = useState([]);
   const [materias, setMaterias] = useState([]);
 
-  // form
+  //form
   const [form, setForm] = useState({
     nombre: "", apellido: "", telefono: "", ci: "",
     idFacultad: "", idCarrera: "", semestreId: "",
@@ -65,7 +65,7 @@ export default function Estudiantes() {
   });
   const setF = (p) => setForm((s) => ({ ...s, ...p }));
 
-  // --------- catálogos ---------
+  //catálogos
   const readText = async (r) => { try { return await r.text(); } catch { return ""; } };
 
   async function loadFacultades() {
@@ -113,7 +113,7 @@ export default function Estudiantes() {
     } catch { setMaterias([]); }
   }
 
-  // --------- CRUD (helpers con toasts) ---------
+  //CRUD
   async function loadEstudiantes(q = "") {
     try {
       setLoading(true);
@@ -146,7 +146,7 @@ export default function Estudiantes() {
     return r.json();
   }
 
-  // --------- effects ---------
+  //effects
   useEffect(() => { loadEstudiantes().catch(e => setErr(String(e.message || e))); }, []);
   useEffect(() => {
     const t = setTimeout(() => loadEstudiantes(searchTerm).catch(e => setErr(String(e.message || e))), 300);
@@ -172,7 +172,6 @@ export default function Estudiantes() {
     setF({ materiaIds: [] });
   }, [form.semestreId, form.idCarrera]);
 
-  // Detect scroll need
   useEffect(() => {
     const checkScrollNeed = () => {
       const tableWrapper = document.querySelector('[data-table-wrapper]');
@@ -186,7 +185,6 @@ export default function Estudiantes() {
     return () => window.removeEventListener('resize', checkScrollNeed);
   }, [rows]);
 
-  // --------- previews (solo UI) ---------
   const carreraSel = useMemo(
     () => carreras.find(c => String(c.id) === String(form.idCarrera)) || null,
     [carreras, form.idCarrera]
@@ -212,7 +210,6 @@ export default function Estudiantes() {
     return `${local}@unifranz.edu.bo`;
   }, [form.nombre, form.apellido]);
 
-  // --------- acciones ---------
   const openNew = () => {
     setEditingId(null);
     setForm({
@@ -282,7 +279,7 @@ export default function Estudiantes() {
     if (!confirm("¿Estás seguro de eliminar este estudiante?")) return;
     try {
       await deleteEstudiante(id);
-      await loadEstudiantes(searchTerm); // Recargar lista
+      await loadEstudiantes(searchTerm);
       toast.success("Estudiante eliminado");
     } catch (e) {
       console.error(e);
@@ -300,7 +297,6 @@ export default function Estudiantes() {
     );
   });
 
-  // --------- modal ---------
   const renderModal = () => !isModalOpen ? null : (
     <ModalOverlay>
       <ModalContent size="large">

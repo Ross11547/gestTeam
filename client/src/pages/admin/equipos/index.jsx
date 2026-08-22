@@ -54,7 +54,6 @@ const EquiposCRUD = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
 
-    // Gestión de miembros
     const [membersOpen, setMembersOpen] = useState(false);
     const [membersEquipo, setMembersEquipo] = useState(null);
     const [miembros, setMiembros] = useState([]);
@@ -146,7 +145,6 @@ const EquiposCRUD = () => {
         }
     };
 
-    // ===== Miembros =====
     const openMembers = async (equipo) => {
         setMembersEquipo(equipo);
         setMembersOpen(true);

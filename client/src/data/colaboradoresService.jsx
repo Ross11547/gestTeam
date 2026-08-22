@@ -1,5 +1,3 @@
-// Roxy: BD falsa para colaboraciones
-
 const colaboracionesDB = [
     {
         id: 1,

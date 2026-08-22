@@ -2,7 +2,6 @@ import { ensureIdPositivo, crearError } from "../../../dominio/hito/helpersHito.
 import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadProyecto.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
-// Los 5 hitos fijos del semestre; los pesos suman 100.
 const HITOS_BASE = [
     {
         orden: 1,
@@ -36,8 +35,6 @@ const HITOS_BASE = [
     },
 ];
 
-// Núcleo sin verificación de permisos: lo usa la creación de proyectos
-// (el siembra es parte de la creación) y el endpoint con permisos.
 export async function sembrarHitosBaseInterno(proyectoId) {
     const existentes = await prisma.hitoProyecto.count({ where: { proyectoId } });
     if (existentes > 0) return false;

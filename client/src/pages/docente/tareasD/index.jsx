@@ -124,11 +124,9 @@ const TareasD = ({ ColorsDoc }) => {
             const sourceTasks = [...tareas[draggedFrom]];
             const destTasks = [...tareas[toColumn]];
 
-            // Remover de la columna origen
             const taskIndex = sourceTasks.findIndex(t => t.id === draggedTask.id);
             sourceTasks.splice(taskIndex, 1);
 
-            // Actualizar progreso basado en la columna destino
             let updatedTask = { ...draggedTask };
             if (toColumn === 'enProgreso') {
                 updatedTask.progreso = 25;
@@ -140,7 +138,6 @@ const TareasD = ({ ColorsDoc }) => {
                 updatedTask.progreso = 0;
             }
 
-            // Agregar a la columna destino
             destTasks.push(updatedTask);
 
             setTareas({

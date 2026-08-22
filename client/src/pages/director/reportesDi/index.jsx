@@ -34,7 +34,6 @@ import { useColors } from "../../../style/colors.jsx";
 import CardHeader from "../../../components/ui/cardHeader.jsx";
 import { useUser } from "../../../context/useContext";
 
-// ================= CONFIGS POR DIRECTOR (correo) =================
 
 const sistemasConfig = (ColorsDoc) => ({
     descripcion:
@@ -353,7 +352,6 @@ const defaultConfig = (ColorsDoc) => ({
     tablaTitulo: "Top estudiantes"
 });
 
-// ================= COMPONENTE =================
 
 const ReportesDi = () => {
     const ColorsDoc = useColors();
@@ -378,9 +376,7 @@ const ReportesDi = () => {
 
     const topEstudiantes = config.topEstudiantes;
 
-    // ======== DATOS PARA LA GRÁFICA (100% SIMULADO PERO VISIBLE) ========
     const chartData = useMemo(() => {
-        // Valores “porcentaje” para las barras
         if (email.includes("cbbe.fabiolaevelyn.cadima.sa@unifranz.edu.bo") || email.includes("sis")) {
             if (activeTab === "temporal") {
                 return [
@@ -392,7 +388,6 @@ const ReportesDi = () => {
                     { label: "Ene", value: 84 }
                 ];
             }
-            // ⬇️ Solo 5 hitos
             return [
                 { label: "H1", value: 72 },
                 { label: "H2", value: 78 },
@@ -424,7 +419,6 @@ const ReportesDi = () => {
             ];
         }
 
-        // default
         return [
             { label: "Ago", value: 70 },
             { label: "Sep", value: 73 },

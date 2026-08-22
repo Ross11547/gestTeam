@@ -1,5 +1,3 @@
-// Roxy: detalle de materia mejorado con diseño premium
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";

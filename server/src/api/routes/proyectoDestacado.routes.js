@@ -11,7 +11,6 @@ const router = Router();
 
 const staff = autorizarRoles("Admin", "Director");
 
-// Vitrina pública (autenticada) de proyectos destacados.
 router.get("/proyecto-destacado", listarDestacados);
 router.post("/proyecto-destacado", staff, crearDestacado);
 router.put("/proyecto-destacado/:id(\\d+)", staff, actualizarDestacado);

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const crearPeriodoAcademico = z.object({
     institucionId: z.number().int().positive("institucionId inválido"),
-    nombre: z.string().min(3, "El nombre es obligatorio"), // "2026-1"
+    nombre: z.string().min(3, "El nombre es obligatorio"), 
     fechaIni: z.string().datetime("fechaIni debe ser ISO datetime"),
     fechaFin: z.string().datetime("fechaFin debe ser ISO datetime"),
     activo: z.boolean().optional(),

@@ -40,7 +40,6 @@ const Facultades = () => {
 
   const API = "http://localhost:3000/api/facultad";
 
-  // Carga inicial
   useEffect(() => {
     loadFacultades();
   }, []);
@@ -63,7 +62,6 @@ const Facultades = () => {
     }
   };
 
-  // CRUD Operations
   const handleAddFacultad = async (nuevo) => {
     try {
       const r = await authFetch(API, {
@@ -129,12 +127,10 @@ const Facultades = () => {
     }
   };
 
-  // Filtrado
   const filteredFacultades = facultades.filter((d) =>
     d.nombre?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Modal
   const renderModal = () => {
     if (!isModalOpen) return null;
     const initial = currentFacultad || { nombre: "", theme: "" };
@@ -156,7 +152,7 @@ const Facultades = () => {
           </ModalHeader>
 
           <Form
-            compact // Formulario compacto
+            compact  
             onSubmit={(e) => {
               e.preventDefault();
               const fd = new FormData(e.target);
@@ -218,7 +214,7 @@ const Facultades = () => {
     );
   };
 
-  const columnCount = 3; // Solo 3 columnas: Nombre, Tema, Acciones
+  const columnCount = 3;
 
   return (
     <PageWrapper>
@@ -247,7 +243,6 @@ const Facultades = () => {
             </thead>
             <tbody>
               {loading ? (
-                // Estado de carga
                 Array.from({ length: 3 }, (_, i) => (
                   <TableRow key={`loading-${i}`}>
                     <TableCell compact>
@@ -278,7 +273,6 @@ const Facultades = () => {
                 </TableRow>
               ) : (
                 filteredFacultades.map((fac) => {
-                  // Normalizar theme para mostrar chips
                   let t = fac.theme;
                   if (typeof t === "string") {
                     try { t = JSON.parse(t); } catch { t = null; }
