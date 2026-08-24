@@ -1,39 +1,13 @@
-node_modules
-# Keep environment variables out of version control
-.env
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
 node_modules/
 
+# Variables de entorno locales
 .env
+.env.*
+
+# Cliente generado por Prisma
+/generated/prisma
+/src/generated/prisma
+
+# Documentos subidos por usuarios
+/documentos
+/uploads

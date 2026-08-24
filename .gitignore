@@ -8,7 +8,24 @@ build/
 .codebase-memory/
 *.log
 
+#Llave secreta de GitHubApps
 *.pem
 server/secrets/
 
+#Archivos generador de la detección
 server/uploads/
+
+#Archivos del detector
+detectorIA/modelos/
+detectorIA/checkpoints/
+detectorIA/entrenamiento/data/
+detectorIA/entrenamiento/resultados/
+detectorIA/.venv/
+
+# De Python
+__pycache__/
+*.pyc
+
+# Del sistema operativo
+Thumbs.db
+Desktop.ini

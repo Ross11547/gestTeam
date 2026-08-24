@@ -1,0 +1,24 @@
+# Entorno virtual de Python 
+.venv/
+venv/
+
+# Modelos entrenados y descargas de Hugging Face
+modelos/
+checkpoints/
+
+# Datos y resultados generados por los scripts
+entrenamiento/data/
+entrenamiento/resultados/
+
+# Bytecode de Python
+__pycache__/
+*.pyc
+
+# Variables de entorno locales del microservicio
+.env
+.env.*
+
+# Sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
