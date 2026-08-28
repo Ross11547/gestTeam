@@ -71,14 +71,12 @@ def resolver_ruta_academico() -> Path | None:
             return candidato
     return None
 
-def cargar_dataset_academico() -> pd.DataFrame:
-    ruta = resolver_ruta_academico()
+def cargar_csv_si_existe(ruta: Path, nombre: str) -> pd.DataFrame:
+    if not ruta.is_file():
+        print(f"No se encontró {ruta.name}, se omite")
+        return pd.DataFrame(columns=["oracion1", "oracion2", "score"])
 
-    if ruta is None:
-        print("No se encontró dataset_academico.csv, se usará solo español.")
-        return pd.DataFrame(columns = ["oracion1", "oracion2", "score"])
-
-    print(f"Cargando dataset académico desde: {ruta.name}")
+    print(f"Cargando {nombre} desde: {ruta.name}")
 
     df = pd.read_csv(ruta)
 
@@ -86,15 +84,39 @@ def cargar_dataset_academico() -> pd.DataFrame:
 
     if not columnas_requeridas.issubset(df.columns):
         raise ValueError(
-            "dataset_academico.csv debe tener las columnas: oracion1, oracion2, score"
+            f"{ruta.name} debe tener las columnas: oracion1, oracion2, score"
         )
 
     df = limpiar_dataframe(df)
 
-    print(f"Dataset académico GestTeam: {len(df)} pares cargados.")
+    print(f"{nombre}: {len(df)} pares cargados.")
 
     return df
 
+
+def cargar_dataset_academico() -> pd.DataFrame:
+    academico = cargar_csv_si_existe(
+        BASE_DIR / "dataset_academico.csv",
+        "Dataset académico GestTeam"
+    )
+
+    autogenerado = cargar_csv_si_existe(
+        BASE_DIR / "data" / "dataset_autogenerado.csv",
+        "Dataset autogenerado desde proyectos aprobados"
+    )
+
+    if len(autogenerado) == 0:
+        autogenerado = cargar_csv_si_existe(
+            BASE_DIR / "dataset_autogenerado.csv",
+            "Dataset autogenerado desde proyectos aprobados (raíz)"
+        )
+
+    df = pd.concat([academico, autogenerado], ignore_index = True)
+    df = limpiar_dataframe(df)
+
+    print(f"Dataset combinado: {len(df)} pares cargados.")
+
+    return df
 
 def dividir_dataset_academico(df: pd.DataFrame):
     if len(df) == 0:

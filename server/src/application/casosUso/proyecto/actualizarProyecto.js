@@ -2,6 +2,7 @@ import { actualizarProyecto } from "../../../dominio/proyecto/validacionProyecto
 import { normalizarTexto, crearError } from "../../../dominio/proyecto/helpersProyecto.js";
 import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadProyecto.js";
 import { proyectoRepositorio } from "../../../infrastructure/repositories/repositorioProyecto.js";
+import {incluirProyectoEnDataset} from "../../../infrastructure/similitud/datasetPlagio.js"
 
 export async function actualizarProyectoCasoUso(id, payload, usuario) {
     const actual = await proyectoRepositorio.obtenerPorId(id);
@@ -30,5 +31,22 @@ export async function actualizarProyectoCasoUso(id, payload, usuario) {
 
     if (Object.keys(data).length === 0) return actual;
 
-    return proyectoRepositorio.actualizar(id, data);
+    const proyectoActualizado = await proyectoRepositorio.actualizar(id, data);
+    const aprobadoProyecto = data.estado === "CERRADO" && actual.estado !== "CERRADO";
+
+    if (aprobadoProyecto){
+        incluirProyectoEnDataset(id, { creadoPorId: usuario?.id})
+            .then((resultado) => {
+                                if (resultado.ok) {
+                    console.log(`[dataset-plagio] Proyecto ${id} incluido:`, resultado);
+                } else {
+                    console.warn(`[dataset-plagio] Proyecto ${id} no incluido:`, resultado);
+                }
+            })
+            .catch((err) => {
+                console.error(`[dataset-plagio] Error incluyendo proyecto ${id}:`, err.message);
+            });
+    }
+
+    return proyectoActualizado;
 }

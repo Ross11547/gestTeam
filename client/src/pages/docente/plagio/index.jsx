@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   Container,
-  HeaderPlagio,
   UploadSection,
   DropZone,
   FileInfo,
@@ -74,7 +73,7 @@ import { authFetch } from "../../../services/api";
 import CardHeader from "../../../components/ui/cardHeader";
 import { toast } from "sonner";
 
-const API_BASE = "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const IAPlagio = () => {
   const ColorsDoc = useColors();
@@ -92,20 +91,44 @@ const IAPlagio = () => {
 
   const analysisSteps = [
     { icon: Upload, text: "Cargando documento...", duration: 800 },
-    { icon: FileSearch, text: "Extrayendo texto y analizando estructura...", duration: 1200 },
-    { icon: Database, text: "Comparando con base de datos universitaria...", duration: 1400 },
-    { icon: Globe, text: "Buscando coincidencias en internet...", duration: 1400 },
+    {
+      icon: FileSearch,
+      text: "Extrayendo texto y analizando estructura...",
+      duration: 1200,
+    },
+    {
+      icon: Database,
+      text: "Comparando con base de datos universitaria...",
+      duration: 1400,
+    },
+    {
+      icon: Globe,
+      text: "Buscando coincidencias en internet...",
+      duration: 1400,
+    },
     { icon: Cpu, text: "Detectando patrones de IA...", duration: 1000 },
-    { icon: BarChart3, text: "Generando reporte de análisis...", duration: 800 },
+    {
+      icon: BarChart3,
+      text: "Generando reporte de análisis...",
+      duration: 800,
+    },
   ];
 
   const getGlobalRisk = (r) => {
     const riesgoBruto = r.plagioWeb + r.plagioUniversidad + r.contenidoIA;
     if (riesgoBruto >= 60 || r.originalidad < 55) {
-      return { nivel: "Alto", color: "#EF4444", desc: "Riesgo alto de plagio / IA" };
+      return {
+        nivel: "Alto",
+        color: "#EF4444",
+        desc: "Riesgo alto de plagio / IA",
+      };
     }
     if (riesgoBruto >= 35 || r.originalidad < 65) {
-      return { nivel: "Medio", color: "#F97316", desc: "Revisión detallada recomendada" };
+      return {
+        nivel: "Medio",
+        color: "#F97316",
+        desc: "Revisión detallada recomendada",
+      };
     }
     return { nivel: "Bajo", color: "#22C55E", desc: "Riesgo controlado" };
   };
@@ -120,7 +143,10 @@ const IAPlagio = () => {
       "text/plain",
     ];
 
-    if (!allowed.includes(uploadedFile.type) && !uploadedFile.name.endsWith(".txt")) {
+    if (
+      !allowed.includes(uploadedFile.type) &&
+      !uploadedFile.name.endsWith(".txt")
+    ) {
       return "Formato no soportado. Usa PDF, DOC, DOCX o TXT.";
     }
 
@@ -194,7 +220,6 @@ const IAPlagio = () => {
     }
   };
 
-
   const analyzeDocument = async () => {
     if (!file) {
       toast.warning("Primero selecciona un archivo para analizar.");
@@ -211,7 +236,9 @@ const IAPlagio = () => {
 
     for (let i = 0; i < analysisSteps.length; i++) {
       setCurrentStep(i);
-      await new Promise((resolve) => setTimeout(resolve, analysisSteps[i].duration));
+      await new Promise((resolve) =>
+        setTimeout(resolve, analysisSteps[i].duration),
+      );
     }
 
     try {
@@ -318,7 +345,7 @@ const IAPlagio = () => {
           typeof f.fin === "number" &&
           f.inicio >= 0 &&
           f.fin > f.inicio &&
-          f.fin <= texto.length
+          f.fin <= texto.length,
       )
       .sort((a, b) => a.inicio - b.inicio);
 
@@ -328,27 +355,26 @@ const IAPlagio = () => {
     fragmentos.forEach((fr, index) => {
       if (fr.inicio > cursor) {
         partes.push(
-          <span key={`plain-${index}`}>
-            {texto.slice(cursor, fr.inicio)}
-          </span>
+          <span key={`plain-${index}`}>{texto.slice(cursor, fr.inicio)}</span>,
         );
       }
 
       partes.push(
-        <HighlightSpan key={`hl-${index}`} tipo={fr.tipo}>
+        <HighlightSpan
+          key={`hl-${index}`}
+          tipo={fr.tipo}
+          $riesgo={fr.riesgo}
+          title={fr.riesgo ? `${fr.fuente} — riesgo ${fr.riesgo}` : fr.fuente}
+        >
           {texto.slice(fr.inicio, fr.fin)}
-        </HighlightSpan>
+        </HighlightSpan>,
       );
 
       cursor = fr.fin;
     });
 
     if (cursor < texto.length) {
-      partes.push(
-        <span key="plain-final">
-          {texto.slice(cursor)}
-        </span>
-      );
+      partes.push(<span key="plain-final">{texto.slice(cursor)}</span>);
     }
 
     return (
@@ -360,44 +386,41 @@ const IAPlagio = () => {
           Los segmentos detectados como similares se muestran subrayados y con
           un color distinto según su origen (web, repositorio UNIFRANZ o IA).
         </HighlightedDocumentInfo>
-        <HighlightedDocumentBox>
-          {partes}
-        </HighlightedDocumentBox>
+        <HighlightedDocumentBox>{partes}</HighlightedDocumentBox>
 
         <HighlightLegend>
           <LegendItem>
-            <LegendColor
-              bg="rgba(34, 197, 94, 0.4)"
-              border="#22c55e"
-            />
+            <LegendColor bg="rgba(34, 197, 94, 0.4)" border="#22c55e" />
             <span>Texto original</span>
           </LegendItem>
           <LegendItem>
-            <LegendColor
-              bg="rgba(239, 68, 68, 0.4)"
-              border="#ef4444"
-            />
+            <LegendColor bg="rgba(239, 68, 68, 0.4)" border="#ef4444" />
             <span>Coincidencias web</span>
           </LegendItem>
           <LegendItem>
-            <LegendColor
-              bg="rgba(249, 115, 22, 0.4)"
-              border="#f97316"
-            />
+            <LegendColor bg="rgba(249, 115, 22, 0.4)" border="#f97316" />
             <span>Repositorio UNIFRANZ</span>
           </LegendItem>
           <LegendItem>
-            <LegendColor
-              bg="rgba(139, 92, 246, 0.4)"
-              border="#8b5cf6"
-            />
+            <LegendColor bg="rgba(139, 92, 246, 0.4)" border="#8b5cf6" />
             <span>Patrones de IA</span>
+          </LegendItem>
+          <LegendItem>
+            <LegendColor bg="rgba(250, 204, 21, 0.35)" border="#eab308" />
+            <span>Riesgo semántico BAJO</span>
+          </LegendItem>
+          <LegendItem>
+            <LegendColor bg="rgba(239, 68, 68, 0.45)" border="#ef4444" />
+            <span>ALTO</span>
+          </LegendItem>
+          <LegendItem>
+            <LegendColor bg="rgba(127, 29, 29, 0.55)" border="#7f1d1d" />
+            <span>CRÍTICO (paráfrasis casi segura)</span>
           </LegendItem>
         </HighlightLegend>
       </HighlightedDocumentWrapper>
     );
   };
-
 
   const handleDownloadReport = () => {
     if (!results || !file) {
@@ -425,7 +448,7 @@ const IAPlagio = () => {
       `Fuentes detectadas:`,
       ...results.fuentes.map(
         (f, i) =>
-          `${i + 1}. [${f.tipo.toUpperCase()}] ${f.titulo} - ${f.autor} (Coincidencia: ${f.coincidencia}%)`
+          `${i + 1}. [${f.tipo.toUpperCase()}] ${f.titulo} - ${f.autor} (Coincidencia: ${f.coincidencia}%)`,
       ),
       ``,
     ].join("\n");
@@ -466,7 +489,10 @@ const IAPlagio = () => {
         >
           {!file ? (
             <>
-              <Upload size={48} color={isDragging ? ColorsDoc.primary : "#9ca3af"} />
+              <Upload
+                size={48}
+                color={isDragging ? ColorsDoc.primary : "#9ca3af"}
+              />
               <h3>Arrastra el documento aquí</h3>
               <p>o haz clic para seleccionar</p>
               <input
@@ -479,13 +505,21 @@ const IAPlagio = () => {
               <button
                 type="button"
                 style={{ background: ColorsDoc.primary, marginTop: "0.75rem" }}
-                onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                onClick={() =>
+                  fileInputRef.current && fileInputRef.current.click()
+                }
               >
                 Seleccionar Archivo
               </button>
               <span>Formatos soportados: PDF, DOC, DOCX, TXT • Máx 10MB</span>
               {error && (
-                <p style={{ color: "#EF4444", marginTop: "0.5rem", fontSize: "0.85rem" }}>
+                <p
+                  style={{
+                    color: "#EF4444",
+                    marginTop: "0.5rem",
+                    fontSize: "0.85rem",
+                  }}
+                >
                   {error}
                 </p>
               )}
@@ -539,7 +573,11 @@ const IAPlagio = () => {
       {analyzing && (
         <AnalyzingOverlay>
           <AnalyzingContent>
-            <Shield size={64} color={ColorsDoc.primary} className="shield-pulse" />
+            <Shield
+              size={64}
+              color={ColorsDoc.primary}
+              className="shield-pulse"
+            />
             <h2>Analizando documento</h2>
             <p>Por favor espera mientras se completa el proceso...</p>
 
@@ -557,7 +595,11 @@ const IAPlagio = () => {
                 const isCompleted = currentStep > index;
 
                 return (
-                  <AnalyzingStep key={index} active={isActive} completed={isCompleted}>
+                  <AnalyzingStep
+                    key={index}
+                    active={isActive}
+                    completed={isCompleted}
+                  >
                     <StepIcon active={isActive} completed={isCompleted}>
                       <Icon size={20} />
                     </StepIcon>
@@ -648,7 +690,9 @@ const IAPlagio = () => {
                   color={getColorByPercentage(results.originalidad)}
                 />
               </MetricIcon>
-              <MetricValue style={{ color: getColorByPercentage(results.originalidad) }}>
+              <MetricValue
+                style={{ color: getColorByPercentage(results.originalidad) }}
+              >
                 {results.originalidad}%
               </MetricValue>
               <MetricLabel>Contenido Original</MetricLabel>
@@ -668,7 +712,8 @@ const IAPlagio = () => {
               </MetricValue>
               <MetricLabel>Plagio Web</MetricLabel>
               <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
-                {results.fuentes.filter((f) => f.tipo === "web").length} fuentes externas
+                {results.fuentes.filter((f) => f.tipo === "web").length} fuentes
+                externas
               </small>
             </MetricCard>
 
@@ -681,9 +726,7 @@ const IAPlagio = () => {
               </MetricValue>
               <MetricLabel>Proyectos UNIFRANZ</MetricLabel>
               <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
-                {
-                  results.fuentes.filter((f) => f.tipo === "universidad").length
-                }{" "}
+                {results.fuentes.filter((f) => f.tipo === "universidad").length}{" "}
                 coincidencias internas
               </small>
             </MetricCard>
@@ -829,6 +872,17 @@ const IAPlagio = () => {
                       <SourceInfo>
                         <SourceTitle>{fuente.titulo}</SourceTitle>
                         <p>Autor/Fuente: {fuente.autor}</p>
+                        {fuente.metodo && (
+                          <p
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#6b7280",
+                              marginTop: "0.25rem",
+                            }}
+                          >
+                            Método: {fuente.metodo}
+                          </p>
+                        )}
                         <SourceMatch>
                           <TrendingUp size={16} />
                           Coincidencia: {fuente.coincidencia}%
@@ -860,7 +914,7 @@ const IAPlagio = () => {
                   return (
                     <div key={index} style={{ marginBottom: "1.5rem" }}>
                       <CopiedText tipo={fragmento.tipo}>
-                        "{fragmento.original}"
+                        {`"${String(fragmento?.original ?? fragmento?.texto ?? "")}"`}
                       </CopiedText>
                       <p
                         style={{

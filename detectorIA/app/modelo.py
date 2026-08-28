@@ -50,7 +50,8 @@ def informacion_modelo():
 
     return{
         "modelo": _modelo_nombre,
-        "ajustado": _ajustado
+        "ajustado": _ajustado,
+        "dispositivo": str(_modelo.device)
     }
 
 def puntaje_lexico(texto_a: str, texto_b: str) -> float:

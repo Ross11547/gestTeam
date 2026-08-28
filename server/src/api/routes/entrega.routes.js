@@ -11,14 +11,14 @@ import { autorizarRoles } from "../middleware/autenticacionMiddleware.js";
 
 const router = Router();
 
-const soloAdminODirector = autorizarRoles("Admin", "Director");
+const staffAcademico = autorizarRoles("Admin", "Director", "Docente");
 
 router.get("/entrega/by-hito", listarEntregasPorHito);
 router.get("/entrega/by-equipo", listarEntregasPorEquipo);
 router.get("/entrega/:id", obtenerEntrega);
 
 router.post("/entrega", crearEntrega);
-router.put("/entrega/:id", actualizarEntrega);
-router.delete("/entrega/:id", soloAdminODirector, eliminarEntrega);
+router.put("/entrega/:id", staffAcademico, actualizarEntrega);
+router.delete("/entrega/:id", staffAcademico, eliminarEntrega);
 
 export default router;

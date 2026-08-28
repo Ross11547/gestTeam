@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Container,
   HeaderPlagio,
@@ -37,98 +37,33 @@ import {
   StepIcon,
   StepText,
   LoadingBar,
-  RemoveFileButton
+  RemoveFileButton,
 } from "../../../style/docente/iaPlagioDStyled";
-import { 
-  Upload, FileText, AlertTriangle, CheckCircle, 
-  Globe, Book, Users, Bot, ExternalLink, 
-  TrendingUp, Shield, Search, Download, X,
-  Database, Cpu, FileSearch, BarChart3
+import {
+  Upload,
+  FileText,
+  AlertTriangle,
+  CheckCircle,
+  Globe,
+  Book,
+  Users,
+  Bot,
+  ExternalLink,
+  TrendingUp,
+  Shield,
+  Search,
+  Download,
+  X,
+  Database,
+  Cpu,
+  FileSearch,
+  BarChart3,
 } from "lucide-react";
 import { useColors } from "../../../style/colors";
+import { authFetch } from "../../../services/api";
+import { toast } from "sonner";
 
-const UNIVERSITY_PROJECTS = [
-  {
-    titulo: "Sistema de Gestión Académica Web",
-    autor: "María González",
-    año: "2023",
-    carrera: "Ingeniería de Sistemas"
-  },
-  {
-    titulo: "Aplicación Móvil de Biblioteca Digital",
-    autor: "Carlos Mendoza",
-    año: "2023",
-    carrera: "Ingeniería de Software"
-  },
-  {
-    titulo: "Plataforma E-Learning con React",
-    autor: "Ana Rodríguez",
-    año: "2022",
-    carrera: "Ingeniería de Sistemas"
-  },
-  {
-    titulo: "Sistema de Control de Inventarios",
-    autor: "Juan Pérez",
-    año: "2023",
-    carrera: "Ingeniería de Software"
-  },
-  {
-    titulo: "Red Neuronal para Clasificación de Imágenes",
-    autor: "Luis Martínez",
-    año: "2024",
-    carrera: "Ingeniería de Sistemas"
-  }
-];
-
-const WEB_SOURCES = [
-  {
-    titulo: "Introduction to Software Engineering",
-    sitio: "GeeksforGeeks",
-    url: "https://www.geeksforgeeks.org/software-engineering"
-  },
-  {
-    titulo: "React Documentation - Getting Started",
-    sitio: "React.dev",
-    url: "https://react.dev/learn"
-  },
-  {
-    titulo: "Database Management Systems",
-    sitio: "TutorialsPoint",
-    url: "https://www.tutorialspoint.com/dbms"
-  },
-  {
-    titulo: "Machine Learning Basics",
-    sitio: "Towards Data Science",
-    url: "https://towardsdatascience.com/machine-learning-basics"
-  },
-  {
-    titulo: "Web Development Best Practices",
-    sitio: "MDN Web Docs",
-    url: "https://developer.mozilla.org"
-  }
-];
-
-const BOOK_SOURCES = [
-  {
-    titulo: "Software Engineering: A Practitioner's Approach",
-    autor: "Roger S. Pressman",
-    editorial: "McGraw-Hill",
-    año: "2020"
-  },
-  {
-    titulo: "Clean Code: A Handbook of Agile Software",
-    autor: "Robert C. Martin",
-    editorial: "Prentice Hall",
-    año: "2008"
-  },
-  {
-    titulo: "Design Patterns: Elements of Reusable Software",
-    autor: "Gang of Four",
-    editorial: "Addison-Wesley",
-    año: "1994"
-  }
-];
-
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const IAPlagioDi = () => {
   const ColorsDoc = useColors();
   const [file, setFile] = useState(null);
@@ -140,119 +75,28 @@ const IAPlagioDi = () => {
 
   const analysisSteps = [
     { icon: Upload, text: "Cargando documento...", duration: 1000 },
-    { icon: FileSearch, text: "Extrayendo texto y analizando estructura...", duration: 1500 },
-    { icon: Database, text: "Comparando con base de datos universitaria...", duration: 2000 },
-    { icon: Globe, text: "Buscando coincidencias en internet...", duration: 2000 },
+    {
+      icon: FileSearch,
+      text: "Extrayendo texto y analizando estructura...",
+      duration: 1500,
+    },
+    {
+      icon: Database,
+      text: "Comparando con base de datos universitaria...",
+      duration: 2000,
+    },
+    {
+      icon: Globe,
+      text: "Buscando coincidencias en internet...",
+      duration: 2000,
+    },
     { icon: Cpu, text: "Detectando patrones de IA...", duration: 1500 },
-    { icon: BarChart3, text: "Generando reporte de análisis...", duration: 1000 }
+    {
+      icon: BarChart3,
+      text: "Generando reporte de análisis...",
+      duration: 1000,
+    },
   ];
-
-  const generateRandomResults = () => {
-    const originalidad = Math.floor(Math.random() * 30) + 55; 
-    const plagioWeb = Math.floor(Math.random() * 15) + 5; 
-    const plagioUniversidad = Math.floor(Math.random() * 15) + 5; 
-    const contenidoIA = 100 - originalidad - plagioWeb - plagioUniversidad;
-
-    const numUniversitySources = Math.floor(Math.random() * 3) + 1;
-    const numWebSources = Math.floor(Math.random() * 3) + 1;
-    const numBookSources = Math.floor(Math.random() * 2);
-
-    const universitySources = UNIVERSITY_PROJECTS
-      .sort(() => Math.random() - 0.5)
-      .slice(0, numUniversitySources)
-      .map(proj => ({
-        tipo: "universidad",
-        titulo: `${proj.titulo} - ${proj.carrera} ${proj.año}`,
-        autor: proj.autor,
-        coincidencia: Math.floor(Math.random() * 10) + 3,
-        url: `unifranz.edu.bo/repository/${proj.año}/${proj.autor.toLowerCase().replace(' ', '-')}`
-      }));
-
-    const webSources = WEB_SOURCES
-      .sort(() => Math.random() - 0.5)
-      .slice(0, numWebSources)
-      .map(source => ({
-        tipo: "web",
-        titulo: source.titulo,
-        autor: source.sitio,
-        coincidencia: Math.floor(Math.random() * 8) + 2,
-        url: source.url
-      }));
-
-    const bookSources = BOOK_SOURCES
-      .sort(() => Math.random() - 0.5)
-      .slice(0, numBookSources)
-      .map(book => ({
-        tipo: "libro",
-        titulo: book.titulo,
-        autor: `${book.autor} - ${book.editorial} (${book.año})`,
-        coincidencia: Math.floor(Math.random() * 5) + 2,
-        url: null
-      }));
-
-    const iaSource = contenidoIA > 5 ? [{
-      tipo: "ia",
-      titulo: "Contenido potencialmente generado por IA",
-      autor: "Análisis de patrones - GPT/Claude/Gemini",
-      coincidencia: contenidoIA,
-      url: null
-    }] : [];
-
-    const alertas = [];
-    if (contenidoIA > 10) {
-      alertas.push({
-        nivel: "alto",
-        mensaje: `Se detectó ${contenidoIA}% de contenido con patrones característicos de IA`
-      });
-    }
-    if (plagioUniversidad > 10) {
-      alertas.push({
-        nivel: "medio",
-        mensaje: `Coincidencia del ${plagioUniversidad}% con proyectos anteriores de la universidad`
-      });
-    }
-    if (originalidad < 60) {
-      alertas.push({
-        nivel: "alto",
-        mensaje: "El porcentaje de originalidad está por debajo del mínimo aceptable (60%)"
-      });
-    }
-
-    const fragmentos = [
-      {
-        original: "El desarrollo de software es un proceso sistemático que involucra múltiples etapas desde la concepción hasta el mantenimiento del producto final.",
-        fuente: webSources[0]?.autor || "GeeksforGeeks",
-        tipo: "web"
-      },
-      {
-        original: "La arquitectura de microservicios permite desarrollar aplicaciones como un conjunto de pequeños servicios independientes que se comunican entre sí.",
-        fuente: universitySources[0] ? `Proyecto Universidad ${universitySources[0].autor}` : "Proyecto Universidad 2023",
-        tipo: "universidad"
-      }
-    ];
-
-    if (contenidoIA > 10) {
-      fragmentos.push({
-        original: "Es importante destacar que la implementación de algoritmos de machine learning requiere un entendimiento profundo de los datos y sus características intrínsecas para obtener resultados óptimos.",
-        fuente: "Patrón detectado como generado por IA",
-        tipo: "ia"
-      });
-    }
-
-    return {
-      originalidad,
-      plagioWeb,
-      plagioUniversidad,
-      contenidoIA,
-      fuentes: [...universitySources, ...webSources, ...bookSources, ...iaSource],
-      alertas,
-      fragmentos,
-      fechaAnalisis: new Date().toLocaleString('es-ES'),
-      tiempoAnalisis: "8.3 segundos",
-      palabrasAnalizadas: Math.floor(Math.random() * 3000) + 1500,
-      frasesAnalizadas: Math.floor(Math.random() * 200) + 100
-    };
-  };
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -276,7 +120,7 @@ const IAPlagioDi = () => {
     setUploadProgress(0);
 
     const interval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           return 100;
@@ -287,17 +131,65 @@ const IAPlagioDi = () => {
   };
 
   const analyzeDocument = async () => {
-    setAnalyzing(true);
-    setCurrentStep(0);
-
-    for (let i = 0; i < analysisSteps.length; i++) {
-      setCurrentStep(i);
-      await new Promise(resolve => setTimeout(resolve, analysisSteps[i].duration));
+    if (!file) {
+      toast.warning("Primero selecciona un archivo para analizar.");
+      return;
+    }
+    if (uploadProgress < 100) {
+      toast.info("Espera a que el archivo termine de cargarse.");
+      return;
     }
 
-    const generatedResults = generateRandomResults();
-    setResults(generatedResults);
-    setAnalyzing(false);
+    setAnalyzing(true);
+    setCurrentStep(0);
+    setResults(null);
+
+    const pasos = setInterval(() => {
+      setCurrentStep((prev) => (prev + 1) % analysisSteps.length);
+    }, 1500);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadRes = await authFetch(`${API_BASE}/api/plagio/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Error subiendo el archivo para análisis.");
+      }
+
+      const uploadData = await uploadRes.json();
+      const documentoId = uploadData.documentoId;
+
+      if (!documentoId) {
+        throw new Error("El backend no devolvió un documentoId.");
+      }
+
+      const res = await authFetch(`${API_BASE}/api/plagio/analizar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ documentoId }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Error al analizar el documento.");
+      }
+
+      const data = await res.json();
+      clearInterval(pasos);
+      setResults(data);
+      toast.success("Análisis completado correctamente.");
+    } catch (err) {
+      console.error(err);
+      clearInterval(pasos);
+      toast.error(err.message || "Ocurrió un error al analizar el documento.");
+    } finally {
+      clearInterval(pasos);
+      setAnalyzing(false);
+    }
   };
 
   const removeFile = () => {
@@ -307,34 +199,46 @@ const IAPlagioDi = () => {
   };
 
   const getColorByPercentage = (value) => {
-    if (value >= 80) return '#4ECDC4';
-    if (value >= 60) return '#52C41A';
-    if (value >= 40) return '#FFA500';
-    return '#FF6B6B';
+    if (value >= 80) return "#4ECDC4";
+    if (value >= 60) return "#52C41A";
+    if (value >= 40) return "#FFA500";
+    return "#FF6B6B";
   };
 
   const getSourceIcon = (tipo) => {
-    switch(tipo) {
-      case 'web': return Globe;
-      case 'universidad': return Users;
-      case 'libro': return Book;
-      case 'ia': return Bot;
-      default: return FileText;
+    switch (tipo) {
+      case "web":
+        return Globe;
+      case "universidad":
+        return Users;
+      case "libro":
+        return Book;
+      case "ia":
+        return Bot;
+      default:
+        return FileText;
     }
   };
 
   return (
     <Container>
-      <HeaderPlagio style={{ background: `linear-gradient(135deg, ${ColorsDoc.primary} 0%, ${ColorsDoc.primary100} 100%)` }}>
+      <HeaderPlagio
+        style={{
+          background: `linear-gradient(135deg, ${ColorsDoc.primary} 0%, ${ColorsDoc.primary100} 100%)`,
+        }}
+      >
         <div>
           <h1>
             <Shield size={32} />
             Detector de Plagio Avanzado
           </h1>
-          <p>Análisis completo con IA para detectar plagio académico y contenido generado</p>
+          <p>
+            Análisis completo con IA para detectar plagio académico y contenido
+            generado
+          </p>
         </div>
-        
-        <div style={{ color: 'white', textAlign: 'right' }}>
+
+        <div style={{ color: "white", textAlign: "right" }}>
           <small>Versión 2.1 • Base de datos actualizada</small>
           <br />
           <small>+5,000 proyectos universitarios indexados</small>
@@ -354,14 +258,17 @@ const IAPlagioDi = () => {
         >
           {!file ? (
             <>
-              <Upload size={48} color={isDragging ? ColorsDoc.primary : '#9ca3af'} />
+              <Upload
+                size={48}
+                color={isDragging ? ColorsDoc.primary : "#9ca3af"}
+              />
               <h3>Arrastra el documento aquí</h3>
               <p>o haz clic para seleccionar</p>
               <input
                 type="file"
                 onChange={handleFileUpload}
                 accept=".pdf,.doc,.docx,.txt"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
                 id="file-upload"
               />
               <label htmlFor="file-upload">
@@ -376,7 +283,7 @@ const IAPlagioDi = () => {
               <FileText size={48} color={ColorsDoc.primary} />
               <FileName>{file.name}</FileName>
               <FileSize>{(file.size / 1024 / 1024).toFixed(2)} MB</FileSize>
-              
+
               {uploadProgress < 100 ? (
                 <LoadingBar>
                   <div style={{ width: `${uploadProgress}%` }} />
@@ -415,19 +322,23 @@ const IAPlagioDi = () => {
       {analyzing && (
         <AnalyzingOverlay>
           <AnalyzingContent>
-            <Shield size={64} color={ColorsDoc.primary} className="shield-pulse" />
+            <Shield
+              size={64}
+              color={ColorsDoc.primary}
+              className="shield-pulse"
+            />
             <h2>Analizando Documento</h2>
             <p>Por favor espera mientras procesamos tu archivo...</p>
-            
-            <div style={{ width: '100%', marginTop: '2rem' }}>
+
+            <div style={{ width: "100%", marginTop: "2rem" }}>
               {analysisSteps.map((step, index) => {
                 const Icon = step.icon;
                 const isActive = currentStep === index;
                 const isCompleted = currentStep > index;
-                
+
                 return (
-                  <AnalyzingStep 
-                    key={index} 
+                  <AnalyzingStep
+                    key={index}
                     active={isActive}
                     completed={isCompleted}
                   >
@@ -447,14 +358,23 @@ const IAPlagioDi = () => {
 
       {results && (
         <ResultsSection>
-          <div style={{ 
-            background: 'white',
-            padding: '1rem',
-            borderRadius: '12px',
-            marginBottom: '1rem',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.08)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6b7280', fontSize: '0.9rem' }}>
+          <div
+            style={{
+              background: "white",
+              padding: "1rem",
+              borderRadius: "12px",
+              marginBottom: "1rem",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.08)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                color: "#6b7280",
+                fontSize: "0.9rem",
+              }}
+            >
               <span>📅 Análisis completado: {results.fechaAnalisis}</span>
               <span>⏱️ Tiempo: {results.tiempoAnalisis}</span>
               <span>📝 {results.palabrasAnalizadas} palabras analizadas</span>
@@ -464,54 +384,66 @@ const IAPlagioDi = () => {
 
           <OverviewCards>
             <MetricCard>
-              <MetricIcon style={{ background: `${getColorByPercentage(results.originalidad)}15` }}>
-                <CheckCircle size={32} color={getColorByPercentage(results.originalidad)} />
+              <MetricIcon
+                style={{
+                  background: `${getColorByPercentage(results.originalidad)}15`,
+                }}
+              >
+                <CheckCircle
+                  size={32}
+                  color={getColorByPercentage(results.originalidad)}
+                />
               </MetricIcon>
-              <MetricValue style={{ color: getColorByPercentage(results.originalidad) }}>
+              <MetricValue
+                style={{ color: getColorByPercentage(results.originalidad) }}
+              >
                 {results.originalidad}%
               </MetricValue>
               <MetricLabel>Contenido Original</MetricLabel>
-              <small style={{ color: '#9ca3af', marginTop: '0.5rem' }}>
-                {results.originalidad >= 60 ? '✅ Aceptable' : '⚠️ Bajo el mínimo'}
+              <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
+                {results.originalidad >= 60
+                  ? "✅ Aceptable"
+                  : "⚠️ Bajo el mínimo"}
               </small>
             </MetricCard>
 
             <MetricCard>
-              <MetricIcon style={{ background: '#FF6B6B15' }}>
+              <MetricIcon style={{ background: "#FF6B6B15" }}>
                 <Globe size={32} color="#FF6B6B" />
               </MetricIcon>
-              <MetricValue style={{ color: '#FF6B6B' }}>
+              <MetricValue style={{ color: "#FF6B6B" }}>
                 {results.plagioWeb}%
               </MetricValue>
               <MetricLabel>Plagio Web</MetricLabel>
-              <small style={{ color: '#9ca3af', marginTop: '0.5rem' }}>
-                {results.fuentes.filter(f => f.tipo === 'web').length} fuentes
+              <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
+                {results.fuentes.filter((f) => f.tipo === "web").length} fuentes
               </small>
             </MetricCard>
 
             <MetricCard>
-              <MetricIcon style={{ background: '#FFA50015' }}>
+              <MetricIcon style={{ background: "#FFA50015" }}>
                 <Users size={32} color="#FFA500" />
               </MetricIcon>
-              <MetricValue style={{ color: '#FFA500' }}>
+              <MetricValue style={{ color: "#FFA500" }}>
                 {results.plagioUniversidad}%
               </MetricValue>
               <MetricLabel>Proyectos UNIFRANZ</MetricLabel>
-              <small style={{ color: '#9ca3af', marginTop: '0.5rem' }}>
-                {results.fuentes.filter(f => f.tipo === 'universidad').length} coincidencias
+              <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
+                {results.fuentes.filter((f) => f.tipo === "universidad").length}{" "}
+                coincidencias
               </small>
             </MetricCard>
 
             <MetricCard>
-              <MetricIcon style={{ background: '#9B59B615' }}>
+              <MetricIcon style={{ background: "#9B59B615" }}>
                 <Bot size={32} color="#9B59B6" />
               </MetricIcon>
-              <MetricValue style={{ color: '#9B59B6' }}>
+              <MetricValue style={{ color: "#9B59B6" }}>
                 {results.contenidoIA}%
               </MetricValue>
               <MetricLabel>Generado por IA</MetricLabel>
-              <small style={{ color: '#9ca3af', marginTop: '0.5rem' }}>
-                {results.contenidoIA > 10 ? '⚠️ Detectado' : '✅ No detectado'}
+              <small style={{ color: "#9ca3af", marginTop: "0.5rem" }}>
+                {results.contenidoIA > 10 ? "⚠️ Detectado" : "✅ No detectado"}
               </small>
             </MetricCard>
           </OverviewCards>
@@ -537,7 +469,7 @@ const IAPlagioDi = () => {
                   strokeDasharray={`${results.originalidad * 5.02} 502`}
                   strokeDashoffset="125"
                   strokeLinecap="round"
-                  style={{ transition: 'all 1s ease' }}
+                  style={{ transition: "all 1s ease" }}
                 />
               </svg>
               <ProgressText>
@@ -546,26 +478,55 @@ const IAPlagioDi = () => {
               </ProgressText>
             </ProgressRing>
 
-            <div style={{ flex: 1, padding: '0 2rem' }}>
-              <h3 style={{ marginBottom: '1rem', color: '#2c3e50' }}>Distribución del Contenido</h3>
+            <div style={{ flex: 1, padding: "0 2rem" }}>
+              <h3 style={{ marginBottom: "1rem", color: "#2c3e50" }}>
+                Distribución del Contenido
+              </h3>
               {[
-                { label: 'Original', value: results.originalidad, color: getColorByPercentage(results.originalidad) },
-                { label: 'Web', value: results.plagioWeb, color: '#FF6B6B' },
-                { label: 'Universidad', value: results.plagioUniversidad, color: '#FFA500' },
-                { label: 'IA', value: results.contenidoIA, color: '#9B59B6' }
-              ].map(item => (
-                <div key={item.label} style={{ marginBottom: '1rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ color: '#6b7280', fontSize: '0.9rem' }}>{item.label}</span>
-                    <span style={{ color: item.color, fontWeight: '600' }}>{item.value}%</span>
+                {
+                  label: "Original",
+                  value: results.originalidad,
+                  color: getColorByPercentage(results.originalidad),
+                },
+                { label: "Web", value: results.plagioWeb, color: "#FF6B6B" },
+                {
+                  label: "Universidad",
+                  value: results.plagioUniversidad,
+                  color: "#FFA500",
+                },
+                { label: "IA", value: results.contenidoIA, color: "#9B59B6" },
+              ].map((item) => (
+                <div key={item.label} style={{ marginBottom: "1rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    <span style={{ color: "#6b7280", fontSize: "0.9rem" }}>
+                      {item.label}
+                    </span>
+                    <span style={{ color: item.color, fontWeight: "600" }}>
+                      {item.value}%
+                    </span>
                   </div>
-                  <div style={{ height: '8px', background: '#e9ecef', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{ 
-                      width: `${item.value}%`, 
-                      height: '100%', 
-                      background: item.color,
-                      transition: 'width 1s ease'
-                    }} />
+                  <div
+                    style={{
+                      height: "8px",
+                      background: "#e9ecef",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${item.value}%`,
+                        height: "100%",
+                        background: item.color,
+                        transition: "width 1s ease",
+                      }}
+                    />
                   </div>
                 </div>
               ))}
@@ -593,7 +554,7 @@ const IAPlagioDi = () => {
                 <FileText size={24} />
                 Fuentes Detectadas ({results.fuentes.length})
               </SectionHeader>
-              
+
               <SourcesList>
                 {results.fuentes.map((fuente, index) => {
                   const Icon = getSourceIcon(fuente.tipo);
@@ -603,16 +564,27 @@ const IAPlagioDi = () => {
                         <Icon size={20} />
                         {fuente.tipo.toUpperCase()}
                       </SourceType>
-                      
+
                       <SourceInfo>
                         <SourceTitle>{fuente.titulo}</SourceTitle>
                         <p>Autor/Fuente: {fuente.autor}</p>
+                        {fuente.metodo && (
+                          <p
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#6b7280",
+                              marginTop: "0.25rem",
+                            }}
+                          >
+                            Método: {fuente.metodo}
+                          </p>
+                        )}
                         <SourceMatch>
                           <TrendingUp size={16} />
                           Coincidencia: {fuente.coincidencia}%
                         </SourceMatch>
                       </SourceInfo>
-                      
+
                       {fuente.url && (
                         <SourceLink href={fuente.url} target="_blank">
                           <ExternalLink size={18} />
@@ -626,63 +598,74 @@ const IAPlagioDi = () => {
             </ReportSection>
 
             <ReportSection>
-              <SectionHeader>
-                Fragmentos Detectados
-              </SectionHeader>
-              
+              <SectionHeader>Fragmentos Detectados</SectionHeader>
+
               <ComparisonText>
-                {results.fragmentos.map((fragmento, index) => (
-                  <div key={index} style={{ marginBottom: '1.5rem' }}>
-                    <CopiedText tipo={fragmento.tipo}>
-                      "{fragmento.original}"
-                    </CopiedText>
-                    <p style={{ 
-                      color: '#6b7280', 
-                      fontSize: '0.9rem', 
-                      marginTop: '0.5rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem'
-                    }}>
-                      {React.createElement(getSourceIcon(fragmento.tipo), { size: 16 })}
-                      Fuente: {fragmento.fuente} ({fragmento.tipo})
-                    </p>
-                  </div>
-                ))}
+                {results.fragmentos?.filter(Boolean).map((fragmento, index) => {
+                  const tipo = fragmento.tipo || "original";
+                  const Icon = getSourceIcon(tipo);
+                  return (
+                    <div key={index} style={{ marginBottom: "1.5rem" }}>
+                      <CopiedText tipo={tipo}>
+                        <q>{fragmento.original || ""}</q>
+                      </CopiedText>
+                      <p
+                        style={{
+                          color: "#6b7280",
+                          fontSize: "0.9rem",
+                          marginTop: "0.5rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <Icon size={16} />
+                        Fuente: {fragmento.fuente || "Desconocida"} ({tipo})
+                      </p>
+                    </div>
+                  );
+                })}
               </ComparisonText>
             </ReportSection>
           </DetailedReport>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
-            <button 
-              style={{ 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+              marginTop: "2rem",
+            }}
+          >
+            <button
+              style={{
                 background: ColorsDoc.primary,
-                color: 'white',
-                padding: '0.75rem 2rem',
-                borderRadius: '10px',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                cursor: 'pointer',
-                fontWeight: '600'
+                color: "white",
+                padding: "0.75rem 2rem",
+                borderRadius: "10px",
+                border: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                cursor: "pointer",
+                fontWeight: "600",
               }}
             >
               <Download size={20} />
               Descargar Reporte PDF
             </button>
-            <button 
-              style={{ 
-                background: 'white',
+            <button
+              style={{
+                background: "white",
                 color: ColorsDoc.primary,
-                padding: '0.75rem 2rem',
-                borderRadius: '10px',
+                padding: "0.75rem 2rem",
+                borderRadius: "10px",
                 border: `2px solid ${ColorsDoc.primary}`,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                cursor: 'pointer',
-                fontWeight: '600'
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                cursor: "pointer",
+                fontWeight: "600",
               }}
               onClick={removeFile}
             >

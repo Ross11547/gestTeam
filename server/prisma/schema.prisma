@@ -224,17 +224,17 @@ model Usuario {
   instalaciones  InstGithubApp[]
   GithubLinkPair GithubLinkPair?
 
-  docenteMaterias    DocenteMateria[]
+  docenteMaterias DocenteMateria[]
 
   inscripcionesMateria InscripcionMateria[]
   clasesDocente        ClaseMateria[]       @relation("DocenteClase")
 
-  membresias     MiembroProyecto[]
-  equipos        EquipoMiembro[]
-  equiposCreados Equipo[]          @relation("EquipoCreador")
-  proyectosCreados Proyecto[]      @relation("ProyectoCreador")
-  entregas       EntregaHito[]     @relation("AutorEntrega")
-  revisiones     RevisionEntrega[] @relation("RevisorEntrega")
+  membresias       MiembroProyecto[]
+  equipos          EquipoMiembro[]
+  equiposCreados   Equipo[]          @relation("EquipoCreador")
+  proyectosCreados Proyecto[]        @relation("ProyectoCreador")
+  entregas         EntregaHito[]     @relation("AutorEntrega")
+  revisiones       RevisionEntrega[] @relation("RevisorEntrega")
 
   documentos Documento[]
 

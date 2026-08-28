@@ -324,7 +324,7 @@ const RecursosDi = () => {
         materia: materiaPorDefecto,
         fecha: now.toISOString().slice(0, 10),
         tamaño: formatSize(file.size),
-        descargas: Math.floor(Math.random() * 20), 
+        descargas: 0, 
         icono: icon,
         color
       };
