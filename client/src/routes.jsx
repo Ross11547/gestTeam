@@ -57,6 +57,7 @@ import RecursosDi from "./pages/director/recursos.Di/index.jsx";
 import HorarioDi from "./pages/director/horariosDi/inde.jsx";
 import MateriaDetalle from "./pages/private/materias/materiaDetalle.jsx";
 import ColaboracionDetalle from "./pages/private/colaboradores/colaboracionDetalle.jsx";
+import EspacioAcademico from "./pages/private/workspaceAcademico/index.jsx";
 
 const AppRoutes = () => {
   const { user } = useUser();
@@ -105,6 +106,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.RECURSODI} element={<RecursosDi />} />
             <Route path={ROUTES.PIZARRADI} element={<Pizarra />} />
             <Route path={ROUTES.EXCALIDRAWDI} element={<Excalidraw />} />
+            <Route path={ROUTES.ESPACIOACADEMICODI} element={<EspacioAcademico />} />
           </Route>
         ) : user?.rol === "Docente" ? (
           <Route path={ROUTES.DOCENTES} element={<Layout />}>
@@ -123,6 +125,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.RECURSOS} element={<RecursosD />} />
             <Route path={ROUTES.PIZARRADOC} element={<Pizarra />} />
             <Route path={ROUTES.EXCALIDRAWDOC} element={<Excalidraw />} />
+            <Route path={ROUTES.ESPACIOACADEMICODOC} element={<EspacioAcademico />} />
 
           </Route>
         ) : (
@@ -136,6 +139,7 @@ const AppRoutes = () => {
             <Route path={ROUTES.PIZARRA} element={<Pizarra />} />
             <Route path={ROUTES.EXCALIDRAW} element={<Excalidraw />} />
             <Route path={ROUTES.CALENDARIOU} element={<CalendarioUni />} />
+            <Route path={ROUTES.ESPACIOACADEMICO} element={<EspacioAcademico />} />
             {user?.facultad?.nombre === "Ingeniería de Sistemas" ? (
               <Route path={ROUTES.PROYECTO} element={<ProyectoUno />} />
             ) : (

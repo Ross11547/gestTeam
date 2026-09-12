@@ -7,6 +7,7 @@ import {
     buildCorreo,
     toDirectorDTO,
 } from "./codigoDirector.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function crearDirectorCasoUso({ rolId, body }) {
     const {
@@ -18,9 +19,11 @@ export async function crearDirectorCasoUso({ rolId, body }) {
         idFacultad = null,
         idCarrera = null,
         materiaIds = [],
-        password = "123456",
+        password,
         activo = true,
     } = body || {};
+
+    validarContrasenaPlana(password);
 
     if (!nombre || !apellido || !ci) {
         const err = new Error("nombre, apellido y ci son requeridos");
@@ -63,6 +66,8 @@ export async function crearDirectorCasoUso({ rolId, body }) {
             ? correo
             : buildCorreo({ nombres: nombre, apellidos: apellido });
 
+    const passwordHash = await hashearContrasena(password);
+
     let created;
     try {
         created = await prisma.usuario.create({
@@ -72,7 +77,7 @@ export async function crearDirectorCasoUso({ rolId, body }) {
                 telefono,
                 ci: Number(ci),
                 correo: correoFinal,
-                password, 
+                password: passwordHash,
                 idRol: rolId,
                 esDirector: true,
                 activo: Boolean(activo),

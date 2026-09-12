@@ -60,3 +60,19 @@ export function buildCodigo({ ci, siglaCarrera, siglaFallback }) {
     const pref = siglaCarrera || siglaFallback || "GEN";
     return `${pref}${ci}`;
 }
+
+export function toDocenteDTO(u) {
+    if (!u) return null;
+    return {
+        id: u.id,
+        nombre: u.nombre,
+        apellido: u.apellido || "",
+        email: u.correo,
+        telefono: u.telefono || "",
+        ci: u.ci,
+        departamento: u.facultad?.nombre || "",
+        especialidad: u.carrera?.nombre || "",
+        codigo: u.codigo || buildCodigo({ ci: u.ci, siglaCarrera: u.carrera?.sigla || derivarSigla(u.carrera?.nombre || ""), siglaFallback: derivarSigla(u.facultad?.nombre || "") }),
+        materias: (u.docenteMaterias || []).map((dm) => ({ id: dm.materia.id, nombre: dm.materia.nombre })),
+    };
+}

@@ -6,7 +6,7 @@ import { eliminarRevisionCasoUso } from "../../application/casosUso/revision/eli
 
 export async function listarRevisionesPorEntrega(req, res, next) {
     try {
-        const data = await listarRevisionesPorEntregaCasoUso(req.query);
+        const data = await listarRevisionesPorEntregaCasoUso(req.query, req.user);
         res.json({ data, mensaje: "Revisiones obtenidas correctamente" });
     } catch (e) {
         next(e);

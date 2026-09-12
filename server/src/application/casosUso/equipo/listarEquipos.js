@@ -1,8 +1,11 @@
 import { equipoRepositorio } from "../../../infrastructure/repositories/repositorioEquipo.js";
 import { ensureIdPositivo, crearError } from "../../../dominio/equipo/helpersEquipo.js";
+import { obtenerFiltroEquipos } from "../../../dominio/comun/autoridadProyecto.js";
 
-export async function listarEquiposCasoUso(query = {}) {
-    const filtros = {};
+export async function listarEquiposCasoUso(query = {}, usuario) {
+    if (!usuario?.id) throw crearError("Usuario no autenticado", 401);
+
+    const filtros = await obtenerFiltroEquipos(usuario);
 
     if (query.proyectoId !== undefined && query.proyectoId !== "") {
         const id = ensureIdPositivo(query.proyectoId);

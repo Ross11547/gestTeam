@@ -8,7 +8,7 @@ import {
   getInstallationInfo,
 } from "./githubApp.js";
 import { invitePersonalToProjectRepos } from "./githubLink.js";
-
+import { obtenerSecretoJwt } from "../../shared/auth/secret.js";
 
 import { prisma } from "../db/prisma.client.js";
 const router = express.Router();
@@ -26,10 +26,9 @@ function redirectToGithubPage(params = {}) {
 // Helpers
 async function ensureAuth(req, res, next) {
   try {
-    const secret = process.env.SESSION_SECRET || "dev_secret";
     const auth = req.headers.authorization || "";
     if (auth.startsWith("Bearer ")) {
-      const payload = jwt.verify(auth.slice(7), secret);
+      const payload = jwt.verify(auth.slice(7), obtenerSecretoJwt());
       const user = await prisma.usuario.findUnique({
         where: { id: Number(payload.uid) },
       });
@@ -40,7 +39,7 @@ async function ensureAuth(req, res, next) {
     }
     const t = req.query.t;
     if (t) {
-      const payload = jwt.verify(String(t), secret);
+      const payload = jwt.verify(String(t), obtenerSecretoJwt());
       const user = await prisma.usuario.findUnique({
         where: { id: Number(payload.uid) },
       });
@@ -160,7 +159,7 @@ router.get("/app/installed", async (req, res) => {
     try {
       payload = jwt.verify(
         String(state),
-        process.env.SESSION_SECRET || "dev_secret",
+        obtenerSecretoJwt(),
       );
     } catch {
       return res.redirect(

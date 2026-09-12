@@ -24,6 +24,8 @@ export const crearEquipo = z.object({
     materiaId: idOpcional,
     periodoId: idOpcional,
     claseId: idOpcional,
+    proyectoPeriodoId: idOpcional,
+    proyectoMateriaId: idOpcional,
 });
 
 export const actualizarEquipo = crearEquipo.omit({ proyectoId: true }).partial();

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {  ColorsLogin,ColorsEstu } from "../colors";
+import { ColorsLogin, ColorsEstu } from "../colors";
 export const Container = styled.div`
   width: 100%;
   padding: 1rem;
@@ -48,7 +48,10 @@ export const SubjectCard = styled.div`
     width: 100%;
     height: 6px;
     background: linear-gradient(
-      90deg, ${ColorsLogin.secondary100} 0%, ${ColorsEstu.primary} 100%);
+      90deg,
+      ${ColorsLogin.secondary100} 0%,
+      ${ColorsEstu.primary} 100%
+    );
   }
 
   &:hover {
@@ -108,7 +111,11 @@ export const Header = styled.header`
   height: 280px;
   color: #333;
   //background: linear-gradient(135deg, ${ColorsEstu.primary} 0%, #ffd54f 100%);
-  background: linear-gradient(135deg, ${(props) => props.ColorsCard.primary} 0%,${(props) => props.ColorsCard.primary100} 100%);
+  background: linear-gradient(
+    135deg,
+    ${(props) => props.ColorsCard.primary} 0%,
+    ${(props) => props.ColorsCard.primary100} 100%
+  );
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 20px;

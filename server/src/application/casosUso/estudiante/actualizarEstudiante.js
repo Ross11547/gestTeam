@@ -1,5 +1,6 @@
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
-import { buildEmail, siglaCarreraOrFallback, buildCodigo } from "./codigoEstudiante.js";
+import { buildEmail, siglaCarreraOrFallback, buildCodigo, toEstudianteDTO } from "./codigoEstudiante.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function actualizarEstudianteCasoUso({ id, rolId, body }) {
     const exists = await prisma.usuario.findUnique({
@@ -54,6 +55,12 @@ export async function actualizarEstudianteCasoUso({ id, rolId, body }) {
         }
     }
 
+    let passwordUpdate = {};
+    if (password !== undefined && String(password).trim() !== "") {
+        validarContrasenaPlana(password);
+        passwordUpdate = { password: await hashearContrasena(password) };
+    }
+
     let emailUpdate = {};
     if (nombre !== undefined || apellido !== undefined) {
         const n = nombre !== undefined ? nombre : exists.nombre;
@@ -71,7 +78,7 @@ export async function actualizarEstudianteCasoUso({ id, rolId, body }) {
     }
 
     try {
-        return await prisma.usuario.update({
+        const actualizado = await prisma.usuario.update({
             where: { id },
             data: {
                 ...(nombre !== undefined ? { nombre } : {}),
@@ -81,12 +88,18 @@ export async function actualizarEstudianteCasoUso({ id, rolId, body }) {
                 ...(idFacultad !== undefined ? { idFacultad: idFacultad ? Number(idFacultad) : null } : {}),
                 ...(idCarrera !== undefined ? { idCarrera: idCarrera ? Number(idCarrera) : null } : {}),
                 ...(semestreId !== undefined ? { semestreId: semestreId ? Number(semestreId) : null } : {}),
-                ...(password !== undefined ? { password } : {}),
+                ...passwordUpdate,
                 ...(activo !== undefined ? { activo: Boolean(activo) } : {}),
                 ...emailUpdate,
                 ...codigoUpdate,
             },
+            include: {
+                facultad: { select: { id: true, nombre: true } },
+                carrera: { select: { id: true, nombre: true, sigla: true } },
+                semestre: { select: { id: true, numero: true, etiqueta: true } },
+            },
         });
+        return toEstudianteDTO(actualizado);
     } catch (error) {
         if (error?.code === "P2002") {
             const err = new Error("Correo o código ya existen");

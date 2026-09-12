@@ -22,6 +22,13 @@ export const entregaRepositorio = {
             include: INCLUDE_ENTREGA,
         }),
 
+    listarPorHitoYEquipos: (hitoId, equipoIds) =>
+        prisma.entregaHito.findMany({
+            where: { hitoId, equipoId: { in: equipoIds } },
+            orderBy: { createdAt: "desc" },
+            include: INCLUDE_ENTREGA,
+        }),
+
     listarPorEquipo: (equipoId) =>
         prisma.entregaHito.findMany({
             where: { equipoId },

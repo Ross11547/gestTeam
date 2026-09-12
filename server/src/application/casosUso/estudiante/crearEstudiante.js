@@ -1,5 +1,6 @@
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
-import { buildEmail, siglaCarreraOrFallback, buildCodigo } from "./codigoEstudiante.js";
+import { buildEmail, siglaCarreraOrFallback, buildCodigo, toEstudianteDTO } from "./codigoEstudiante.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function crearEstudianteCasoUso({ rolId, body }) {
     const {
@@ -10,9 +11,11 @@ export async function crearEstudianteCasoUso({ rolId, body }) {
         idFacultad = null,
         idCarrera = null,
         semestreId = null,
-        password = "123456",
+        password,
         activo = true,
     } = body || {};
+
+    validarContrasenaPlana(password);
 
     if (!nombre || !ci) {
         const err = new Error("nombre y ci son requeridos");
@@ -62,15 +65,17 @@ export async function crearEstudianteCasoUso({ rolId, body }) {
     const sigla = await siglaCarreraOrFallback(idCarrera, idFacultad);
     const codigo = buildCodigo(sigla, ci);
 
+    const passwordHash = await hashearContrasena(password);
+
     try {
-        return await prisma.usuario.create({
+        const creado = await prisma.usuario.create({
             data: {
                 nombre,
                 apellido,
                 telefono,
                 ci: Number(ci),
                 correo,
-                password,
+                password: passwordHash,
                 idRol: rolId,
                 activo: Boolean(activo),
                 idFacultad: idFacultad ? Number(idFacultad) : null,
@@ -79,6 +84,17 @@ export async function crearEstudianteCasoUso({ rolId, body }) {
                 codigo,
             },
         });
+
+        const full = await prisma.usuario.findUnique({
+            where: { id: creado.id },
+            include: {
+                facultad: { select: { id: true, nombre: true } },
+                carrera: { select: { id: true, nombre: true, sigla: true } },
+                semestre: { select: { id: true, numero: true, etiqueta: true } },
+            },
+        });
+
+        return toEstudianteDTO(full);
     } catch (error) {
         if (error?.code === "P2002") {
             const err = new Error("Correo o código ya existen");

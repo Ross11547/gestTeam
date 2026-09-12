@@ -11,7 +11,7 @@ const SELECCION = {
     motivo: true,
     orden: true,
     createdAt: true,
-    proyecto: { select: { id: true, titulo: true, descripcion: true, repoUrl: true } },
+    proyecto: { select: { id: true, titulo: true, descripcion: true } },
 };
 
 export async function listarProyectosDestacadosCasoUso() {

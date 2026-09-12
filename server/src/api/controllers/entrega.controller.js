@@ -8,7 +8,7 @@ import { eliminarEntregaCasoUso } from "../../application/casosUso/entrega/elimi
 
 export async function listarEntregasPorHito(req, res, next) {
     try {
-        const data = await listarEntregasPorHitoCasoUso(req.query);
+        const data = await listarEntregasPorHitoCasoUso(req.query, req.user);
         res.json({ data, mensaje: "Entregas obtenidas correctamente" });
     } catch (e) {
         next(e);
@@ -17,7 +17,7 @@ export async function listarEntregasPorHito(req, res, next) {
 
 export async function listarEntregasPorEquipo(req, res, next) {
     try {
-        const data = await listarEntregasPorEquipoCasoUso(req.query);
+        const data = await listarEntregasPorEquipoCasoUso(req.query, req.user);
         res.json({ data, mensaje: "Entregas obtenidas correctamente" });
     } catch (e) {
         next(e);
@@ -29,7 +29,7 @@ export async function obtenerEntrega(req, res, next) {
         const id = ensureIdPositivo(req.params.id);
         if (!id) return res.status(400).json({ mensaje: "ID inválido" });
 
-        const data = await obtenerEntregaCasoUso(id);
+        const data = await obtenerEntregaCasoUso(id, req.user);
         res.json({ data, mensaje: "Entrega obtenida correctamente" });
     } catch (e) {
         next(e);
@@ -62,7 +62,7 @@ export async function eliminarEntrega(req, res, next) {
         const id = ensureIdPositivo(req.params.id);
         if (!id) return res.status(400).json({ mensaje: "ID inválido" });
 
-        const data = await eliminarEntregaCasoUso(id);
+        const data = await eliminarEntregaCasoUso(id, req.user);
         res.json({ data, mensaje: "Entrega eliminada correctamente" });
     } catch (e) {
         next(e);

@@ -1,7 +1,10 @@
 import { ensureIdPositivo, crearError } from "../../../dominio/evaluacionProyecto/helpersEvaluacionProyecto.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
+import { puedeVerProyecto } from "../../../dominio/comun/autoridadProyecto.js";
 
-export async function obtenerEvaluacionPorIdCasoUso(id) {
+export async function obtenerEvaluacionPorIdCasoUso(id, usuario) {
+    if (!usuario?.id) throw crearError("Usuario no autenticado", 401);
+
     const idValido = ensureIdPositivo(id);
     if (!idValido) throw crearError("ID inválido", 400);
 
@@ -23,5 +26,9 @@ export async function obtenerEvaluacionPorIdCasoUso(id) {
     });
 
     if (!evaluacion) throw crearError("La evaluación indicada no existe", 404);
+
+    const autorizado = await puedeVerProyecto(evaluacion.proyectoId, usuario);
+    if (!autorizado) throw crearError("No tienes permisos para ver esta evaluación", 403);
+
     return evaluacion;
 }

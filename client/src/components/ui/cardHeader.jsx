@@ -1,5 +1,7 @@
-import React from "react";
+import PropTypes from "prop-types";
+
 import Logo from "../../assets/img/headerPort.svg";
+
 import {
   BackgroundIllustration,
   Header,
@@ -9,22 +11,38 @@ import {
   Parrafo,
   Title,
 } from "../../style/estudiante/materiasStyled.jsx";
+
 import { useColors } from "../../style/colors.jsx";
 
 const CardHeader = ({ title, parrafo, children }) => {
-  const ColorsCard=useColors();
+  const colorsCard = useColors();
+
   return (
-    <Header ColorsCard={ColorsCard}>
+    <Header ColorsCard={colorsCard}>
       <HeaderTitle>
         <Title>{title}</Title>
-        <Parrafo>{parrafo}</Parrafo>
+
+        {parrafo && <Parrafo>{parrafo}</Parrafo>}
       </HeaderTitle>
+
       <HeaderContent>{children}</HeaderContent>
+
       <BackgroundIllustration>
-        <ImgLogo src={Logo}  />
+        <ImgLogo src={Logo} alt="" aria-hidden="true" />
       </BackgroundIllustration>
     </Header>
   );
+};
+
+CardHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  parrafo: PropTypes.string,
+  children: PropTypes.node,
+};
+
+CardHeader.defaultProps = {
+  parrafo: "",
+  children: null,
 };
 
 export default CardHeader;

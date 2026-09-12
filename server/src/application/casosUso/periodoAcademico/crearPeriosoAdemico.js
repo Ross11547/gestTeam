@@ -3,6 +3,14 @@ import { crearPeriodoAcademico } from "../../../dominio/periodoAcademico/vlidaci
 import { periodoAcademicoRepositorio } from "../../../infrastructure/repositories/repositorioPeriodoAcademico.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
+const HITOS_INSTITUCIONALES = [
+    { orden: 1, nombre: "H1 - Nivelación" },
+    { orden: 2, nombre: "H2 - Avance evaluable" },
+    { orden: 3, nombre: "H3 - Avance evaluable" },
+    { orden: 4, nombre: "H4 - Avance evaluable" },
+    { orden: 5, nombre: "H5 - Ajustes finales / presentación / cierre del semestre" },
+];
+
 export async function crearPeriodoAcademicoCasoUso(payload) {
     const data = crearPeriodoAcademico.parse(payload);
 
@@ -32,7 +40,7 @@ export async function crearPeriodoAcademicoCasoUso(payload) {
             });
         }
 
-        return tx.periodoAcademico.create({
+        const periodo = await tx.periodoAcademico.create({
             data: {
                 institucionId: data.institucionId,
                 nombre: data.nombre,
@@ -41,6 +49,24 @@ export async function crearPeriodoAcademicoCasoUso(payload) {
                 activo: data.activo ?? false,
             },
             include: { institucion: { select: { id: true, nombre: true, slug: true } } },
+        });
+
+        await tx.hitoPeriodo.createMany({
+            data: HITOS_INSTITUCIONALES.map((h) => ({
+                periodoId: periodo.id,
+                orden: h.orden,
+                nombre: h.nombre,
+                descripcion: null,
+                pesoSugerido: null,
+            })),
+        });
+
+        return tx.periodoAcademico.findUnique({
+            where: { id: periodo.id },
+            include: {
+                institucion: { select: { id: true, nombre: true, slug: true } },
+                hitosPeriodo: { orderBy: { orden: "asc" } },
+            },
         });
     });
 }

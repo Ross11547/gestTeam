@@ -3,7 +3,7 @@ import multer from "multer";
 import * as path from "path";
 import * as fs from "fs";
 import {autorizarRoles} from "../../api/middleware/autenticacionMiddleware.js"
-import { uploadDocumento, analizar, uploadRepositorioUnifranz, incluirProyecto, exportarDataset, reentrenarModelo} from "./controllerPlagioIA.js";
+import { uploadDocumento, analizar, uploadRepositorioUnifranz, exportarDataset, reentrenarModelo} from "./controllerPlagioIA.js";
 
 const router = express.Router();
 const staffAcdemico = autorizarRoles("Admin", "Director", "Docente");
@@ -56,7 +56,9 @@ router.post(
 router.post(
   "/proyecto/:proyectoId/incluir-en-dataset",
   staffAcdemico,
-  incluirProyecto
+  (_req, res) => res.status(410).json({
+    mensaje: "La inclusión manual de proyectos en el dataset está temporalmente deshabilitada.",
+  })
 );
 
 router.post(

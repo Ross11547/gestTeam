@@ -4,19 +4,19 @@ const idPositivo = z.coerce.number().int().positive();
 
 export const crearSolicitudAcceso = z.object({
     proyectoId: idPositivo,
-    tipo: z.enum(["DOCUMENTOS", "CODIGO", "AMBOS"]).default("AMBOS"),
+    proyectoMateriaId: idPositivo,
+    documentoIds: z.array(idPositivo).min(1).max(50).transform((ids) => [...new Set(ids)]),
     motivo: z.string().trim().max(1000).optional(),
-    expiresAt: z.coerce.date().optional().nullable(),
-});
+}).strict();
 
 export const listarSolicitudesAcceso = z.object({
     proyectoId: idPositivo.optional(),
+    proyectoMateriaId: idPositivo.optional(),
     estado: z.enum(["PENDIENTE", "APROBADA", "RECHAZADA", "EXPIRADA"]).optional(),
-});
+}).strict();
 
 export const resolverSolicitudAcceso = z.object({
     estado: z.enum(["APROBADA", "RECHAZADA"]),
     respuesta: z.string().trim().max(1000).optional(),
     expiresAt: z.coerce.date().optional().nullable(),
-    agregarMiembro: z.boolean().default(true),
-});
+}).strict();

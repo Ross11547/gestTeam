@@ -61,9 +61,24 @@ export default function Estudiantes() {
   const [form, setForm] = useState({
     nombre: "", apellido: "", telefono: "", ci: "",
     idFacultad: "", idCarrera: "", semestreId: "",
-    materiaIds: []
+    materiaIds: [], password: "", confirmPassword: ""
   });
   const setF = (p) => setForm((s) => ({ ...s, ...p }));
+  const [formErrors, setFormErrors] = useState({});
+
+  function validateForm() {
+    const errors = {};
+    if (!editingId) {
+      if (!form.password || form.password.length < 10) {
+        errors.password = "La contraseña debe tener al menos 10 caracteres";
+      }
+      if (form.password !== form.confirmPassword) {
+        errors.confirmPassword = "Las contraseñas no coinciden";
+      }
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   //catálogos
   const readText = async (r) => { try { return await r.text(); } catch { return ""; } };
@@ -214,8 +229,10 @@ export default function Estudiantes() {
     setEditingId(null);
     setForm({
       nombre: "", apellido: "", telefono: "", ci: "",
-      idFacultad: "", idCarrera: "", semestreId: "", materiaIds: []
+      idFacultad: "", idCarrera: "", semestreId: "", materiaIds: [],
+      password: "", confirmPassword: ""
     });
+    setFormErrors({});
     setIsModalOpen(true);
   };
 
@@ -236,7 +253,10 @@ export default function Estudiantes() {
         idCarrera: cid || "",
         semestreId: sid || "",
         materiaIds: (data.raw?.materiaIds || []).map(Number),
+        password: "",
+        confirmPassword: "",
       });
+      setFormErrors({});
       setIsModalOpen(true);
       if (fid) await loadCarreras(fid);
       if (cid) await loadSemestresByCarrera(cid);
@@ -246,6 +266,8 @@ export default function Estudiantes() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const payload = {
       nombre: form.nombre,
       apellido: form.apellido,
@@ -255,6 +277,7 @@ export default function Estudiantes() {
       idCarrera: form.idCarrera ? Number(form.idCarrera) : null,
       semestreId: form.semestreId ? Number(form.semestreId) : null,
       materiaIds: form.materiaIds.map(Number),
+      ...(!editingId ? { password: form.password } : {}),
     };
 
     try {
@@ -272,6 +295,12 @@ export default function Estudiantes() {
     } finally {
       setIsModalOpen(false);
       setEditingId(null);
+      setForm({
+        nombre: "", apellido: "", telefono: "", ci: "",
+        idFacultad: "", idCarrera: "", semestreId: "", materiaIds: [],
+        password: "", confirmPassword: ""
+      });
+      setFormErrors({});
     }
   };
 
@@ -302,7 +331,7 @@ export default function Estudiantes() {
       <ModalContent size="large">
         <ModalHeader>
           <ModalTitle>{editingId ? "Editar Estudiante" : "Agregar Estudiante"}</ModalTitle>
-          <ActionButton color={ColorsLogin.secondary100} onClick={() => { setIsModalOpen(false); setEditingId(null); }}>
+          <ActionButton color={ColorsLogin.secondary100} onClick={() => { setIsModalOpen(false); setEditingId(null); setForm({ nombre: "", apellido: "", telefono: "", ci: "", idFacultad: "", idCarrera: "", semestreId: "", materiaIds: [], password: "", confirmPassword: "" }); setFormErrors({}); }}>
             <X />
           </ActionButton>
         </ModalHeader>
@@ -379,8 +408,37 @@ export default function Estudiantes() {
             </small>
           </FormGroup>
 
+          {!editingId && (
+            <>
+              <FormGroup>
+                <Label>Contraseña inicial</Label>
+                <Input
+                  type="password"
+                  autoComplete="new-password"
+                  value={form.password}
+                  onChange={e => setF({ password: e.target.value })}
+                  required={!editingId}
+                  minLength={10}
+                />
+                {formErrors.password && <small style={{ color: ColorsLogin.secondary100 }}>{formErrors.password}</small>}
+              </FormGroup>
+              <FormGroup>
+                <Label>Confirmar contraseña</Label>
+                <Input
+                  type="password"
+                  autoComplete="new-password"
+                  value={form.confirmPassword}
+                  onChange={e => setF({ confirmPassword: e.target.value })}
+                  required={!editingId}
+                  minLength={10}
+                />
+                {formErrors.confirmPassword && <small style={{ color: ColorsLogin.secondary100 }}>{formErrors.confirmPassword}</small>}
+              </FormGroup>
+            </>
+          )}
+
           <ButtonGroup>
-            <Button type="button" className="secondary" onClick={() => { setIsModalOpen(false); setEditingId(null); }}>
+            <Button type="button" className="secondary" onClick={() => { setIsModalOpen(false); setEditingId(null); setForm({ nombre: "", apellido: "", telefono: "", ci: "", idFacultad: "", idCarrera: "", semestreId: "", materiaIds: [], password: "", confirmPassword: "" }); setFormErrors({}); }}>
               Cancelar
             </Button>
             <Button type="submit" className="primary">

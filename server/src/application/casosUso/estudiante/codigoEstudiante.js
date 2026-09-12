@@ -64,3 +64,21 @@ export function buildCodigo(sigla, ci) {
 export function siglaDesdeCarreraOFacultad(nombreCarrera, nombreFacultad) {
     return siglaDesdeNombre(nombreCarrera || nombreFacultad || "");
 }
+
+export function toEstudianteDTO(u) {
+    if (!u) return null;
+    return {
+        id: u.id,
+        nombre: u.nombre,
+        apellido: u.apellido || "",
+        email: u.correo,
+        telefono: u.telefono || "",
+        ci: u.ci,
+        departamento: u.facultad?.nombre || "",
+        especialidad: u.carrera?.nombre || "",
+        codigo: u.codigo || buildCodigo(siglaDesdeNombre(u.carrera?.nombre || u.facultad?.nombre || ""), u.ci),
+        semestre: u.semestre
+            ? { id: u.semestre.id, numero: u.semestre.numero, etiqueta: u.semestre.etiqueta || semLabel(u.semestre) }
+            : null,
+    };
+}

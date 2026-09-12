@@ -14,18 +14,16 @@ import { autorizarRoles } from "../middleware/autenticacionMiddleware.js";
 
 const router = Router();
 
-const staffAcademico = autorizarRoles("Admin", "Director", "Docente");
-
 router.get("/equipo", listarEquipos);
 router.get("/equipo/:id", obtenerEquipo);
 router.get("/equipo/:id/miembro", listarMiembros);
 
-router.post("/equipo", staffAcademico, crearEquipo);
-router.put("/equipo/:id", staffAcademico, actualizarEquipo);
-router.delete("/equipo/:id", staffAcademico, eliminarEquipo);
+router.post("/equipo", crearEquipo);
+router.put("/equipo/:id", actualizarEquipo);
+router.delete("/equipo/:id", eliminarEquipo);
 
-router.post("/equipo/:id/miembro", staffAcademico, agregarMiembro);
-router.put("/equipo/:id/miembro/:usuarioId", staffAcademico, actualizarMiembro);
-router.delete("/equipo/:id/miembro/:usuarioId", staffAcademico, eliminarMiembro);
+router.post("/equipo/:id/miembro", agregarMiembro);
+router.put("/equipo/:id/miembro/:usuarioId", actualizarMiembro);
+router.delete("/equipo/:id/miembro/:usuarioId", eliminarMiembro);
 
 export default router;

@@ -1,16 +1,16 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../db/prisma.client.js';
+import { obtenerSecretoJwt } from '../../shared/auth/secret.js';
 
 const router = express.Router();
-const JWT_SECRET = process.env.SESSION_SECRET || 'dev_secret';
 
 function getUid(req) {
     const h = req.headers.authorization || '';
     const m = h.match(/^Bearer\s+(.+)$/i);
     if (!m) return null;
     try {
-        const p = jwt.verify(m[1], JWT_SECRET);
+        const p = jwt.verify(m[1], obtenerSecretoJwt());
         return Number(p.uid);
     } catch {
         return null;
@@ -21,7 +21,7 @@ async function ensureAuth(req, res, next) {
     try {
         const auth = req.headers.authorization || '';
         if (auth.startsWith('Bearer ')) {
-            const payload = jwt.verify(auth.slice(7), JWT_SECRET);
+            const payload = jwt.verify(auth.slice(7), obtenerSecretoJwt());
             const user = await prisma.usuario.findUnique({ where: { id: Number(payload.uid) } });
             if (user) { req.user = user; return next(); }
         }

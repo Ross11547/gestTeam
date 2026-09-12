@@ -7,6 +7,7 @@ import {
   limpiarTexto,
   toUsuarioDTO,
 } from "../../../dominio/usuario/helpersUsuario.js";
+import { validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 function crearError(message, status = 400) {
   const e = new Error(message);
@@ -133,6 +134,7 @@ export async function actualizarUsuarioCasoUso({ id, data }) {
   }
 
   if (body.password !== undefined && String(body.password).trim() !== "") {
+    validarContrasenaPlana(String(body.password));
     update.password = await bcrypt.hash(String(body.password), 10);
   }
 

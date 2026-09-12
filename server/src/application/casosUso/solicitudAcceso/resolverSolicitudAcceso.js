@@ -1,6 +1,6 @@
 import { resolverSolicitudAcceso } from "../../../dominio/solicitudAcceso/validacionSolicitudAcceso.js";
 import { ensureIdPositivo, crearError } from "../../../dominio/solicitudAcceso/helpersSolicitudAcceso.js";
-import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadProyecto.js";
+import { validarAutoridadSolicitudAcceso } from "../../../dominio/solicitudAcceso/autorizacionSolicitudAcceso.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 
 export async function resolverSolicitudAccesoCasoUso(id, payload, usuario) {
@@ -11,50 +11,54 @@ export async function resolverSolicitudAccesoCasoUso(id, payload, usuario) {
 
     const solicitud = await prisma.solicitudAccesoProyecto.findUnique({
         where: { id: idValido },
-        select: { id: true, proyectoId: true, solicitanteId: true, estado: true },
+        select: {
+            id: true,
+            proyectoId: true,
+            proyectoMateriaId: true,
+            solicitanteId: true,
+            estado: true,
+            proyecto: { select: { estado: true, tipoGrupo: true } },
+            proyectoMateria: { select: { claseId: true, materia: { select: { idCarrera: true } } } },
+            documentos: { select: { documentoId: true } },
+        },
     });
     if (!solicitud) throw crearError("La solicitud indicada no existe", 404);
     if (solicitud.estado !== "PENDIENTE") {
         throw crearError("La solicitud ya fue resuelta", 409);
     }
 
-    if (!(await tieneAutoridadSobreProyecto(solicitud.proyectoId, usuario))) {
-        throw crearError("No tienes autoridad para resolver esta solicitud", 403);
+    if (!solicitud.documentos.length) throw crearError("La solicitud no contiene documentos autorizables", 409);
+    await validarAutoridadSolicitudAcceso(solicitud, usuario);
+    if (data.estado === "APROBADA" && data.expiresAt && data.expiresAt <= new Date()) {
+        throw crearError("La fecha de expiración debe ser futura", 400);
     }
 
-    const actualizada = await prisma.solicitudAccesoProyecto.update({
-        where: { id: idValido },
+    const resultado = await prisma.solicitudAccesoProyecto.updateMany({
+        where: { id: idValido, estado: "PENDIENTE" },
         data: {
             estado: data.estado,
             respuesta: data.respuesta ?? "",
             aprobadorId: usuario.id,
-            expiresAt: data.expiresAt === undefined ? undefined : data.expiresAt,
+            expiresAt: data.estado === "APROBADA" ? (data.expiresAt ?? null) : null,
+            resueltoEn: new Date(),
         },
+    });
+    if (resultado.count !== 1) throw crearError("La solicitud ya fue resuelta", 409);
+
+    return prisma.solicitudAccesoProyecto.findUnique({
+        where: { id: idValido },
         select: {
             id: true,
             proyectoId: true,
+            proyectoMateriaId: true,
             estado: true,
             tipo: true,
             respuesta: true,
             expiresAt: true,
-            updatedAt: true,
+            resueltoEn: true,
             solicitante: { select: { id: true, nombre: true, apellido: true } },
+            aprobador: { select: { id: true, nombre: true, apellido: true } },
+            documentos: { select: { documentoId: true } },
         },
     });
-
-    let miembroAgregado = false;
-    if (data.estado === "APROBADA" && data.agregarMiembro) {
-        const yaMiembro = await prisma.miembroProyecto.findUnique({
-            where: { proyectoId_usuarioId: { proyectoId: solicitud.proyectoId, usuarioId: solicitud.solicitanteId } },
-            select: { id: true },
-        });
-        if (!yaMiembro) {
-            await prisma.miembroProyecto.create({
-                data: { proyectoId: solicitud.proyectoId, usuarioId: solicitud.solicitanteId, rol: "MEMBER" },
-            });
-            miembroAgregado = true;
-        }
-    }
-
-    return { ...actualizada, miembroAgregado };
 }

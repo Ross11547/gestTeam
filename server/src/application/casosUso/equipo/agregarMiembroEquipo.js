@@ -2,16 +2,18 @@ import { agregarMiembro } from "../../../dominio/equipo/validacionEquipo.js";
 import { crearError } from "../../../dominio/equipo/helpersEquipo.js";
 import { equipoRepositorio } from "../../../infrastructure/repositories/repositorioEquipo.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
-import { puedeGestionarEquipo } from "./permisosEquipo.js";
+import { puedeGestionarEquipoAcademico } from "../../../dominio/comun/autoridadProyectoPeriodo.js";
 
 export async function agregarMiembroEquipoCasoUso(idRaw, payload, usuario) {
+    if (!usuario?.id) throw crearError("Usuario no autenticado", 401);
+
     const id = Number(idRaw);
     if (!Number.isInteger(id) || id <= 0) throw crearError("ID inválido");
 
     const equipo = await equipoRepositorio.obtenerPorId(id);
     if (!equipo) throw crearError("El equipo no existe", 404);
 
-    if (!(await puedeGestionarEquipo(usuario, equipo))) {
+    if (!(await puedeGestionarEquipoAcademico(equipo, usuario))) {
         throw crearError("No tienes permisos para agregar miembros a este equipo", 403);
     }
 

@@ -17,6 +17,7 @@ export const ROUTES = {
   PIZARRA: "/estudiante/pizarra",
   EXCALIDRAW: "/estudiante/excalidraw",
   CALENDARIOU: "/estudiante/calendario",
+  ESPACIOACADEMICO: "/estudiante/workspace-academico",
 
   //admin
   ADMIN: "/admin",
@@ -81,6 +82,7 @@ export const ROUTES = {
   RECURSOS: "/docente/recursos",
   PIZARRADOC: "/docente/pizarra",
   EXCALIDRAWDOC: "/docente/excalidraw",
+  ESPACIOACADEMICODOC: "/docente/workspace-academico",
 
   //Director de carrera
   DIRECTOR: "/director",
@@ -100,4 +102,5 @@ export const ROUTES = {
   RECURSODI: "/director/recursos",
   PIZARRADI: "/director/pizarra",
   EXCALIDRAWDI: "/director/excalidraw",
+  ESPACIOACADEMICODI: "/director/workspace-academico",
 };

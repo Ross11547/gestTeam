@@ -1,9 +1,11 @@
 import { crearRevision } from "../../../dominio/revision/validacionRevision.js";
 import { normalizarTexto, crearError } from "../../../dominio/revision/helpersRevision.js";
-import { revisionRepositorio } from "../../../infrastructure/repositories/repositorioRevision.js";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
+import { puedeCrearRevision } from "../../../dominio/comun/autoridadRecursoAcademico.js";
 
 export async function crearRevisionCasoUso(payload, usuario) {
+    if (!usuario?.id) throw crearError("Usuario no autenticado", 401);
+
     const data = crearRevision.parse(payload);
 
     const entrega = await prisma.entregaHito.findUnique({
@@ -15,6 +17,11 @@ export async function crearRevisionCasoUso(payload, usuario) {
 
     if (entrega.estado === "REVISADO") {
         throw crearError("Esta entrega ya fue revisada", 409);
+    }
+
+    const autorizado = await puedeCrearRevision(data.entregaId, usuario);
+    if (!autorizado) {
+        throw crearError("No tienes permisos para revisar esta entrega", 403);
     }
 
     const revision = await prisma.$transaction(async (tx) => {

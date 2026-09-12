@@ -21,8 +21,8 @@ export const crearUsuario = z
         telefono: telefono,
         ci: intPositivo("El CI debe ser un número válido y positivo"),
         correo: correo,
-        password: z.string().min(6, "El password debe tener al menos 6 caracteres").max(200),
-        confirmaPassword: z.string().min(6).max(200),
+        password: z.string().min(10, "La contraseña debe tener al menos 10 caracteres").max(200),
+        confirmaPassword: z.string().min(10).max(200),
         idRol: intPositivo("idRol es requerido"),
         activo: z.coerce.boolean(),
 
@@ -44,7 +44,7 @@ export const actualizarUsuario = z.object({
     ci: z.coerce.number().int().positive().optional(),
     correo: correo.optional(),
 
-    password: z.string().min(6).max(200).optional(),
+    password: z.string().min(10).max(200).optional(),
 
     idRol: z.coerce.number().int().positive().optional(),
     activo: z.coerce.boolean().optional(),

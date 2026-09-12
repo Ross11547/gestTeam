@@ -5,7 +5,9 @@ import {
     nombreFacultad,
     derivarSigla,
     buildCodigo,
+    toDocenteDTO,
 } from "./codigoDocente.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function crearDocenteCasoUso({ rolId, body }) {
     const {
@@ -16,9 +18,11 @@ export async function crearDocenteCasoUso({ rolId, body }) {
         idFacultad = null,
         idCarrera = null,
         materiaIds = [],
-        password = "123456",
+        password,
         activo = true,
     } = body || {};
+
+    validarContrasenaPlana(password);
 
     if (!nombre || !ci) {
         const err = new Error("nombre y ci son requeridos");
@@ -59,6 +63,8 @@ export async function crearDocenteCasoUso({ rolId, body }) {
         siglaFallback: derivarSigla(facName),
     });
 
+    const passwordHash = await hashearContrasena(password);
+
     let created;
     try {
         created = await prisma.usuario.create({
@@ -68,7 +74,7 @@ export async function crearDocenteCasoUso({ rolId, body }) {
                 telefono,
                 ci: Number(ci),
                 correo,
-                password,
+                password: passwordHash,
                 idRol: rolId,
                 activo: Boolean(activo),
                 idFacultad: idFacultad ? Number(idFacultad) : null,
@@ -92,5 +98,14 @@ export async function crearDocenteCasoUso({ rolId, body }) {
         });
     }
 
-    return created;
+    const full = await prisma.usuario.findUnique({
+        where: { id: created.id },
+        include: {
+            facultad: { select: { id: true, nombre: true } },
+            carrera: { select: { id: true, nombre: true, sigla: true } },
+            docenteMaterias: { include: { materia: { select: { id: true, nombre: true } } } },
+        },
+    });
+
+    return toDocenteDTO(full);
 }

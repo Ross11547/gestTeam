@@ -1,10 +1,9 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "../../../infrastructure/db/prisma.client.js";
 import { login } from "../../../dominio/usuario/validacionUsuario.js";
 import { dominioInstitucional, validarCorreoInstitucional } from "../../../dominio/usuario/helpersUsuario.js";
-
-const isBcryptHash = (value) => typeof value === "string" && value.startsWith("$2");
+import { compararContrasena, hashearContrasena, esHashBcrypt } from "../../../shared/auth/password.js";
+import { obtenerSecretoJwt } from "../../../shared/auth/secret.js";
 
 export async function loginCasoUso(payload) {
     const body = login.parse(payload);
@@ -40,12 +39,12 @@ export async function loginCasoUso(payload) {
 
     let ok = false;
 
-    if (isBcryptHash(stored)) {
-        ok = await bcrypt.compare(incoming, stored);
+    if (esHashBcrypt(stored)) {
+        ok = await compararContrasena(incoming, stored);
     } else {
         ok = incoming === stored;
         if (ok) {
-            const newHash = await bcrypt.hash(incoming, 10);
+            const newHash = await hashearContrasena(incoming);
             await prisma.usuario.updateMany({
                 where: { id: user.id, password: stored },
                 data: { password: newHash },
@@ -61,7 +60,7 @@ export async function loginCasoUso(payload) {
 
     const token = jwt.sign(
         { uid: user.id, rol: user.rol?.nombre },
-        process.env.SESSION_SECRET || "dev_secret",
+        obtenerSecretoJwt(),
         { expiresIn: "1d" }
     );
 

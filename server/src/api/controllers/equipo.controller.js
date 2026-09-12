@@ -11,7 +11,7 @@ import { eliminarMiembroEquipoCasoUso } from "../../application/casosUso/equipo/
 
 export async function listarEquipos(req, res, next) {
     try {
-        const data = await listarEquiposCasoUso(req.query);
+        const data = await listarEquiposCasoUso(req.query, req.user);
         res.json({ data, mensaje: "Equipos obtenidos correctamente" });
     } catch (e) {
         next(e);
@@ -23,7 +23,7 @@ export async function obtenerEquipo(req, res, next) {
         const id = ensureIdPositivo(req.params.id);
         if (!id) return res.status(400).json({ mensaje: "ID inválido" });
 
-        const data = await obtenerEquipoCasoUso(id);
+        const data = await obtenerEquipoCasoUso(id, req.user);
         res.json({ data, mensaje: "Equipo obtenido correctamente" });
     } catch (e) {
         next(e);
@@ -68,7 +68,7 @@ export async function listarMiembros(req, res, next) {
         const id = ensureIdPositivo(req.params.id);
         if (!id) return res.status(400).json({ mensaje: "ID inválido" });
 
-        const data = await listarMiembrosEquipoCasoUso(id);
+        const data = await listarMiembrosEquipoCasoUso(id, req.user);
         res.json({ data, mensaje: "Miembros obtenidos correctamente" });
     } catch (e) {
         next(e);

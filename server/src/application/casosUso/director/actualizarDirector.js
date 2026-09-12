@@ -7,6 +7,7 @@ import {
     buildCorreo,
     toDirectorDTO,
 } from "./codigoDirector.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function actualizarDirectorCasoUso({ id, rolId, body }) {
     const exists = await prisma.usuario.findUnique({
@@ -65,6 +66,12 @@ export async function actualizarDirectorCasoUso({ id, rolId, body }) {
         };
     }
 
+    let passwordUpdate = {};
+    if (password !== undefined && String(password).trim() !== "") {
+        validarContrasenaPlana(password);
+        passwordUpdate = { password: await hashearContrasena(password) };
+    }
+
     let correoUpdate = {};
     if (correo !== undefined) {
         correoUpdate = {
@@ -84,7 +91,7 @@ export async function actualizarDirectorCasoUso({ id, rolId, body }) {
                 ...(ci !== undefined ? { ci: Number(ci) } : {}),
                 ...(idFacultad !== undefined ? { idFacultad: idFacultad ? Number(idFacultad) : null } : {}),
                 ...(idCarrera !== undefined ? { idCarrera: idCarrera ? Number(idCarrera) : null } : {}),
-                ...(password !== undefined ? { password } : {}),
+                ...passwordUpdate,
                 ...(activo !== undefined ? { activo: Boolean(activo) } : {}),
                 esDirector: true,
                 ...codigoUpdate,

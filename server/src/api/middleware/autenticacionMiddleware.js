@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { prisma } from "../../infrastructure/db/prisma.client.js";
-
-const JWT_SECRET = process.env.SESSION_SECRET || "dev_secret";
+import { obtenerSecretoJwt } from "../../shared/auth/secret.js";
 
 const RUTAS_PUBLICAS = [{ metodo: "POST", ruta: "/login" }];
 
@@ -29,7 +28,7 @@ export async function autenticarToken(req, res, next) {
     let payload;
 
     try {
-        payload = jwt.verify(token, JWT_SECRET);
+        payload = jwt.verify(token, obtenerSecretoJwt());
     } catch {
         return res.status(401).json({
             error: "No autenticado",
@@ -40,7 +39,19 @@ export async function autenticarToken(req, res, next) {
     try {
         const usuario = await prisma.usuario.findUnique({
             where: { id: Number(payload.uid) },
-            include: { rol: { select: { id: true, nombre: true } } },
+            select: {
+                id: true,
+                nombre: true,
+                apellido: true,
+                correo: true,
+                activo: true,
+                idRol: true,
+                idFacultad: true,
+                idCarrera: true,
+                semestreId: true,
+                esDirector: true,
+                rol: { select: { id: true, nombre: true } },
+            },
         });
 
         if (!usuario || !usuario.activo) {

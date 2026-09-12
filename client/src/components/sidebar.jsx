@@ -168,11 +168,10 @@ const STUDENT_MENU_SECTIONS = [
       },
       {
         icon: <Calendar size={20} />,
-        label: "Proyectos",
+        label: "Mis proyectos",
         key: "proyectos",
         routeKey: "PROYECTO",
         fallback: "/proyectos",
-        extra: "+",
       },
       {
         icon: <Mail size={20} />,
@@ -180,14 +179,21 @@ const STUDENT_MENU_SECTIONS = [
         key: "colaboraciones",
         routeKey: "COLABORACION",
         fallback: "/colaboraciones",
-        badge: 3,
       },
+    ],
+  },
+  {
+    id: "herramientas",
+    title: "Herramientas",
+    icon: <SlidersHorizontal size={21} />,
+    alwaysOpen: true,
+    items: [
       {
-        icon: <Bell size={20} />,
-        label: "Notificaciones",
-        key: "notificaciones",
-        routeKey: "NOTIFICACION",
-        fallback: "/notificaciones",
+        icon: <CalendarDays size={20} />,
+        label: "Calendario",
+        key: "calendario",
+        routeKey: "CALENDARIOU",
+        fallback: "/calendario",
       },
       {
         icon: <Layout size={20} />,
@@ -195,6 +201,13 @@ const STUDENT_MENU_SECTIONS = [
         key: "pizarra",
         routeKey: "PIZARRA",
         fallback: "/pizarra",
+      },
+      {
+        icon: <Boxes size={20} />,
+        label: "Aplicaciones",
+        key: "aplicaciones",
+        routeKey: "APLICACIONES",
+        fallback: "#",
       },
     ],
   },
@@ -220,6 +233,13 @@ const DIRECTOR_MENU_SECTIONS = [
         key: "materias",
         routeKey: "MISMATERIASDI",
         fallback: "/director/materias",
+      },
+      {
+        icon: <FolderKanban size={20} />,
+        label: "Workspace académico",
+        key: "espacioAcademico",
+        routeKey: "ESPACIOACADEMICODI",
+        fallback: "/director/workspace-academico",
       },
       {
         icon: <CalendarDays size={20} />,
@@ -287,6 +307,13 @@ const DOCENTE_MENU_SECTIONS = [
         key: "materias",
         routeKey: "MISMATERIAS",
         fallback: "/docente/materias",
+      },
+      {
+        icon: <FolderKanban size={20} />,
+        label: "Workspace académico",
+        key: "espacioAcademico",
+        routeKey: "ESPACIOACADEMICODOC",
+        fallback: "/docente/workspace-academico",
       },
       {
         icon: <CalendarDays size={20} />,
@@ -654,7 +681,6 @@ const SidebarNavigation = ({ minimized = false, toggleSidebar = noop } = {}) => 
     : normalizeTheme(colorsFromHook, colorsFromHook);
 
   const [activeItem, setActiveItem] = useState("dashboard");
-  const [services, setServices] = useState([]);
   const [showToolPicker, setShowToolPicker] = useState(false);
   const [compactPanelId, setCompactPanelId] = useState(null);
 
@@ -701,18 +727,9 @@ const SidebarNavigation = ({ minimized = false, toggleSidebar = noop } = {}) => 
     }));
   };
 
-  const handleCalendario = () => {
-    navigate(resolveRoute("CALENDARIOU", "/calendario"));
-  };
-
   const handleOpenTool = (tool) => {
     if (!tool?.url) return;
     window.open(tool.url, "_blank", "noopener,noreferrer");
-  };
-
-  const handleAddTool = (tool) => {
-    if (services.some((service) => service.id === tool.id)) return;
-    setServices((prev) => [...prev, tool]);
   };
 
   const handleQuickAction = () => {
@@ -746,6 +763,40 @@ const SidebarNavigation = ({ minimized = false, toggleSidebar = noop } = {}) => 
   };
 
   const renderMenuItem = (item) => {
+    if (item.key === "aplicaciones") {
+      return (
+        <div key={item.key}>
+          <NavLinkItem
+            as="button"
+            type="button"
+            $active={showToolPicker}
+            $colors={themeColors}
+            onClick={() => setShowToolPicker((prev) => !prev)}
+            style={{ width: "100%", textAlign: "left", cursor: "pointer", border: "none", background: "transparent" }}
+          >
+            <NavIcon $active={showToolPicker} $colors={themeColors}>
+              {item.icon}
+            </NavIcon>
+            <NavText>{item.label}</NavText>
+          </NavLinkItem>
+          {showToolPicker && (
+            <ToolPicker style={{ marginTop: "4px", marginBottom: "8px" }}>
+              {AVAILABLE_TOOLS.map((tool) => (
+                <ToolButton
+                  key={tool.id}
+                  type="button"
+                  onClick={() => handleOpenTool(tool)}
+                  $colors={themeColors}
+                >
+                  {tool.label}
+                </ToolButton>
+              ))}
+            </ToolPicker>
+          )}
+        </div>
+      );
+    }
+
     const to = resolveRoute(item.routeKey, item.fallback);
     const active = isRouteActive(item);
 
@@ -781,7 +832,7 @@ const SidebarNavigation = ({ minimized = false, toggleSidebar = noop } = {}) => 
       <>
         <GlobalStyle />
         <AppContainer>
-          <SidebarWrapper minimized={true} style={{ overflow: "visible", zIndex: 50 }}>
+          <SidebarWrapper minimized={true}>
             <CompactSidebar>
               <CompactTop>
                 <CompactToggle type="button" onClick={toggleSidebar} $colors={themeColors}>
@@ -943,55 +994,8 @@ const SidebarNavigation = ({ minimized = false, toggleSidebar = noop } = {}) => 
                     );
                   })}
 
-                  {isStudent ? (
-                    <StudentToolsBlock>
-                      <ToolsHeader>
-                        <span>Herramientas</span>
-                        <CalendarShortcut type="button" $colors={themeColors} onClick={handleCalendario}>
-                          <CalendarDays size={22} />
-                        </CalendarShortcut>
-                      </ToolsHeader>
 
-                      <ServiceSection>
-                        {services.map((service) => (
-                          <ServiceItem key={service.id} onClick={() => handleOpenTool(service)}>
-                            <ToolDot style={{ background: themeColors.primary100 }} />
-                            <span style={{ marginLeft: "10px" }}>{service.label}</span>
-                          </ServiceItem>
-                        ))}
 
-                        <ServiceItem onClick={() => setShowToolPicker((prev) => !prev)}>
-                          <PlusCircle
-                            size={24}
-                            color={themeColors.primary100}
-                            style={{ marginRight: "10px" }}
-                          />
-                          Añadir una herramienta
-                        </ServiceItem>
-
-                        {showToolPicker ? (
-                          <ToolPicker>
-                            {AVAILABLE_TOOLS.map((tool) => {
-                              const alreadyAdded = services.some((service) => service.id === tool.id);
-
-                              return (
-                                <ToolButton
-                                  key={tool.id}
-                                  type="button"
-                                  disabled={alreadyAdded}
-                                  onClick={() => handleAddTool(tool)}
-                                  $colors={themeColors}
-                                >
-                                  {tool.label}
-                                  {alreadyAdded ? <span className="added">Agregada</span> : null}
-                                </ToolButton>
-                              );
-                            })}
-                          </ToolPicker>
-                        ) : null}
-                      </ServiceSection>
-                    </StudentToolsBlock>
-                  ) : null}
                 </MenuScroll>
               </SidebarMain>
 
@@ -1028,14 +1032,17 @@ const AppContainer = styled.div`
 `;
 
 const SidebarWrapper = styled.aside`
-  width: ${({ minimized }) => (minimized ? "92px" : "300px")};
-  height: calc(100vh - 32px);
+  width: ${({ minimized }) =>
+    minimized ? "92px" : "min(300px, calc(100vw - 32px))"};
+  height: calc(100dvh - 32px);
   margin: 16px;
   padding: ${({ minimized }) => (minimized ? "18px 10px" : "22px 18px")};
   background: #ffffff;
   border-radius: 28px;
   box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
   position: relative;
+  overflow: ${({ minimized }) => (minimized ? "visible" : "hidden")};
+  z-index: ${({ minimized }) => (minimized ? 20 : "auto")};
   transition: width 0.22s ease;
 `;
 
@@ -1083,27 +1090,6 @@ const Badge = styled.span`
   align-items: center;
   justify-content: center;
   font-weight: 800;
-`;
-
-const ServiceSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const ServiceItem = styled.div`
-  min-height: 40px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  color: #374151;
-  font-weight: 700;
-  cursor: pointer;
-
-  &:hover {
-    background: #f8fafc;
-  }
 `;
 
 const SidebarLayout = styled.div`
@@ -1340,30 +1326,6 @@ const ExtraLabel = styled.span`
   font-weight: 900;
 `;
 
-const StudentToolsBlock = styled.div`
-  margin-top: 14px;
-`;
-
-const ToolsHeader = styled.div`
-  padding: 8px 12px;
-  color: #6b7280;
-  font-size: 0.72rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const CalendarShortcut = styled.button`
-  border: none;
-  background: transparent;
-  color: ${({ $colors }) => $colors.primary};
-  display: flex;
-  cursor: pointer;
-`;
-
 const ToolPicker = styled.div`
   margin-top: 8px;
   padding: 8px;
@@ -1400,13 +1362,6 @@ const ToolButton = styled.button`
     opacity: 0.6;
     cursor: default;
   }
-`;
-
-const ToolDot = styled.span`
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  flex-shrink: 0;
 `;
 
 const CompactSidebar = styled.div`
@@ -1575,8 +1530,8 @@ const CompactFloatingPanel = styled.div`
   position: absolute;
   left: calc(100% + 14px);
   top: 128px;
-  width: 270px;
-  max-height: calc(100vh - 180px);
+  width: min(270px, calc(100vw - 124px));
+  max-height: calc(100dvh - 180px);
   border-radius: 24px;
   padding: 14px;
   background: rgba(255, 255, 255, 0.96);
@@ -1640,7 +1595,7 @@ const CompactPanelClose = styled.button`
 `;
 
 const CompactPanelList = styled.div`
-  max-height: calc(100vh - 260px);
+  max-height: calc(100dvh - 260px);
   overflow-y: auto;
   padding-top: 10px;
   display: flex;

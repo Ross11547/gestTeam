@@ -5,7 +5,9 @@ import {
     nombreFacultad,
     derivarSigla,
     buildCodigo,
+    toDocenteDTO,
 } from "./codigoDocente.js";
+import { hashearContrasena, validarContrasenaPlana } from "../../../shared/auth/password.js";
 
 export async function actualizarDocenteCasoUso({ id, rolId, body }) {
     const exists = await prisma.usuario.findUnique({ where: { id }, select: { idRol: true } });
@@ -58,6 +60,12 @@ export async function actualizarDocenteCasoUso({ id, rolId, body }) {
         };
     }
 
+    let passwordUpdate = {};
+    if (password !== undefined && String(password).trim() !== "") {
+        validarContrasenaPlana(password);
+        passwordUpdate = { password: await hashearContrasena(password) };
+    }
+
     let correoUpdate = {};
     if (nombre !== undefined || apellido !== undefined) {
         const u = await prisma.usuario.findUnique({ where: { id }, select: { nombre: true, apellido: true } });
@@ -77,10 +85,15 @@ export async function actualizarDocenteCasoUso({ id, rolId, body }) {
                 ...(ci !== undefined ? { ci: Number(ci) } : {}),
                 ...(idFacultad !== undefined ? { idFacultad: idFacultad ? Number(idFacultad) : null } : {}),
                 ...(idCarrera !== undefined ? { idCarrera: idCarrera ? Number(idCarrera) : null } : {}),
-                ...(password !== undefined ? { password } : {}),
+                ...passwordUpdate,
                 ...(activo !== undefined ? { activo: Boolean(activo) } : {}),
                 ...codigoUpdate,
                 ...correoUpdate,
+            },
+            include: {
+                facultad: { select: { id: true, nombre: true } },
+                carrera: { select: { id: true, nombre: true, sigla: true } },
+                docenteMaterias: { include: { materia: { select: { id: true, nombre: true } } } },
             },
         });
     } catch (error) {
@@ -103,5 +116,14 @@ export async function actualizarDocenteCasoUso({ id, rolId, body }) {
         }
     }
 
-    return updated;
+    const full = await prisma.usuario.findUnique({
+        where: { id },
+        include: {
+            facultad: { select: { id: true, nombre: true } },
+            carrera: { select: { id: true, nombre: true, sigla: true } },
+            docenteMaterias: { include: { materia: { select: { id: true, nombre: true } } } },
+        },
+    });
+
+    return toDocenteDTO(full);
 }

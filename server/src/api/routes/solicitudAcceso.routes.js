@@ -9,14 +9,15 @@ import { autorizarRoles } from "../middleware/autenticacionMiddleware.js";
 
 const router = Router();
 
-const staffAcademico = autorizarRoles("Admin", "Director", "Docente");
+const resolutorAcademico = autorizarRoles("Director", "Docente");
+const estudiante = autorizarRoles("Estudiante");
 
-router.get("/solicitud-acceso", staffAcademico, listarSolicitudes);
+router.get("/solicitud-acceso", listarSolicitudes);
 
-router.post("/solicitud-acceso", crearSolicitud);
+router.post("/solicitud-acceso", estudiante, crearSolicitud);
 
-router.put("/solicitud-acceso/:id/resolver", staffAcademico, resolverSolicitud);
+router.put("/solicitud-acceso/:id/resolver", resolutorAcademico, resolverSolicitud);
 
-router.delete("/solicitud-acceso/:id", staffAcademico, cancelarSolicitud);
+router.delete("/solicitud-acceso/:id", estudiante, cancelarSolicitud);
 
 export default router;

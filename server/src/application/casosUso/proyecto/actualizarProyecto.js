@@ -2,7 +2,6 @@ import { actualizarProyecto } from "../../../dominio/proyecto/validacionProyecto
 import { normalizarTexto, crearError } from "../../../dominio/proyecto/helpersProyecto.js";
 import { tieneAutoridadSobreProyecto } from "../../../dominio/comun/autoridadProyecto.js";
 import { proyectoRepositorio } from "../../../infrastructure/repositories/repositorioProyecto.js";
-import {incluirProyectoEnDataset} from "../../../infrastructure/similitud/datasetPlagio.js"
 
 export async function actualizarProyectoCasoUso(id, payload, usuario) {
     const actual = await proyectoRepositorio.obtenerPorId(id);
@@ -25,28 +24,16 @@ export async function actualizarProyectoCasoUso(id, payload, usuario) {
 
     if (body.tipoGrupo !== undefined) data.tipoGrupo = body.tipoGrupo;
 
-    if (body.estado !== undefined) data.estado = body.estado;
+    if (body.estado !== undefined) {
+        throw crearError(
+            "El estado académico del proyecto no puede modificarse mediante esta operación.",
+            403
+        );
+    }
 
     if (body.repoUrl !== undefined) data.repoUrl = body.repoUrl ? body.repoUrl.trim() : null;
 
     if (Object.keys(data).length === 0) return actual;
 
-    const proyectoActualizado = await proyectoRepositorio.actualizar(id, data);
-    const aprobadoProyecto = data.estado === "CERRADO" && actual.estado !== "CERRADO";
-
-    if (aprobadoProyecto){
-        incluirProyectoEnDataset(id, { creadoPorId: usuario?.id})
-            .then((resultado) => {
-                                if (resultado.ok) {
-                    console.log(`[dataset-plagio] Proyecto ${id} incluido:`, resultado);
-                } else {
-                    console.warn(`[dataset-plagio] Proyecto ${id} no incluido:`, resultado);
-                }
-            })
-            .catch((err) => {
-                console.error(`[dataset-plagio] Error incluyendo proyecto ${id}:`, err.message);
-            });
-    }
-
-    return proyectoActualizado;
+    return proyectoRepositorio.actualizar(id, data);
 }

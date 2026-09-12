@@ -1,4 +1,4 @@
-export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+export const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 function getSessionToken() {
   return (
@@ -52,25 +52,36 @@ async function request(path, { method = "GET", body, headers } = {}) {
       body: body ? JSON.stringify(body) : undefined,
     });
   } catch (e) {
+    console.error("API ERROR ->", path, e);
     throw new Error("No se pudo conectar con el servidor");
   }
 
   if (!res.ok) {
+    if (res.status === 401 && token) {
+      clearSessionToken();
+      localStorage.removeItem("user");
+      window.dispatchEvent(new Event("gestteam:sesion-invalida"));
+    }
     const text = await res.text();
     console.error("API ERROR ->", path, res.status, text);
 
     let data = {};
     try {
       data = JSON.parse(text);
-    } catch {}
+    } catch {
+      console.error("No se pudo parsear la respuesta del servidor");
+    }
 
-    throw new Error(
+    const error = new Error(
       data.error ||
       data.mensaje ||
       data.message ||
       text ||
       `Error ${res.status}`
     );
+    error.status = res.status;
+    error.data = data;
+    throw error;
   }
 
   let data = {};
@@ -168,4 +179,60 @@ export const api = {
   },
 
   myMaterias: () => request("/api/materias/mias"),
+
+  listarProyectosPeriodo: (filtros = {}) =>
+    request(`/api/proyectoPeriodo${crearConsulta(filtros)}`),
+
+  obtenerProyectoPeriodo: (id) => request(`/api/proyectoPeriodo/${id}`),
+
+  listarProyectosMateria: (proyectoPeriodoId) =>
+    request(`/api/proyectoMateria${crearConsulta({ proyectoPeriodoId })}`),
+
+  obtenerProyectoMateria: (id) => request(`/api/proyectoMateria/${id}`),
+
+  listarHitosProyecto: (proyectoPeriodoId) =>
+    request(`/api/hitoProyecto${crearConsulta({ proyectoPeriodoId })}`),
+
+  obtenerHitoProyecto: (id) => request(`/api/hitoProyecto/${id}`),
+
+  listarEquipos: (filtros = {}) =>
+    request(`/api/equipo${crearConsulta(filtros)}`),
+
+  obtenerEquipo: (id) => request(`/api/equipo/${id}`),
+
+  listarMiembrosEquipo: (id) => request(`/api/equipo/${id}/miembro`),
+
+  listarCatalogoProyectos: (filtros = {}) =>
+    request(`/api/proyecto/catalogo${crearConsulta(filtros)}`),
+
+  obtenerCatalogoProyecto: (id) => request(`/api/proyecto/catalogo/${id}`),
+
+  listarDocumentosSolicitables: (proyectoId) =>
+    request(`/api/proyecto/catalogo/${proyectoId}/documentos-solicitables`),
+
+  crearSolicitudAcceso: (payload) =>
+    request("/api/solicitud-acceso", { method: "POST", body: payload }),
+
+  listarFacultades: () => request("/api/facultad"),
+
+  listarCarreras: (filtros = {}) =>
+    request(`/api/carrera${crearConsulta(filtros)}`),
+
+  listarMateriasPorCarrera: (idCarrera) =>
+    request(`/api/materia/by-carrera?idCarrera=${idCarrera}`),
+
+  listarPeriodosAcademicos: () => request("/api/periodoAcademico"),
 };
+
+function crearConsulta(filtros) {
+  const parametros = new URLSearchParams();
+
+  Object.entries(filtros).forEach(([clave, valor]) => {
+    if (valor !== undefined && valor !== null && valor !== "") {
+      parametros.set(clave, String(valor));
+    }
+  });
+
+  const consulta = parametros.toString();
+  return consulta ? `?${consulta}` : "";
+}

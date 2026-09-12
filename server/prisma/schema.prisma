@@ -34,7 +34,13 @@ enum EstadoProyecto {
   BORRADOR
   ACTIVO
   CERRADO
+  INCONCLUSO
   ARCHIVADO
+}
+
+enum EstadoProyectoPeriodo {
+  ACTIVO
+  CERRADO_PERIODO
 }
 
 enum EstadoEntrega {
@@ -184,17 +190,60 @@ model PeriodoAcademico {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  clases              ClaseMateria[]
-  proyectos           ProyectoMateria[]
-  inscripciones       InscripcionMateria[]
-  equipos             Equipo[]
-  evaluacionProyectos EvaluacionProyecto[]
-  proyectoDestacados  ProyectoDestacado[]
-  reporteGenerados    ReporteGenerado[]
-  pizarras            Pizarra[]
+  clases                  ClaseMateria[]
+  proyectos               ProyectoMateria[]
+  proyectosPeriodo        ProyectoPeriodo[]
+  hitosPeriodo            HitoPeriodo[]
+  inscripciones           InscripcionMateria[]
+  equipos                 Equipo[]
+  evaluacionProyectos     EvaluacionProyecto[]
+  solicitudesContinuacion SolicitudContinuacionProyecto[]
+  proyectoDestacados      ProyectoDestacado[]
+  reporteGenerados        ReporteGenerado[]
+  pizarras                Pizarra[]
 
   @@unique([institucionId, nombre])
   @@index([institucionId, activo])
+}
+
+model ProyectoPeriodo {
+  id          Int                   @id @default(autoincrement())
+  proyectoId  Int
+  proyecto    Proyecto              @relation(fields: [proyectoId], references: [id])
+  periodoId   Int
+  periodo     PeriodoAcademico      @relation(fields: [periodoId], references: [id])
+  estado      EstadoProyectoPeriodo @default(ACTIVO)
+  fechaInicio DateTime?
+  fechaFin    DateTime?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  proyectosMateria ProyectoMateria[]
+  equipos          Equipo[]
+  hitos            HitoProyecto[]
+
+  @@unique([proyectoId, periodoId])
+  @@index([proyectoId])
+  @@index([periodoId])
+}
+
+model HitoPeriodo {
+  id           Int              @id @default(autoincrement())
+  periodoId    Int
+  periodo      PeriodoAcademico @relation(fields: [periodoId], references: [id])
+  orden        Int
+  nombre       String
+  descripcion  String?          @default("")
+  pesoSugerido Int?
+  fechaInicio  DateTime?
+  fechaFin     DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  ejecuciones HitoProyecto[]
+
+  @@unique([periodoId, orden])
+  @@index([periodoId])
 }
 
 //======== USUARIOS & ROLES ========
@@ -238,17 +287,20 @@ model Usuario {
 
   documentos Documento[]
 
-  cv                               CV?
-  feriaEquipos                     FeriaEquipoMiembro[]
-  feriaEvaluacions                 FeriaEvaluacion[]
-  evaluacionProyectos              EvaluacionProyecto[]
-  reporteGenerados                 ReporteGenerado[]
-  datasetsPlagioCreados            DatasetPlagio[]
-  solicitudesAccesoComoSolicitante SolicitudAccesoProyecto[] @relation("SolicitudSolicitante")
-  solicitudesAccesoComoAprobador   SolicitudAccesoProyecto[] @relation("SolicitudAprobador")
-  pizarrasCreadas                  Pizarra[]
-  pizarrasColaborando              PizarraColaborador[]
-  pizarrasColabAgregado            PizarraColaborador[]      @relation("PizarraColabAgregadoPor")
+  cv                                     CV?
+  feriaEquipos                           FeriaEquipoMiembro[]
+  feriaEvaluacions                       FeriaEvaluacion[]
+  evaluacionProyectos                    EvaluacionProyecto[]
+  evaluacionesHito                       EvaluacionHito[]
+  reporteGenerados                       ReporteGenerado[]
+  datasetsPlagioCreados                  DatasetPlagio[]
+  solicitudesAccesoComoSolicitante       SolicitudAccesoProyecto[]       @relation("SolicitudSolicitante")
+  solicitudesAccesoComoAprobador         SolicitudAccesoProyecto[]       @relation("SolicitudAprobador")
+  solicitudesContinuacionComoSolicitante SolicitudContinuacionProyecto[] @relation("SolicitudContinuacionSolicitante")
+  solicitudesContinuacionComoAprobador   SolicitudContinuacionProyecto[] @relation("SolicitudContinuacionAprobador")
+  pizarrasCreadas                        Pizarra[]
+  pizarrasColaborando                    PizarraColaborador[]
+  pizarrasColabAgregado                  PizarraColaborador[]            @relation("PizarraColabAgregadoPor")
 
   @@index([idRol])
   @@index([idFacultad])
@@ -313,21 +365,23 @@ model Semestre {
 }
 
 model Materia {
-  id                  Int                  @id @default(autoincrement())
-  nombre              String
-  codigo              String               @unique
-  idCarrera           Int
-  carrera             Carrera              @relation(fields: [idCarrera], references: [id])
-  semestreId          Int?
-  semestre            Semestre?            @relation(fields: [semestreId], references: [id])
-  horarios            Horario[]
-  docentes            DocenteMateria[]
-  clases              ClaseMateria[]
-  proyectosMateria    ProyectoMateria[]
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  inscripcionMaterias InscripcionMateria[]
-  equipos             Equipo[]
+  id                      Int                             @id @default(autoincrement())
+  nombre                  String
+  codigo                  String                          @unique
+  idCarrera               Int
+  carrera                 Carrera                         @relation(fields: [idCarrera], references: [id])
+  semestreId              Int?
+  semestre                Semestre?                       @relation(fields: [semestreId], references: [id])
+  esIntegrador            Boolean                         @default(false)
+  horarios                Horario[]
+  docentes                DocenteMateria[]
+  clases                  ClaseMateria[]
+  proyectosMateria        ProyectoMateria[]
+  createdAt               DateTime                        @default(now())
+  updatedAt               DateTime                        @updatedAt
+  inscripcionMaterias     InscripcionMateria[]
+  equipos                 Equipo[]
+  solicitudesContinuacion SolicitudContinuacionProyecto[]
 
   @@index([idCarrera])
   @@index([semestreId])
@@ -362,9 +416,10 @@ model ClaseMateria {
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 
-  inscripciones InscripcionMateria[]
-  proyectos     ProyectoMateria[]
-  equipos       Equipo[]
+  inscripciones           InscripcionMateria[]
+  proyectos               ProyectoMateria[]
+  equipos                 Equipo[]
+  solicitudesContinuacion SolicitudContinuacionProyecto[]
 
   @@unique([periodoId, materiaId, paralelo])
   @@index([periodoId])
@@ -404,62 +459,80 @@ model DocenteMateria {
 
 //======== PROYECTOS, EQUIPOS, HITOS, ENTREGAS ========
 model Proyecto {
-  id            Int            @id @default(autoincrement())
-  titulo        String
-  descripcion   String?        @default("")
-  codigoMateria String?
-  tipoGrupo     TipoGrupo      @default(GRUPAL)
-  estado        EstadoProyecto @default(ACTIVO)
-  repoUrl       String?
-  creadoPorId   Int?
-  creadoPor     Usuario?       @relation("ProyectoCreador", fields: [creadoPorId], references: [id])
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id               Int            @id @default(autoincrement())
+  titulo           String
+  descripcion      String?        @default("")
+  codigoMateria    String?
+  tipoGrupo        TipoGrupo      @default(GRUPAL)
+  estado           EstadoProyecto @default(ACTIVO)
+  repoUrl          String?
+  creadoPorId      Int?
+  creadoPor        Usuario?       @relation("ProyectoCreador", fields: [creadoPorId], references: [id])
+  proyectoOrigenId Int?
+  proyectoOrigen   Proyecto?      @relation("ProyectoContinuacion", fields: [proyectoOrigenId], references: [id])
+  continuaciones   Proyecto[]     @relation("ProyectoContinuacion")
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   miembros                 MiembroProyecto[]
   hitos                    HitoProyecto[]
+  periodos                 ProyectoPeriodo[]
   proyectosMateria         ProyectoMateria[]
   equipos                  Equipo[]
   evaluacionProyectos      EvaluacionProyecto[]
   proyectoDestacado        ProyectoDestacado?
   solicitudAccesoProyectos SolicitudAccesoProyecto[]
+  solicitudesContinuacion  SolicitudContinuacionProyecto[]
   pizarras                 Pizarra[]
 
   @@index([creadoPorId])
+  @@index([proyectoOrigenId])
 }
 
 model ProyectoMateria {
-  id         Int               @id @default(autoincrement())
-  proyectoId Int
-  proyecto   Proyecto          @relation(fields: [proyectoId], references: [id])
-  materiaId  Int
-  materia    Materia           @relation(fields: [materiaId], references: [id])
-  periodoId  Int?
-  periodo    PeriodoAcademico? @relation(fields: [periodoId], references: [id])
-  claseId    Int?
-  clase      ClaseMateria?     @relation(fields: [claseId], references: [id])
+  id                Int               @id @default(autoincrement())
+  proyectoId        Int
+  proyecto          Proyecto          @relation(fields: [proyectoId], references: [id])
+  materiaId         Int
+  materia           Materia           @relation(fields: [materiaId], references: [id])
+  periodoId         Int?
+  periodo           PeriodoAcademico? @relation(fields: [periodoId], references: [id])
+  claseId           Int?
+  clase             ClaseMateria?     @relation(fields: [claseId], references: [id])
+  proyectoPeriodoId Int?
+  proyectoPeriodo   ProyectoPeriodo?  @relation(fields: [proyectoPeriodoId], references: [id])
 
   createdAt DateTime @default(now())
 
+  equipos           Equipo[]
+  evaluacionesHito  EvaluacionHito[]
+  solicitudesAcceso SolicitudAccesoProyecto[]
+
   @@unique([proyectoId, materiaId, periodoId])
+  @@unique([proyectoPeriodoId, materiaId])
   @@index([materiaId, periodoId])
   @@index([claseId])
+  @@index([proyectoPeriodoId])
 }
 
 model Equipo {
-  id          Int               @id @default(autoincrement())
-  proyectoId  Int
-  proyecto    Proyecto          @relation(fields: [proyectoId], references: [id])
-  nombre      String
-  tipoGrupo   TipoGrupo         @default(GRUPAL)
-  materiaId   Int?
-  materia     Materia?          @relation(fields: [materiaId], references: [id])
-  periodoId   Int?
-  periodo     PeriodoAcademico? @relation(fields: [periodoId], references: [id])
-  claseId     Int?
-  clase       ClaseMateria?     @relation(fields: [claseId], references: [id])
-  creadoPorId Int?
-  creadoPor   Usuario?          @relation("EquipoCreador", fields: [creadoPorId], references: [id])
+  id                Int               @id @default(autoincrement())
+  proyectoId        Int
+  proyecto          Proyecto          @relation(fields: [proyectoId], references: [id])
+  nombre            String
+  tipoGrupo         TipoGrupo         @default(GRUPAL)
+  materiaId         Int?
+  materia           Materia?          @relation(fields: [materiaId], references: [id])
+  periodoId         Int?
+  periodo           PeriodoAcademico? @relation(fields: [periodoId], references: [id])
+  claseId           Int?
+  clase             ClaseMateria?     @relation(fields: [claseId], references: [id])
+  proyectoPeriodoId Int?
+  proyectoPeriodo   ProyectoPeriodo?  @relation(fields: [proyectoPeriodoId], references: [id])
+  proyectoMateriaId Int?
+  proyectoMateria   ProyectoMateria?  @relation(fields: [proyectoMateriaId], references: [id])
+  creadoPorId       Int?
+  creadoPor         Usuario?          @relation("EquipoCreador", fields: [creadoPorId], references: [id])
 
   repoVinculado RepoGithub?
 
@@ -475,6 +548,8 @@ model Equipo {
   @@index([materiaId, periodoId])
   @@index([claseId])
   @@index([creadoPorId])
+  @@index([proyectoPeriodoId])
+  @@index([proyectoMateriaId])
 }
 
 model EquipoMiembro {
@@ -493,22 +568,32 @@ model EquipoMiembro {
 }
 
 model HitoProyecto {
-  id          Int           @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   proyectoId  Int
-  proyecto    Proyecto      @relation(fields: [proyectoId], references: [id])
+  proyecto    Proyecto @relation(fields: [proyectoId], references: [id])
   orden       Int
   nombre      String
-  descripcion String?       @default("")
+  descripcion String?  @default("")
   peso        Int?
-  fechaInicio DateTime?
-  fechaFin    DateTime?
-  estado      EstadoHito    @default(PENDIENTE)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  entregas    EntregaHito[]
 
-  @@unique([proyectoId, orden])
+  proyectoPeriodoId Int?
+  proyectoPeriodo   ProyectoPeriodo? @relation(fields: [proyectoPeriodoId], references: [id])
+  hitoPeriodoId     Int?
+  hitoPeriodo       HitoPeriodo?     @relation(fields: [hitoPeriodoId], references: [id])
+
+  fechaInicio  DateTime?
+  fechaFin     DateTime?
+  estado       EstadoHito       @default(PENDIENTE)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  entregas     EntregaHito[]
+  evaluaciones EvaluacionHito[]
+
+  @@unique([proyectoPeriodoId, hitoPeriodoId])
   @@index([proyectoId])
+  @@index([proyectoPeriodoId])
+  @@index([hitoPeriodoId])
 }
 
 model EntregaHito {
@@ -581,6 +666,26 @@ model EvaluacionProyecto {
   @@index([evaluadorId])
 }
 
+model EvaluacionHito {
+  id                Int                   @id @default(autoincrement())
+  hitoProyectoId    Int
+  hitoProyecto      HitoProyecto          @relation(fields: [hitoProyectoId], references: [id])
+  proyectoMateriaId Int?
+  proyectoMateria   ProyectoMateria?      @relation(fields: [proyectoMateriaId], references: [id])
+  evaluadorId       Int
+  evaluador         Usuario               @relation(fields: [evaluadorId], references: [id])
+  tipoEvaluador     TipoEvaluadorProyecto
+  puntaje           Float
+  comentario        String?               @default("")
+  criteriosJson     Json?
+  createdAt         DateTime              @default(now())
+
+  @@unique([hitoProyectoId, evaluadorId, proyectoMateriaId])
+  @@index([hitoProyectoId])
+  @@index([evaluadorId])
+  @@index([proyectoMateriaId])
+}
+
 model ProyectoDestacado {
   id         Int               @id @default(autoincrement())
   proyectoId Int               @unique
@@ -601,24 +706,69 @@ model ProyectoDestacado {
 }
 
 model SolicitudAccesoProyecto {
+  id                Int                   @id @default(autoincrement())
+  proyectoId        Int
+  proyecto          Proyecto              @relation(fields: [proyectoId], references: [id])
+  proyectoMateriaId Int?
+  proyectoMateria   ProyectoMateria?      @relation(fields: [proyectoMateriaId], references: [id])
+  solicitanteId     Int
+  solicitante       Usuario               @relation("SolicitudSolicitante", fields: [solicitanteId], references: [id])
+  aprobadorId       Int?
+  aprobador         Usuario?              @relation("SolicitudAprobador", fields: [aprobadorId], references: [id])
+  estado            EstadoSolicitudAcceso @default(PENDIENTE)
+  tipo              TipoRecursoAcceso     @default(AMBOS)
+  motivo            String?               @default("")
+  respuesta         String?               @default("")
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  expiresAt         DateTime?
+  resueltoEn        DateTime?
+
+  documentos DocumentoSolicitudAcceso[]
+
+  @@index([proyectoId])
+  @@index([proyectoMateriaId])
+  @@index([solicitanteId])
+  @@index([aprobadorId])
+  @@index([estado])
+}
+
+model DocumentoSolicitudAcceso {
+  id          Int                     @id @default(autoincrement())
+  solicitudId Int
+  solicitud   SolicitudAccesoProyecto @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  documentoId Int
+  documento   Documento               @relation(fields: [documentoId], references: [id], onDelete: Restrict)
+  createdAt   DateTime                @default(now())
+
+  @@unique([solicitudId, documentoId])
+  @@index([documentoId])
+}
+
+model SolicitudContinuacionProyecto {
   id            Int                   @id @default(autoincrement())
   proyectoId    Int
   proyecto      Proyecto              @relation(fields: [proyectoId], references: [id])
   solicitanteId Int
-  solicitante   Usuario               @relation("SolicitudSolicitante", fields: [solicitanteId], references: [id])
-  aprobadorId   Int?
-  aprobador     Usuario?              @relation("SolicitudAprobador", fields: [aprobadorId], references: [id])
+  solicitante   Usuario               @relation("SolicitudContinuacionSolicitante", fields: [solicitanteId], references: [id])
+  periodoId     Int
+  periodo       PeriodoAcademico      @relation(fields: [periodoId], references: [id])
+  materiaId     Int
+  materia       Materia               @relation(fields: [materiaId], references: [id])
+  claseId       Int?
+  clase         ClaseMateria?         @relation(fields: [claseId], references: [id])
   estado        EstadoSolicitudAcceso @default(PENDIENTE)
-  tipo          TipoRecursoAcceso     @default(AMBOS)
   motivo        String?               @default("")
   respuesta     String?               @default("")
+  aprobadorId   Int?
+  aprobador     Usuario?              @relation("SolicitudContinuacionAprobador", fields: [aprobadorId], references: [id])
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
-  expiresAt     DateTime?
 
   @@index([proyectoId])
   @@index([solicitanteId])
-  @@index([aprobadorId])
+  @@index([periodoId])
+  @@index([materiaId])
   @@index([estado])
 }
 
@@ -686,7 +836,8 @@ model Documento {
   entregaId             Int?
   entrega               EntregaHito?  @relation(fields: [entregaId], references: [id])
 
-  analisis AnalisisPlagio[]
+  analisis          AnalisisPlagio[]
+  solicitudesAcceso DocumentoSolicitudAcceso[]
 
   @@index([usuarioId])
   @@index([entregaId])

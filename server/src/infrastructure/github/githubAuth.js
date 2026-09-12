@@ -7,18 +7,14 @@ import {
 } from "./githubLink.js";
 import { Octokit } from "@octokit/rest";
 import { prisma } from "../db/prisma.client.js";
-
-export 
+import { obtenerSecretoJwt } from "../../shared/auth/secret.js";
 
 const {
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   OAUTH_CALLBACK_URL,
   ALLOWED_INSTITUTION_DOMAIN,
-  SESSION_SECRET,
 } = process.env;
-
-const JWT_SECRET = SESSION_SECRET || "dev_secret";
 
 function normalizarTipoCuenta(type) {
   const value = String(type || "")
@@ -79,7 +75,7 @@ passport.use(
               }
 
               if (!req.user && decoded?.t) {
-                const payload = jwt.verify(decoded.t, JWT_SECRET);
+                const payload = jwt.verify(decoded.t, obtenerSecretoJwt());
 
                 const user = await prisma.usuario.findUnique({
                   where: { id: Number(payload.uid) },

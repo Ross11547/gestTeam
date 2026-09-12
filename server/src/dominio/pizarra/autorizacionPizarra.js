@@ -6,6 +6,13 @@ export function esRolStaffPizarra(usuario) {
     return nombre === "admin" || nombre === "director";
 }
 
+function colaboradorPuedeEscribir(colaboradores, usuarioId) {
+    const colaborador = colaboradores.find((c) => c.usuarioId === usuarioId);
+    if (!colaborador) return false;
+    const rol = String(colaborador.rol || "").trim().toUpperCase();
+    return rol === "OWNER" || rol === "EDITOR";
+}
+
 export async function obtenerPizarraParaEscritura(pizarraId, usuario, { soloDuenio = false } = {}) {
     const pizarra = await prisma.pizarra.findUnique({
         where: { id: pizarraId },
@@ -19,7 +26,7 @@ export async function obtenerPizarraParaEscritura(pizarraId, usuario, { soloDuen
 
     if (esRolStaffPizarra(usuario)) return pizarra;
     if (pizarra.creadoPorId === usuario.id) return pizarra;
-    if (!soloDuenio && pizarra.colaboradores.some((c) => c.usuarioId === usuario.id)) return pizarra;
+    if (!soloDuenio && colaboradorPuedeEscribir(pizarra.colaboradores, usuario.id)) return pizarra;
 
-    throw new ErrorNoAutorizado("No tienes permisos sobre esta pizarra");
+    throw new ErrorNoAutorizado("No tienes permisos para modificar esta pizarra");
 }

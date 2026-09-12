@@ -154,6 +154,18 @@ export const UserProvider = ({ children }) => {
     setTheme(resolveTheme(user));
   }, [user]);
 
+  useEffect(() => {
+    const manejarSesionInvalida = () => {
+      setUser(null);
+      setTheme(ColorsEstu);
+      navigate(ROUTES.LOGIN);
+      toast.error("Tu sesión expiró. Inicia sesión nuevamente.");
+    };
+
+    window.addEventListener("gestteam:sesion-invalida", manejarSesionInvalida);
+    return () => window.removeEventListener("gestteam:sesion-invalida", manejarSesionInvalida);
+  }, [navigate]);
+
   const login = (userData) => {
     setUser(userData);
     setTheme(resolveTheme(userData));

@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 const tiposGrupo = ["INDIVIDUAL", "GRUPAL", "COLABORATIVO"];
-const estadosProyecto = ["BORRADOR", "ACTIVO", "CERRADO", "ARCHIVADO"];
+const estadosProyecto = ["BORRADOR", "ACTIVO", "CERRADO", "INCONCLUSO", "ARCHIVADO"];
+const estadosCreacionProyecto = ["BORRADOR", "ACTIVO", "ARCHIVADO"];
 
 export const crearProyecto = z.object({
     titulo: z
@@ -27,7 +28,7 @@ export const crearProyecto = z.object({
         invalid_type_error: "El tipo de grupo es inválido",
     }).optional(),
 
-    estado: z.enum(estadosProyecto, {
+    estado: z.enum(estadosCreacionProyecto, {
         required_error: "El estado del proyecto es obligatorio",
         invalid_type_error: "El estado del proyecto es inválido",
     }).optional(),

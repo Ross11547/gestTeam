@@ -40,7 +40,7 @@ export async function cancelarSolicitud(req, res, next) {
         if (!id) return res.status(400).json({ mensaje: "ID inválido" });
 
         const data = await cancelarSolicitudAccesoCasoUso(id, req.user);
-        res.json({ data, mensaje: "Solicitud eliminada correctamente" });
+        res.json({ data, mensaje: "Solicitud pendiente eliminada correctamente" });
     } catch (e) {
         next(e);
     }
